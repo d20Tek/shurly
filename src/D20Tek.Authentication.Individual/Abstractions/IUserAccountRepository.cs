@@ -13,6 +13,8 @@ internal interface IUserAccountRepository
 
     public Task<bool> CreateAsync(UserAccount userAccount);
 
+    public Task<bool> AttachUserRole(UserAccount userAccount, string roleName);
+
     public Task<bool> UpdateAsync(UserAccount userAccount);
 
     public Task<bool> DeleteAsync(Guid id);

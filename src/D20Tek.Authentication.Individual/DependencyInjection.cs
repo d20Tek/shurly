@@ -3,6 +3,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.Abstractions;
 using D20Tek.Authentication.Individual.Infrastructure;
+using D20Tek.Authentication.Individual.UseCases.Login;
+using D20Tek.Authentication.Individual.UseCases.Register;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -29,7 +31,8 @@ public static class DependencyInjection
         ConfigurationManager configuration)
     {
         services.AddDatabaseServices(configuration)
-                .AddInfrastructureServices(configuration);
+                .AddInfrastructureServices(configuration)
+                .AddUseCases();
 
         return services;
     }
@@ -99,6 +102,18 @@ public static class DependencyInjection
 
         return services;
     }
+
+    private static IServiceCollection AddUseCases(this IServiceCollection services)
+    {
+        services.AddScoped<ILoginQueryHandler, LoginQueryHandler>();
+        services.AddScoped<IRegisterCommandHandler, RegisterCommandHandler>();
+
+        services.AddScoped<LoginQueryValidator>();
+        services.AddScoped<RegisterCommandValidator>();
+
+        return services;
+    }
+
 
     private static void AddScopeClaimsPolicy(
         this AuthorizationPolicyBuilder policyBuilder,

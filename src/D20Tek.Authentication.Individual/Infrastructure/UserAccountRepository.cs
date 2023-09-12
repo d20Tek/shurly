@@ -27,28 +27,25 @@ internal class UserAccountRepository : IUserAccountRepository
     public async Task<UserAccount?> GetByIdAsync(Guid id)
     {
         return await RepositoryOperationAsync<UserAccount?>(async () =>
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            return user;
-        });
+            await _userManager.FindByIdAsync(id.ToString()));
     }
 
     public async Task<UserAccount?> GetByUserNameAsync(string userName)
     {
         return await RepositoryOperationAsync<UserAccount?>(async () =>
-        {
-            var user = await _userManager.FindByNameAsync(userName);
-            return user;
-        });
+            await _userManager.FindByNameAsync(userName));
     }
 
     public async Task<UserAccount?> GetByEmailAsync(string email)
     {
         return await RepositoryOperationAsync<UserAccount?>(async () =>
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            return user;
-        });
+            await _userManager.FindByEmailAsync(email));
+    }
+
+    public async Task<bool> CheckPasswordAsync(UserAccount userAccount, string password)
+    {
+        return await RepositoryOperationAsync<bool>(async () =>
+            await _userManager.CheckPasswordAsync(userAccount, password));
     }
 
     public async Task<IdentityResult> CreateAsync(UserAccount userAccount, string password)
@@ -65,6 +62,13 @@ internal class UserAccountRepository : IUserAccountRepository
 
             return result;
         });
+    }
+
+    public async Task<IEnumerable<string>> GetUserRoles(UserAccount userAccount)
+    {
+        return await RepositoryOperationAsync<IEnumerable<string>>(async () =>
+            await _userManager.GetRolesAsync(userAccount))
+                ?? Array.Empty<string>();
     }
 
     public async Task<bool> AttachUserRole(UserAccount userAccount, string userRole)

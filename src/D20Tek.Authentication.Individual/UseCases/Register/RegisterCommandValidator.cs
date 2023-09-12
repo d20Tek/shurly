@@ -9,38 +9,41 @@ namespace D20Tek.Authentication.Individual.UseCases.Register;
 
 internal sealed class RegisterCommandValidator : IValidator<RegisterCommand>
 {
-    private const int _namesMaxLength = 64;
-    private const int _emailMaxLength = 128;
-    private const int _passwordMinLength = 6;
-    private const int _passwordMaxLength = 32;
-
     public ValidationsResult Validate(RegisterCommand command)
     {
         var result = new ValidationsResult();
 
         result.AddOnFailure(
-            () => command.GivenName.NotEmpty(),
-            Errors.UserAccount.GivenNameEmpty);
+            () => command.UserName.NotEmpty(),
+            Errors.UserAccount.PropertyEmpty("UserName"));
 
         result.AddOnFailure(
-            () => command.GivenName.InMaxLength(_namesMaxLength),
-            Errors.UserAccount.GivenNameTooLong);
+            () => command.UserName.InMaxLength(UserAccountConstants.NamesMaxLength),
+            Errors.UserAccount.PropertyTooLong("UserName"));
+
+        result.AddOnFailure(
+            () => command.GivenName.NotEmpty(),
+            Errors.UserAccount.PropertyEmpty("GivenName"));
+
+        result.AddOnFailure(
+            () => command.GivenName.InMaxLength(UserAccountConstants.NamesMaxLength),
+            Errors.UserAccount.PropertyTooLong("GivenName"));
 
         result.AddOnFailure(
             () => command.FamilyName.NotEmpty(),
-            Errors.UserAccount.FamilyNameEmpty);
+            Errors.UserAccount.PropertyEmpty("FamilyName"));
 
         result.AddOnFailure(
-            () => command.FamilyName.InMaxLength(_namesMaxLength),
-            Errors.UserAccount.FamilyNameTooLong);
+            () => command.FamilyName.InMaxLength(UserAccountConstants.NamesMaxLength),
+            Errors.UserAccount.PropertyTooLong("FamilyName"));
 
         result.AddOnFailure(
             () => command.Email.NotEmpty(),
-            Errors.UserAccount.EmailEmpty);
+            Errors.UserAccount.PropertyEmpty("Email"));
 
         result.AddOnFailure(
-            () => command.Email.InMaxLength(_emailMaxLength),
-            Errors.UserAccount.EmailTooLong);
+            () => command.Email.InMaxLength(UserAccountConstants.EmailMaxLength),
+            Errors.UserAccount.PropertyTooLong("Email"));
 
         result.AddOnFailure(
             () => command.Email.IsValidEmailAddress(),
@@ -48,10 +51,12 @@ internal sealed class RegisterCommandValidator : IValidator<RegisterCommand>
 
         result.AddOnFailure(
             () => command.Password.NotEmpty(),
-            Errors.UserAccount.PasswordEmpty);
+            Errors.UserAccount.PropertyEmpty("Password"));
 
         result.AddOnFailure(
-            () => command.Password.HasLength(_passwordMinLength, _passwordMaxLength),
+            () => command.Password.HasLength(
+                UserAccountConstants.PasswordMinLength,
+                UserAccountConstants.PasswordMaxLength),
             Errors.UserAccount.PasswordLength);
 
         return result;

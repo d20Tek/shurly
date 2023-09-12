@@ -17,37 +17,17 @@ internal class Errors
                 "AccountId.Empty",
                 "The specified account id is invalid.");
 
-        public static readonly Error GivenNameEmpty = Error.Validation(
-                "GivenName.Empty",
-                "Given name cannot be empty.");
+        public static Error PropertyEmpty(string name) => Error.Validation(
+                $"{name}.Empty",
+                $"{name} cannot be empty.");
 
-        public static readonly Error GivenNameTooLong = Error.Validation(
-                "GivenName.TooLong",
-                "Given name is too long.");
-
-        public static readonly Error FamilyNameEmpty = Error.Validation(
-                "Family Name.Empty",
-                "Family name cannot be empty.");
-
-        public static readonly Error FamilyNameTooLong = Error.Validation(
-                "Family.TooLong",
-                "Family name is too long.");
-
-        public static readonly Error EmailEmpty = Error.Validation(
-                "Email.Empty",
-                "Email cannot be empty.");
-
-        public static readonly Error EmailTooLong = Error.Validation(
-                "Email.TooLong",
-                "Email is too long.");
+        public static Error PropertyTooLong(string name) => Error.Validation(
+                $"{name}.TooLong",
+                $"{name} is too long.");
 
         public static readonly Error EmailInvalidFormat = Error.Validation(
                 "Email.InvalidFormat",
                 "Email property is not a valid email format.");
-
-        public static readonly Error PasswordEmpty = Error.Validation(
-                "Password.Empty",
-                "Password cannot be empty.");
 
         public static readonly Error PasswordLength = Error.Validation(
                 "Password.LengthInvalid",
@@ -60,5 +40,16 @@ internal class Errors
         public static readonly Error UserNameAlreadyInUse = Error.Conflict(
                 "UserName.AlreadyInUse",
                 "User name is already in use and must be unique per account.");
+    }
+
+    public static class Authentication
+    {
+        public static readonly Error InvalidCredentials = Error.Validation(
+                "Auth.InvalidCredentials",
+                "The provided user credentials are not valid.");
+
+        public static readonly Error InvalidExistingCredentials = Error.Validation(
+                "Auth.InvalidExistingCredentials",
+                "The provided user's existing credentials are not valid.");
     }
 }

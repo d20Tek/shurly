@@ -13,9 +13,13 @@ internal interface IUserAccountRepository
 
     public Task<UserAccount?> GetByEmailAsync(string email);
 
+    public Task<bool> CheckPasswordAsync(UserAccount userAccountstring, string password);
+
     public Task<IdentityResult> CreateAsync(UserAccount userAccount, string password);
 
     public Task<bool> AttachUserRole(UserAccount userAccount, string roleName);
+
+    public Task<IEnumerable<string>> GetUserRoles(UserAccount userAccount);
 
     public Task<bool> UpdateAsync(UserAccount userAccount);
 

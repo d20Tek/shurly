@@ -51,11 +51,11 @@ internal class UserAccountRepository : IUserAccountRepository
         });
     }
 
-    public async Task<bool> CreateAsync(UserAccount userAccount)
+    public async Task<IdentityResult> CreateAsync(UserAccount userAccount, string password)
     {
-        return await RepositoryOperationAsync<bool>(async () =>
+        return await RepositoryOperationAsync(async () =>
         {
-            var result = await _userManager.CreateAsync(userAccount);
+            var result = await _userManager.CreateAsync(userAccount, password);
             if (result.Succeeded is false)
             {
                 _logger.LogError(
@@ -63,7 +63,7 @@ internal class UserAccountRepository : IUserAccountRepository
                     result.Errors);
             }
 
-            return result.Succeeded;
+            return result;
         });
     }
 
@@ -149,6 +149,32 @@ internal class UserAccountRepository : IUserAccountRepository
                 ex,
                 $"Error processing {className}.{caller} operation.");
             return default;
+        }
+    }
+
+    private async Task<IdentityResult> RepositoryOperationAsync(
+        Func<Task<IdentityResult>> operation,
+        [CallerMemberName] string caller = "method")
+    {
+        try
+        {
+            return await operation.Invoke();
+        }
+        catch (Exception ex)
+        {
+            var className = this.GetType().Name;
+            _logger.LogError(
+                ex,
+                $"Error processing {className}.{caller} operation.");
+
+            var result = new IdentityResult();
+            result.Errors.Append(new IdentityError
+            {
+                Code = "Unexpected",
+                Description = ex.Message
+            });
+
+            return result;
         }
     }
 }

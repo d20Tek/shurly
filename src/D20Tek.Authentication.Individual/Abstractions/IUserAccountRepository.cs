@@ -1,6 +1,8 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Identity;
+
 namespace D20Tek.Authentication.Individual.Abstractions;
 
 internal interface IUserAccountRepository
@@ -11,7 +13,7 @@ internal interface IUserAccountRepository
 
     public Task<UserAccount?> GetByEmailAsync(string email);
 
-    public Task<bool> CreateAsync(UserAccount userAccount);
+    public Task<IdentityResult> CreateAsync(UserAccount userAccount, string password);
 
     public Task<bool> AttachUserRole(UserAccount userAccount, string roleName);
 

@@ -31,7 +31,7 @@ internal class JwtTokenGenerator : IJwtTokenGenerator
     internal static SecurityKey GetSecurityKey(string secret) =>
         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
-    public string GenerateAccessToken(UserAccount account, IEnumerable<string> userRoles)
+    public TokenResponse GenerateAccessToken(UserAccount account, IEnumerable<string> userRoles)
     {
         List<Claim> claims = GetClaims(account, _jwtSettings.Scopes, userRoles);
 
@@ -42,7 +42,7 @@ internal class JwtTokenGenerator : IJwtTokenGenerator
         return token;
     }
 
-    public string GenerateRefreshToken(UserAccount account)
+    public TokenResponse GenerateRefreshToken(UserAccount account)
     {
         List<Claim> claims = GetClaims(account, _jwtSettings.RefreshScopes, null);
 
@@ -84,7 +84,7 @@ internal class JwtTokenGenerator : IJwtTokenGenerator
         return claims;
     }
 
-    private string CreateJwtToken(List<Claim> claims, DateTime expiresOn)
+    private TokenResponse CreateJwtToken(List<Claim> claims, DateTime expiresOn)
     {
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
@@ -93,6 +93,8 @@ internal class JwtTokenGenerator : IJwtTokenGenerator
             claims: claims,
             signingCredentials: GetSigningCredentials());
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return new TokenResponse(tokenString, token.ValidTo);
     }
 }

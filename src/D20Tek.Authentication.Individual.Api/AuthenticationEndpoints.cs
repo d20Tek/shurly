@@ -18,18 +18,20 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
 
     public void MapRoutes(IEndpointRouteBuilder routeBuilder)
     {
-        var group = routeBuilder.MapGroup("/api/v1/auth")
-            .WithTags("Authentication")
+        var group = routeBuilder.MapGroup(Configuration.Authentication.BaseUrl)
+            .WithTags(Configuration.Authentication.GroupTag)
             .WithOpenApi();
 
-        group.MapPost("/register", RegisterAsync)
-            .WithName("Register")
+        group.MapPost(Configuration.Register.RoutePattern, RegisterAsync)
+            .WithName(Configuration.Register.EndpointName)
+            .WithDisplayName(Configuration.Register.DisplayName)
             .Produces<AuthenticationResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest);
 
-        group.MapPost("/login", LoginAsync)
-            .WithName("Login")
+        group.MapPost(Configuration.Login.RoutePattern, LoginAsync)
+            .WithName(Configuration.Login.EndpointName)
+            .WithDisplayName(Configuration.Login.DisplayName)
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest);
     }
@@ -48,7 +50,9 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
 
         var authResult = await commandHandler.HandleAsync(command, cancellation);
 
-        return authResult.ToCreatedApiResult(_authResponseMapper.Map, $"/api/v1/auth/account");
+        return authResult.ToCreatedApiResult(
+            _authResponseMapper.Map,
+            Configuration.Register.CreatedAtUrl);
     }
 
     public async Task<IResult> LoginAsync(

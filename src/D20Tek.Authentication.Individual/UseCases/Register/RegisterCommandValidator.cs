@@ -15,35 +15,35 @@ internal sealed class RegisterCommandValidator : IValidator<RegisterCommand>
 
         result.AddOnFailure(
             () => command.UserName.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("UserName"));
+            Errors.UserAccount.PropertyEmpty(nameof(command.UserName)));
 
         result.AddOnFailure(
             () => command.UserName.InMaxLength(UserAccountConstants.NamesMaxLength),
-            Errors.UserAccount.PropertyTooLong("UserName"));
+            Errors.UserAccount.PropertyTooLong(nameof(command.UserName)));
 
         result.AddOnFailure(
             () => command.GivenName.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("GivenName"));
+            Errors.UserAccount.PropertyEmpty(nameof(command.GivenName)));
 
         result.AddOnFailure(
             () => command.GivenName.InMaxLength(UserAccountConstants.NamesMaxLength),
-            Errors.UserAccount.PropertyTooLong("GivenName"));
+            Errors.UserAccount.PropertyTooLong(nameof(command.GivenName)));
 
         result.AddOnFailure(
             () => command.FamilyName.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("FamilyName"));
+            Errors.UserAccount.PropertyEmpty(nameof(command.FamilyName)));
 
         result.AddOnFailure(
             () => command.FamilyName.InMaxLength(UserAccountConstants.NamesMaxLength),
-            Errors.UserAccount.PropertyTooLong("FamilyName"));
+            Errors.UserAccount.PropertyTooLong(nameof(command.FamilyName)));
 
         result.AddOnFailure(
             () => command.Email.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("Email"));
+            Errors.UserAccount.PropertyEmpty(nameof(command.Email)));
 
         result.AddOnFailure(
             () => command.Email.InMaxLength(UserAccountConstants.EmailMaxLength),
-            Errors.UserAccount.PropertyTooLong("Email"));
+            Errors.UserAccount.PropertyTooLong(nameof(command.Email)));
 
         result.AddOnFailure(
             () => command.Email.IsValidEmailAddress(),
@@ -51,7 +51,7 @@ internal sealed class RegisterCommandValidator : IValidator<RegisterCommand>
 
         result.AddOnFailure(
             () => command.Password.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("Password"));
+            Errors.UserAccount.PropertyEmpty(nameof(command.Password)));
 
         result.AddOnFailure(
             () => command.Password.HasLength(

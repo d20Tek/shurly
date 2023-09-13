@@ -12,18 +12,17 @@ internal class LoginQueryValidator : IValidator<LoginQuery>
     public ValidationsResult Validate(LoginQuery query)
     {
         var result = new ValidationsResult();
-
         result.AddOnFailure(
-            () => query.UserName.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("UserName"));
+        () => query.UserName.NotEmpty(),
+            Errors.UserAccount.PropertyEmpty(nameof(query.UserName)));
 
         result.AddOnFailure(
             () => query.UserName.InMaxLength(UserAccountConstants.NamesMaxLength),
-            Errors.UserAccount.PropertyTooLong("UserName"));
+            Errors.UserAccount.PropertyTooLong(nameof(query.UserName)));
 
         result.AddOnFailure(
             () => query.Password.NotEmpty(),
-            Errors.UserAccount.PropertyEmpty("Password"));
+            Errors.UserAccount.PropertyEmpty(nameof(query.Password)));
 
         result.AddOnFailure(
             () => query.Password.HasLength(

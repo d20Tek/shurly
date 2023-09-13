@@ -53,6 +53,12 @@ internal sealed class RegisterCommandHandler : IRegisterCommandHandler
             return result.ToMinimalResult<AuthenticationResult>();
         }
 
+        // 4. add user role to this account
+        if (await _accountRepository.AttachUserRole(account, UserRoles.User) is false)
+        {
+            return Errors.UserAccount.CannotAttachRole;
+        }
+
         return _jwtTokenGenerator.GenerateTokenResult(account, _userRoles);
     }
 

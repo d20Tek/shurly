@@ -40,6 +40,10 @@ internal class Errors
         public static readonly Error UserNameAlreadyInUse = Error.Conflict(
                 "UserName.AlreadyInUse",
                 "User name is already in use and must be unique per account.");
+
+        public static readonly Error CannotAttachRole = Error.Invalid(
+                "UserRole.CannotAttach",
+                "Cannot attach the user role to this account.");
     }
 
     public static class Authentication

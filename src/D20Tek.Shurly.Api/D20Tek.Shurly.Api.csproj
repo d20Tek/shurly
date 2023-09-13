@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\D20Tek.Authentication.Individual\D20Tek.Authentication.Individual.csproj" />
+    <ProjectReference Include="..\D20Tek.Authentication.Individual.Api\D20Tek.Authentication.Individual.Api.csproj" />
     <ProjectReference Include="..\D20Tek.Shurly.Domain\D20Tek.Shurly.Domain.csproj" />
   </ItemGroup>
 

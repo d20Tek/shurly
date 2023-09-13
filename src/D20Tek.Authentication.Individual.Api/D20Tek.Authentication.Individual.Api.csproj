@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="D20Tek.Minimal.Endpoints" Version="0.0.5-prerelease" />
+	<PackageReference Include="D20Tek.Minimal.Result.AspNetCore" Version="0.1.3-prerelease" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\D20Tek.Authentication.Individual\D20Tek.Authentication.Individual.csproj" />
+  </ItemGroup>
+
+</Project>

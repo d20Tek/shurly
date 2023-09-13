@@ -1,11 +1,14 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-namespace D20Tek.Shurly.Api.Endpoints.Authentication;
+using D20Tek.Minimal.Endpoints;
+using Microsoft.AspNetCore.Http;
 
-internal sealed record AuthenticationResponse(
-    string UserId,
+namespace D20Tek.Authentication.Individual.Api;
+
+internal sealed record RegisterRequest(
     string UserName,
-    string Token,
-    DateTime Expiration,
-    string RefreshToken);
+    string GivenName,
+    string FamilyName,
+    string Email,
+    string Password) : IRequest<IResult>;

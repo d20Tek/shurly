@@ -1,10 +1,11 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Minimal.Endpoints;
+namespace D20Tek.Authentication.Individual.Api;
 
-namespace D20Tek.Shurly.Api.Endpoints.Authentication;
-
-internal sealed record LoginRequest(
+internal sealed record AuthenticationResponse(
+    string UserId,
     string UserName,
-    string Password) : IRequest<IResult>;
+    string Token,
+    DateTime Expiration,
+    string RefreshToken);

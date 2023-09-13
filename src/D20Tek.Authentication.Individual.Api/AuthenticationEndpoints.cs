@@ -5,9 +5,12 @@ using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
-namespace D20Tek.Shurly.Api.Endpoints.Authentication;
+namespace D20Tek.Authentication.Individual.Api;
 
 internal class AuthenticationEndpoints : ICompositeApiEndpoint
 {

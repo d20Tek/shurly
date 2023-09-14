@@ -1,0 +1,21 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host = https://localhost:7208
+@contentType = application/json
+@token = token
+@refresh = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NmEyMmIzNi1lNGY2LTRmYWYtOGE1Mi1hYTU5MDkzZTBkNzYiLCJnaXZlbl9uYW1lIjoiUGVkcm8iLCJmYW1pbHlfbmFtZSI6IlNpbHZhIiwibmFtZSI6IkRhcnRoUGVkcm8iLCJlbWFpbCI6ImRhcnRocGVkcm9AZ21haWwuY29tIiwianRpIjoiYjMwZDU1ZjItNTAwNy00NjNkLWIwMDMtYzJmMTY3YWE1YjUyIiwic2NvcGUiOiJkMjBUZWsuU2h1cmx5LlJlZnJlc2hUb2tlbiIsImV4cCI6MTY5NTkzNzgxNSwiaXNzIjoiZDIwVGVrLkF1dGhlbnRpY2F0aW9uU2VydmljZSIsImF1ZCI6ImQyMFRlay5TaHVybHkifQ.U-l50zJZXDQbAcxQzg3XDrei-F7_bV8CjaZt64SK1Pw
+
+### home (anonymous)
+GET {{host}}/
+Authorization: Bearer {{token}}
+
+### authenticated user
+GET {{host}}/user
+Authorization: Bearer {{token}}
+
+### authenticated admin
+GET {{host}}/admin
+Authorization: Bearer {{token}}
+
+### authenticated refresh
+GET {{host}}/refresh
+Authorization: Bearer {{refresh}}

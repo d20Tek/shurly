@@ -6,6 +6,8 @@ using D20Tek.Authentication.Individual.Infrastructure;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -84,13 +86,6 @@ public static class DependencyInjection
 
         services.AddAuthorization(config =>
         {
-            config.AddPolicy(_userPolicyName, policyBuilder =>
-            {
-                policyBuilder.RequireRole(UserRoles.User);
-                policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.Scopes);
-                policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-            });
-
             config.AddPolicy(_adminPolicyName, policyBuilder =>
             {
                 policyBuilder.RequireRole(UserRoles.Admin);
@@ -100,11 +95,18 @@ public static class DependencyInjection
 
             config.AddPolicy(_refreshPolicyName, policyBuilder =>
             {
+                policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.RefreshScopes);
                 policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
             });
 
-            config.DefaultPolicy = config.GetPolicy(_userPolicyName)!;
+            config.DefaultPolicy = new AuthorizationPolicy(
+                new IAuthorizationRequirement[]
+                {
+                    new DenyAnonymousAuthorizationRequirement(),
+                    new ClaimsAuthorizationRequirement(ClaimTypesExtension.Scope, jwtSettings.Scopes)
+                },
+                new[] { JwtBearerDefaults.AuthenticationScheme });
         });
         return services;
     }

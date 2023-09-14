@@ -26,4 +26,4 @@ Content-Type: {{contentType}}
 
 ###
 GET {{host}}/api/v1/auth/account/claims
-Authorization: Bearer token
+Authorization: Bearer {{token}}

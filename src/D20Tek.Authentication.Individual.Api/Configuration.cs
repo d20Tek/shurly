@@ -6,9 +6,6 @@ internal class Configuration
     {
         public const string BaseUrl = "/api/v1/auth";
         public const string GroupTag = "Authentication";
-        public const string UserPolicyName = "AuthZUser";
-        public const string AdminPolicyName = "AuthZAdmin";
-        public const string RefreshPolicyName = "AuthZRefresh";
     }
 
     public class Register

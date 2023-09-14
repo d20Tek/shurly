@@ -6,6 +6,5 @@ namespace D20Tek.Authentication.Individual;
 public class AuthorizationPolicies
 {
     public const string Admin = "AuthZAdmin";
-    public const string User = "AuthZUser";
     public const string Refresh = "AuthZRefresh";
 }

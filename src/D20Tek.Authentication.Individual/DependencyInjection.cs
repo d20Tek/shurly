@@ -21,9 +21,6 @@ namespace D20Tek.Authentication.Individual;
 public static class DependencyInjection
 {
     private const string _defaultDbConnectionKey = "DefaultConnection";
-    private const string _userPolicyName = "AuthZUser";
-    private const string _adminPolicyName = "AuthZAdmin";
-    private const string _refreshPolicyName = "AuthZRefresh";
 
     public static IServiceCollection AddIndividualAuthentication(
         this IServiceCollection services,
@@ -86,14 +83,14 @@ public static class DependencyInjection
 
         services.AddAuthorization(config =>
         {
-            config.AddPolicy(_adminPolicyName, policyBuilder =>
+            config.AddPolicy(AuthorizationPolicies.Admin, policyBuilder =>
             {
                 policyBuilder.RequireRole(UserRoles.Admin);
                 policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.Scopes);
                 policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
             });
 
-            config.AddPolicy(_refreshPolicyName, policyBuilder =>
+            config.AddPolicy(AuthorizationPolicies.Refresh, policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.RefreshScopes);

@@ -1,6 +1,7 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Authentication.Individual;
 using D20Tek.Minimal.Endpoints;
 
 namespace D20Tek.Shurly.Api.Endpoints.Home;
@@ -18,10 +19,10 @@ internal class HomeEndpoints : ICompositeApiEndpoint
             .RequireAuthorization();
 
         group.MapGet("/admin", GetAuthenticatedAdmin)
-            .RequireAuthorization("AuthZAdmin");
+            .RequireAuthorization(AuthorizationPolicies.Admin);
 
         group.MapGet("/refresh", GetRefreshToken)
-            .RequireAuthorization("AuthZRefresh");
+            .RequireAuthorization(AuthorizationPolicies.Refresh);
     }
 
     internal string GetHome() => "Shurly Api - Link shortening and management";

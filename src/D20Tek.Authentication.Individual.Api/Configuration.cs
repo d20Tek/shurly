@@ -6,6 +6,9 @@ internal class Configuration
     {
         public const string BaseUrl = "/api/v1/auth";
         public const string GroupTag = "Authentication";
+        public const string UserPolicyName = "AuthZUser";
+        public const string AdminPolicyName = "AuthZAdmin";
+        public const string RefreshPolicyName = "AuthZRefresh";
     }
 
     public class Register
@@ -21,5 +24,12 @@ internal class Configuration
         public const string RoutePattern = "/login";
         public const string EndpointName = "Login";
         public const string DisplayName = "Login";
+    }
+
+    public class GetClaims
+    {
+        public const string RoutePattern = "/account/claims";
+        public const string EndpointName = "GetClaims";
+        public const string DisplayName = "GetClaims";
     }
 }

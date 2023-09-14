@@ -6,8 +6,6 @@ using D20Tek.Authentication.Individual.Infrastructure;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
 
 namespace D20Tek.Authentication.Individual;
 
@@ -88,18 +85,27 @@ public static class DependencyInjection
         services.AddAuthorization(config =>
         {
             config.AddPolicy(_userPolicyName, policyBuilder =>
-                policyBuilder.AddScopeClaimsPolicy(jwtSettings.Scopes));
+            {
+                policyBuilder.RequireRole(UserRoles.User);
+                policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.Scopes);
+                policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+            });
 
             config.AddPolicy(_adminPolicyName, policyBuilder =>
             {
-                policyBuilder.AddRoleClaimsPolicy(UserRoles.Admin);
-                policyBuilder.AddScopeClaimsPolicy(jwtSettings.Scopes);
+                policyBuilder.RequireRole(UserRoles.Admin);
+                policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.Scopes);
+                policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
             });
 
             config.AddPolicy(_refreshPolicyName, policyBuilder =>
-                policyBuilder.AddScopeClaimsPolicy(jwtSettings.RefreshScopes));
-        });
+            {
+                policyBuilder.RequireClaim(ClaimTypesExtension.Scope, jwtSettings.RefreshScopes);
+                policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+            });
 
+            config.DefaultPolicy = config.GetPolicy(_userPolicyName)!;
+        });
         return services;
     }
 
@@ -112,24 +118,5 @@ public static class DependencyInjection
         services.AddScoped<RegisterCommandValidator>();
 
         return services;
-    }
-
-
-    private static void AddScopeClaimsPolicy(
-        this AuthorizationPolicyBuilder policyBuilder,
-        string[] scopes)
-    {
-        policyBuilder.Requirements.Add(
-            new ClaimsAuthorizationRequirement(ClaimTypesExtension.Scope, scopes));
-    }
-
-    private static void AddRoleClaimsPolicy(
-        this AuthorizationPolicyBuilder policyBuilder,
-        string role)
-    {
-        policyBuilder.Requirements.Add(
-            new ClaimsAuthorizationRequirement(
-                ClaimTypes.Role,
-                new string[] { role }));
     }
 }

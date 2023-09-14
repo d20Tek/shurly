@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System.Security.Claims;
 
 namespace D20Tek.Authentication.Individual.Api;
 
@@ -34,6 +35,14 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .WithDisplayName(Configuration.Login.DisplayName)
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+
+        group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)
+            .WithName(Configuration.GetClaims.EndpointName)
+            .WithDisplayName(Configuration.GetClaims.DisplayName)
+            .Produces(StatusCodes.Status200OK)
+            .RequireAuthorization(
+                Configuration.Authentication.UserPolicyName,
+                Configuration.Authentication.AdminPolicyName);
     }
 
     public async Task<IResult> RegisterAsync(
@@ -65,4 +74,7 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
 
         return authResult.ToApiResult(_authResponseMapper.Map);
     }
+
+    public IResult GetClaims(ClaimsPrincipal user) =>
+        Results.Json(user.Claims.Select(x => x.ToString()));
 }

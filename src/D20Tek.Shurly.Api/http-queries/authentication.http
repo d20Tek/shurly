@@ -1,0 +1,29 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host = https://localhost:7208
+@contentType = application/json
+@token = token
+
+### Register(create) new account
+POST {{host}}/api/v1/auth/register
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro",
+  "givenName": "Pedro",
+  "familyName": "Silva",
+  "email": "darthpedro@gmail.com",
+  "password": "Password123!"
+}
+
+### Login
+POST {{host}}/api/v1/auth/login
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro",
+  "password": "Password123!"
+}
+
+###
+GET {{host}}/api/v1/auth/account/claims
+Authorization: Bearer token

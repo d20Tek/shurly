@@ -1,9 +1,9 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Authentication.Individual.Api;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Endpoints.Exceptions;
-using D20Tek.Authentication.Individual.Api;
 
 namespace D20Tek.Shurly.Api;
 

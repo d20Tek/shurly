@@ -20,5 +20,5 @@ internal interface IUserAccountRepository : IUserAccountReadRepository
 
     public Task<IdentityResult> UpdateAsync(UserAccount userAccount);
 
-    public Task<IdentityResult> DeleteAsync(Guid id);
+    public Task<IdentityResult> DeleteAsync(UserAccount userAccount);
 }

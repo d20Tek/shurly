@@ -57,6 +57,10 @@ internal class Errors
         public static readonly Error ChangePasswordForbidden = Error.Forbidden(
                 "Password.ChangeForbidden",
                 "Cannot change password to the specified value.");
+
+        public static readonly Error CannotDelete = Error.Invalid(
+                "Account.CannotDelete",
+                "Cannot delete this user's account.");
     }
 
     public static class Authentication

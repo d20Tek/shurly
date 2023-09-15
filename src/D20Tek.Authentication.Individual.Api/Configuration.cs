@@ -37,6 +37,13 @@ internal class Configuration
         public const string DisplayName = "Change Role";
     }
 
+    public class RemoveAccount
+    {
+        public const string RoutePattern = "/";
+        public const string EndpointName = "RemoveAccount";
+        public const string DisplayName = "Remove Account";
+    }
+
     public class GetClaims
     {
         public const string RoutePattern = "/claims";

@@ -52,34 +52,23 @@ internal sealed class UserAccountRepository : UserAccountReadRepository, IUserAc
         });
     }
 
-    public async Task<bool> RemoveUserRolesAsync(UserAccount userAccount, IEnumerable<string> userRoles)
+    public async Task<bool> RemoveUserRolesAsync(
+        UserAccount userAccount,
+        IEnumerable<string> userRoles)
     {
         return await _opsManager.OperationAsync<bool>(async () =>
-        {
-            var result = await _userManager.RemoveFromRolesAsync(userAccount, userRoles);
-            return result.Succeeded;
-        });
+            (await _userManager.RemoveFromRolesAsync(userAccount, userRoles)).Succeeded);
     }
 
     public async Task<IdentityResult> UpdateAsync(UserAccount userAccount)
     {
         return await _opsManager.OperationAsync(async () =>
-        {
-            return await _userManager.UpdateAsync(userAccount);
-        });
+            await _userManager.UpdateAsync(userAccount));
     }
 
-    public async Task<IdentityResult> DeleteAsync(Guid id)
+    public async Task<IdentityResult> DeleteAsync(UserAccount userAccount)
     {
         return await _opsManager.OperationAsync(async () =>
-        {
-            var userAccount = await GetByIdAsync(id);
-            if (userAccount is null)
-            {
-                return IdentityResult.Failed(Errors.Authentication.AccountNotFound);
-            }
-
-            return await _userManager.DeleteAsync(userAccount);
-        });
+            await _userManager.DeleteAsync(userAccount));
     }
 }

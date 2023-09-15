@@ -53,6 +53,7 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+            .ExcludeFromDescription()
             .RequireAuthorization(AuthorizationPolicies.Admin);
 
         group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)

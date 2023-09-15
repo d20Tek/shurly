@@ -24,6 +24,16 @@ Content-Type: {{contentType}}
   "password": "Password123!"
 }
 
+### Change password
+PATCH {{host}}/api/v1/auth/password
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Password123!",
+  "newPassword": "Password123!5"
+}
+
 ###
-GET {{host}}/api/v1/auth/account/claims
+GET {{host}}/api/v1/auth/claims
 Authorization: Bearer {{token}}

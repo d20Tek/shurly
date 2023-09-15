@@ -23,10 +23,17 @@ internal class Configuration
         public const string DisplayName = "Login";
     }
 
+    public class ChangePassword
+    {
+        public const string RoutePattern = "/password";
+        public const string EndpointName = "ChangePassword";
+        public const string DisplayName = "Change Password";
+    }
+
     public class GetClaims
     {
-        public const string RoutePattern = "/account/claims";
-        public const string EndpointName = "GetClaims";
-        public const string DisplayName = "GetClaims";
+        public const string RoutePattern = "/claims";
+        public const string EndpointName = "Get Claims";
+        public const string DisplayName = "Get Claims";
     }
 }

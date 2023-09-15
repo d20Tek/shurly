@@ -1,6 +1,7 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Authentication.Individual.UseCases.ChangePassword;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Minimal.Endpoints;
@@ -36,6 +37,15 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest);
 
+        group.MapPatch(Configuration.ChangePassword.RoutePattern, ChangePasswordAsync)
+            .WithName(Configuration.ChangePassword.EndpointName)
+            .WithName(Configuration.ChangePassword.DisplayName)
+            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesProblem(StatusCodes.Status409Conflict)
+            .RequireAuthorization();
+
         group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)
             .WithName(Configuration.GetClaims.EndpointName)
             .WithDisplayName(Configuration.GetClaims.DisplayName)
@@ -69,6 +79,22 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
     {
         var query = new LoginQuery(request.UserName, request.Password);
         var authResult = await queryHandler.HandleAsync(query, cancellation);
+
+        return authResult.ToApiResult(_authResponseMapper.Map);
+    }
+
+    public async Task<IResult> ChangePasswordAsync(
+        [AsParameters] AuthRequestEnvelope<ChangePasswordRequest> request,
+        [FromServices] IChangePasswordCommandHandler commandHandler,
+        CancellationToken cancellation)
+    {
+        var userId = request.User.FindUserId();
+        var command = new ChangePasswordCommand(
+            userId,
+            request.Body.CurrentPassword,
+            request.Body.NewPassword);
+
+        var authResult = await commandHandler.HandleAsync(command, cancellation);
 
         return authResult.ToApiResult(_authResponseMapper.Map);
     }

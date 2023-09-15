@@ -4,7 +4,7 @@
 @token = token
 
 ### Register(create) new account
-POST {{host}}/api/v1/auth/register
+POST {{host}}/api/v1/account
 Content-Type: {{contentType}}
 
 {
@@ -16,7 +16,7 @@ Content-Type: {{contentType}}
 }
 
 ### Login
-POST {{host}}/api/v1/auth/login
+POST {{host}}/api/v1/account/login
 Content-Type: {{contentType}}
 
 {
@@ -25,7 +25,7 @@ Content-Type: {{contentType}}
 }
 
 ### Change password
-PATCH {{host}}/api/v1/auth/password
+PATCH {{host}}/api/v1/account/password
 Authorization: Bearer {{token}}
 Content-Type: {{contentType}}
 
@@ -34,6 +34,6 @@ Content-Type: {{contentType}}
   "newPassword": "Password123!5"
 }
 
-###
-GET {{host}}/api/v1/auth/claims
+### Get token claims
+GET {{host}}/api/v1/account/claims
 Authorization: Bearer {{token}}

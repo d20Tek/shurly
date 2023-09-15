@@ -4,13 +4,13 @@ internal class Configuration
 {
     public class Authentication
     {
-        public const string BaseUrl = "/api/v1/auth";
+        public const string BaseUrl = "/api/v1/account";
         public const string GroupTag = "Authentication";
     }
 
     public class Register
     {
-        public const string RoutePattern = "/register";
+        public const string RoutePattern = "/";
         public const string EndpointName = "Register";
         public const string DisplayName = "Register";
         public const string CreatedAtUrl = "/api/v1/auth/account";

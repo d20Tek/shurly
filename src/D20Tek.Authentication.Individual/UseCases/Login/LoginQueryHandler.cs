@@ -42,7 +42,7 @@ internal sealed class LoginQueryHandler : ILoginQueryHandler
         }
 
         // 3. get the account's user roles
-        var roles = await _accountRepository.GetUserRoles(account);
+        var roles = await _accountRepository.GetUserRolesAsync(account);
 
         return _jwtTokenGenerator.GenerateTokenResult(account, roles);
     }

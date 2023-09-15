@@ -54,7 +54,7 @@ internal sealed class RegisterCommandHandler : IRegisterCommandHandler
         }
 
         // 4. add user role to this account
-        if (await _accountRepository.AttachUserRole(account, UserRoles.User) is false)
+        if (await _accountRepository.AttachUserRoleAsync(account, UserRoles.User) is false)
         {
             return Errors.UserAccount.CannotAttachRole;
         }

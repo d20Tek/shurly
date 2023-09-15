@@ -4,181 +4,73 @@
 using D20Tek.Authentication.Individual.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
 
 namespace D20Tek.Authentication.Individual.Infrastructure;
 
-internal class UserAccountRepository : IUserAccountRepository
+internal sealed class UserAccountRepository : UserAccountReadRepository, IUserAccountRepository
 {
-    private readonly UserManager<UserAccount> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly ILogger<UserAccountRepository> _logger;
-
     public UserAccountRepository(
         UserManager<UserAccount> userManager,
         RoleManager<IdentityRole> roleManager,
         ILogger<UserAccountRepository> logger)
+        : base(userManager, roleManager, logger)
     {
-        _userManager = userManager;
-        _logger = logger;
-        _roleManager = roleManager;
     }
 
-    public async Task<UserAccount?> GetByIdAsync(Guid id)
+    public async Task<IdentityResult> ChangePasswordAsync(
+        UserAccount userAccount,
+        string currentPassword,
+        string newPassword)
     {
-        return await RepositoryOperationAsync<UserAccount?>(async () =>
-            await _userManager.FindByIdAsync(id.ToString()));
-    }
-
-    public async Task<UserAccount?> GetByUserNameAsync(string userName)
-    {
-        return await RepositoryOperationAsync<UserAccount?>(async () =>
-            await _userManager.FindByNameAsync(userName));
-    }
-
-    public async Task<UserAccount?> GetByEmailAsync(string email)
-    {
-        return await RepositoryOperationAsync<UserAccount?>(async () =>
-            await _userManager.FindByEmailAsync(email));
-    }
-
-    public async Task<bool> CheckPasswordAsync(UserAccount userAccount, string password)
-    {
-        return await RepositoryOperationAsync<bool>(async () =>
-            await _userManager.CheckPasswordAsync(userAccount, password));
+        return await _opsManager.OperationAsync(async () =>
+            await _userManager.ChangePasswordAsync(userAccount, currentPassword, newPassword));
     }
 
     public async Task<IdentityResult> CreateAsync(UserAccount userAccount, string password)
     {
-        return await RepositoryOperationAsync(async () =>
-        {
-            var result = await _userManager.CreateAsync(userAccount, password);
-            if (result.Succeeded is false)
-            {
-                _logger.LogError(
-                    "UserAccountRepository.CreateAsync failed: {error}",
-                    result.Errors);
-            }
-
-            return result;
-        });
+        return await _opsManager.OperationAsync(async () =>
+            await _userManager.CreateAsync(userAccount, password));
     }
 
-    public async Task<IEnumerable<string>> GetUserRoles(UserAccount userAccount)
+    public async Task<bool> AttachUserRoleAsync(UserAccount userAccount, string userRole)
     {
-        return await RepositoryOperationAsync<IEnumerable<string>>(async () =>
-            await _userManager.GetRolesAsync(userAccount))
-                ?? Array.Empty<string>();
-    }
-
-    public async Task<bool> AttachUserRole(UserAccount userAccount, string userRole)
-    {
-        return await RepositoryOperationAsync<bool>(async () =>
+        return await _opsManager.OperationAsync<bool>(async () =>
         {
             if (!await _roleManager.RoleExistsAsync(userRole))
             {
                 var result = await _roleManager.CreateAsync(new IdentityRole(userRole));
-                if (result.Succeeded is false)
-                {
-                    _logger.LogError(
-                        "UserAccountRepository.AttachUserRole unable to create new role: {error}",
-                        result.Errors);
-                    return false;
-                }
+                if (result.Succeeded is false) return false;
             }
 
             if (await _roleManager.RoleExistsAsync(userRole))
             {
                 var result = await _userManager.AddToRoleAsync(userAccount, userRole);
-                if (result.Succeeded is false)
-                {
-                    _logger.LogError(
-                        "UserAccountRepository.AttachUserRole unable to add new role: {error}",
-                        result.Errors);
-                    return false;
-                }
+                if (result.Succeeded is false) return false;
             }
 
             return true;
         });
     }
 
-    public async Task<bool> UpdateAsync(UserAccount userAccount)
+    public async Task<IdentityResult> UpdateAsync(UserAccount userAccount)
     {
-        return await RepositoryOperationAsync<bool>(async () =>
+        return await _opsManager.OperationAsync(async () =>
         {
-            var result = await _userManager.UpdateAsync(userAccount);
-            if (result.Succeeded is false)
-            {
-                _logger.LogError(
-                    "UserAccountRepository.UpdateAsync failed: {error}",
-                    result.Errors);
-            }
-
-            return result.Succeeded;
+            return await _userManager.UpdateAsync(userAccount);
         });
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<IdentityResult> DeleteAsync(Guid id)
     {
-        return await RepositoryOperationAsync<bool>(async () =>
+        return await _opsManager.OperationAsync(async () =>
         {
             var userAccount = await GetByIdAsync(id);
-            if (userAccount is null) return false;
-
-            var result = await _userManager.DeleteAsync(userAccount);
-            if (result.Succeeded is false)
+            if (userAccount is null)
             {
-                _logger.LogError(
-                    "UserAccountRepository.DeleteAsync failed: {error}",
-                    result.Errors);
+                return IdentityResult.Failed(Errors.Authentication.AccountNotFound);
             }
 
-            return result.Succeeded;
+            return await _userManager.DeleteAsync(userAccount);
         });
-    }
-
-    private async Task<TResult?> RepositoryOperationAsync<TResult>(
-        Func<Task<TResult>> operation,
-        [CallerMemberName] string caller = "method")
-    {
-        try
-        {
-            return await operation.Invoke();
-        }
-        catch (Exception ex)
-        {
-            var className = this.GetType().Name;
-            _logger.LogError(
-                ex,
-                $"Error processing {className}.{caller} operation.");
-            return default;
-        }
-    }
-
-    private async Task<IdentityResult> RepositoryOperationAsync(
-        Func<Task<IdentityResult>> operation,
-        [CallerMemberName] string caller = "method")
-    {
-        try
-        {
-            return await operation.Invoke();
-        }
-        catch (Exception ex)
-        {
-            var className = this.GetType().Name;
-            _logger.LogError(
-                ex,
-                $"Error processing {className}.{caller} operation.");
-
-            var result = new IdentityResult();
-            result.Errors.Append(new IdentityError
-            {
-                Code = "Unexpected",
-                Description = ex.Message
-            });
-
-            return result;
-        }
     }
 }

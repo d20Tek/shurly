@@ -2,6 +2,7 @@
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Minimal.Result;
+using Microsoft.AspNetCore.Identity;
 
 namespace D20Tek.Authentication.Individual;
 
@@ -55,5 +56,11 @@ internal class Errors
         public static readonly Error InvalidExistingCredentials = Error.Validation(
                 "Auth.InvalidExistingCredentials",
                 "The provided user's existing credentials are not valid.");
+
+        public static readonly IdentityError AccountNotFound = new()
+        {
+            Code = "Account.NotFound",
+            Description = "Test specified user account was not found"
+        };
     }
 }

@@ -30,6 +30,13 @@ internal class Configuration
         public const string DisplayName = "Change Password";
     }
 
+    public class ChangeRole
+    {
+        public const string RoutePattern = "/role";
+        public const string EndpointName = "ChangeRole";
+        public const string DisplayName = "Change Role";
+    }
+
     public class GetClaims
     {
         public const string RoutePattern = "/claims";

@@ -2,6 +2,7 @@
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.UseCases.ChangePassword;
+using D20Tek.Authentication.Individual.UseCases.ChangeRole;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Minimal.Endpoints;
@@ -39,12 +40,20 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
 
         group.MapPatch(Configuration.ChangePassword.RoutePattern, ChangePasswordAsync)
             .WithName(Configuration.ChangePassword.EndpointName)
-            .WithName(Configuration.ChangePassword.DisplayName)
+            .WithDisplayName(Configuration.ChangePassword.DisplayName)
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status403Forbidden)
-            .ProducesProblem(StatusCodes.Status409Conflict)
             .RequireAuthorization();
+
+        group.MapPatch(Configuration.ChangeRole.RoutePattern, ChangeRoleAsync)
+            .WithName(Configuration.ChangeRole.EndpointName)
+            .WithDisplayName(Configuration.ChangeRole.DisplayName)
+            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+            .RequireAuthorization(AuthorizationPolicies.Admin);
 
         group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)
             .WithName(Configuration.GetClaims.EndpointName)
@@ -97,6 +106,20 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
         var authResult = await commandHandler.HandleAsync(command, cancellation);
 
         return authResult.ToApiResult(_authResponseMapper.Map);
+    }
+
+    public async Task<IResult> ChangeRoleAsync(
+        [FromBody] ChangeRoleRequest request,
+        [FromServices] IChangeRoleCommandHandler commandHandler,
+        CancellationToken cancellation)
+    {
+        var command = new ChangeRoleCommand(
+            request.UserName,
+            request.NewRole);
+
+        var authResult = await commandHandler.HandleAsync(command, cancellation);
+
+        return authResult.ToApiResult();
     }
 
     public IResult GetClaims(ClaimsPrincipal user) =>

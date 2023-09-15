@@ -14,7 +14,9 @@ internal interface IUserAccountRepository : IUserAccountReadRepository
 
     public Task<IdentityResult> CreateAsync(UserAccount userAccount, string password);
 
-    public Task<bool> AttachUserRoleAsync(UserAccount userAccount, string roleName);
+    public Task<bool> AttachUserRoleAsync(UserAccount userAccount, string userRole);
+
+    public Task<bool> RemoveUserRolesAsync(UserAccount userAccount, IEnumerable<string> userRoles);
 
     public Task<IdentityResult> UpdateAsync(UserAccount userAccount);
 

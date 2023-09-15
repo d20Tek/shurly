@@ -52,6 +52,15 @@ internal sealed class UserAccountRepository : UserAccountReadRepository, IUserAc
         });
     }
 
+    public async Task<bool> RemoveUserRolesAsync(UserAccount userAccount, IEnumerable<string> userRoles)
+    {
+        return await _opsManager.OperationAsync<bool>(async () =>
+        {
+            var result = await _userManager.RemoveFromRolesAsync(userAccount, userRoles);
+            return result.Succeeded;
+        });
+    }
+
     public async Task<IdentityResult> UpdateAsync(UserAccount userAccount)
     {
         return await _opsManager.OperationAsync(async () =>

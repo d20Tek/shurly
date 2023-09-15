@@ -1,0 +1,59 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host = https://localhost:7208
+@contentType = application/json
+@token = token
+
+### Register(create) new account
+POST {{host}}/api/v1/account
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro-Admin",
+  "givenName": "Admin",
+  "familyName": "Silva",
+  "email": "darthpedro@admin.com",
+  "password": "Password5!"
+}
+
+### Login
+POST {{host}}/api/v1/account/login
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro-Admin",
+  "password": "Password5!"
+}
+
+### Change role
+PATCH {{host}}/api/v1/account/role
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro-Admin",
+  "newRole": "admin"
+}
+
+### Change role - user
+PATCH {{host}}/api/v1/account/role
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro",
+  "newRole": "user"
+}
+
+### Change password
+PATCH {{host}}/api/v1/account/password
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Password5!",
+  "newPassword": "Password42!"
+}
+
+### Get token claims
+GET {{host}}/api/v1/account/claims
+Authorization: Bearer {{token}}

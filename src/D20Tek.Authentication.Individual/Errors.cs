@@ -14,6 +14,10 @@ internal class Errors
                 "Account.NotFound",
                 $"The account with Id [{accountId}] was not found.");
 
+        public static Error NotFound(string userName) => Error.NotFound(
+                "Account.NotFound",
+                $"The account with UserName [{userName}] was not found.");
+
         public static readonly Error IdInvalid = Error.Validation(
                 "AccountId.Empty",
                 "The specified account id is invalid.");
@@ -45,6 +49,10 @@ internal class Errors
         public static readonly Error CannotAttachRole = Error.Invalid(
                 "UserRole.CannotAttach",
                 "Cannot attach the user role to this account.");
+
+        public static readonly Error CannotRemoveRoles = Error.Invalid(
+                "UserRole.CannotRemove",
+                "Cannot remove old user roles from this account.");
 
         public static readonly Error ChangePasswordForbidden = Error.Forbidden(
                 "Password.ChangeForbidden",

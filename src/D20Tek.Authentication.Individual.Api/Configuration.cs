@@ -37,6 +37,13 @@ internal class Configuration
         public const string DisplayName = "Change Role";
     }
 
+    public class GetAccount
+    {
+        public const string RoutePattern = "/";
+        public const string EndpointName = "GetAccount";
+        public const string DisplayName = "Get Account";
+    }
+
     public class RemoveAccount
     {
         public const string RoutePattern = "/";

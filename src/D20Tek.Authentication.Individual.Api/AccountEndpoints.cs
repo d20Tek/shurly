@@ -1,6 +1,7 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Authentication.Individual.UseCases.GetById;
 using D20Tek.Authentication.Individual.UseCases.RemoveAccount;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
@@ -21,6 +22,14 @@ internal class AccountEndpoints : ICompositeApiEndpoint
             .WithTags(Configuration.Authentication.GroupTag)
             .WithOpenApi();
 
+        group.MapGet(Configuration.GetAccount.RoutePattern, GetAccountAsync)
+            .WithName(Configuration.GetAccount.EndpointName)
+            .WithDisplayName(Configuration.GetAccount.DisplayName)
+            .Produces<AccountResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization();
+
         group.MapDelete(Configuration.RemoveAccount.RoutePattern, RemoveAccountAsync)
             .WithName(Configuration.RemoveAccount.EndpointName)
             .WithDisplayName(Configuration.RemoveAccount.DisplayName)
@@ -28,6 +37,18 @@ internal class AccountEndpoints : ICompositeApiEndpoint
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .RequireAuthorization();
+    }
+
+    public async Task<IResult> GetAccountAsync(
+        [AsParameters] ClaimsRequest request,
+        [FromServices] IGetByIdQueryHandler queryHandler,
+        CancellationToken cancellation)
+    {
+        var userId = request.User.FindUserId();
+        var query = new GetByIdQuery(userId);
+        var authResult = await queryHandler.HandleAsync(query, cancellation);
+
+        return authResult.ToApiResult(_responseMapper.Map);
     }
 
     public async Task<IResult> RemoveAccountAsync(

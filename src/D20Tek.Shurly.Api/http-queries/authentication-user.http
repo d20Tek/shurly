@@ -34,6 +34,10 @@ Content-Type: {{contentType}}
   "newPassword": "Password123!5"
 }
 
+### Get account
+GET {{host}}/api/v1/account
+Authorization: Bearer {{token}}
+
 ### Delete account
 DELETE {{host}}/api/v1/account
 Authorization: Bearer {{token}}

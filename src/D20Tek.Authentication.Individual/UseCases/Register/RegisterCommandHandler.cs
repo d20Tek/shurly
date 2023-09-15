@@ -8,7 +8,6 @@ namespace D20Tek.Authentication.Individual.UseCases.Register;
 
 internal sealed class RegisterCommandHandler : IRegisterCommandHandler
 {
-    private static readonly string[] _userRoles = new[] { UserRoles.User };
     private readonly IUserAccountRepository _accountRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly RegisterCommandValidator _validator;
@@ -59,7 +58,7 @@ internal sealed class RegisterCommandHandler : IRegisterCommandHandler
             return Errors.UserAccount.CannotAttachRole;
         }
 
-        return _jwtTokenGenerator.GenerateTokenResult(account, _userRoles);
+        return await _jwtTokenGenerator.GenerateTokenResult(_accountRepository, account);
     }
 
     private async Task<Result> ValidateGuardConditions(RegisterCommand command)

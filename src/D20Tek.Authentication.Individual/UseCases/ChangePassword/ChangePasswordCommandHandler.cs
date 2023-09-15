@@ -6,7 +6,6 @@ using D20Tek.Minimal.Result;
 
 namespace D20Tek.Authentication.Individual.UseCases.ChangePassword;
 
-/*
 internal class ChangePasswordCommandHandler : IChangePasswordCommandHandler
 {
     private readonly IUserAccountRepository _accountRepository;
@@ -48,7 +47,7 @@ internal class ChangePasswordCommandHandler : IChangePasswordCommandHandler
             command.NewPassword);
         if (result.Succeeded is false)
         {
-            return Errors.Authentication.ChangePasswordForbidden;
+            return Errors.UserAccount.ChangePasswordForbidden;
         }
 
         return await _jwtTokenGenerator.GenerateTokenResult(_accountRepository, account);
@@ -72,4 +71,3 @@ internal class ChangePasswordCommandHandler : IChangePasswordCommandHandler
         return account;
     }
 }
-*/

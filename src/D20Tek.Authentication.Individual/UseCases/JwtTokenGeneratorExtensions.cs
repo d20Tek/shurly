@@ -7,11 +7,12 @@ namespace D20Tek.Authentication.Individual.UseCases;
 
 internal static class JwtTokenGeneratorExtensions
 {
-    public static AuthenticationResult GenerateTokenResult(
+    public async static Task<AuthenticationResult> GenerateTokenResult(
         this IJwtTokenGenerator jwtTokenGenerator,
-        UserAccount userAccount,
-        IEnumerable<string> userRoles)
+        IUserAccountRepository repository,
+        UserAccount userAccount)
     {
+        var userRoles = await repository.GetUserRolesAsync(userAccount);
         var token = jwtTokenGenerator.GenerateAccessToken(userAccount, userRoles);
         var refreshToken = jwtTokenGenerator.GenerateRefreshToken(userAccount);
 

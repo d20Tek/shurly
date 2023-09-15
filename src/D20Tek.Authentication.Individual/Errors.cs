@@ -45,6 +45,10 @@ internal class Errors
         public static readonly Error CannotAttachRole = Error.Invalid(
                 "UserRole.CannotAttach",
                 "Cannot attach the user role to this account.");
+
+        public static readonly Error ChangePasswordForbidden = Error.Forbidden(
+                "Password.ChangeForbidden",
+                "Cannot change password to the specified value.");
     }
 
     public static class Authentication

@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.Abstractions;
 using D20Tek.Authentication.Individual.Infrastructure;
+using D20Tek.Authentication.Individual.UseCases.ChangePassword;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,7 +28,8 @@ public static class DependencyInjection
         ConfigurationManager configuration)
     {
         services.AddDatabaseServices(configuration)
-                .AddInfrastructureServices(configuration)
+                .AddAuthConfiguration(configuration)
+                .AddInfrastructureServices()
                 .AddUseCases();
 
         return services;
@@ -55,17 +57,13 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddInfrastructureServices(
+    private static IServiceCollection AddAuthConfiguration(
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
         var jwtSettings = new JwtSettings();
         configuration.Bind(nameof(JwtSettings), jwtSettings);
-
         services.AddSingleton(Options.Create(jwtSettings));
-        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddSingleton<IDateTimeFacade, DateTimeFacade>();
-        services.AddScoped<IUserAccountRepository, UserAccountRepository>();
 
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer([ExcludeFromCodeCoverage] (options) =>
@@ -108,13 +106,24 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IDateTimeFacade, DateTimeFacade>();
+        services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+
+        return services;
+    }
+
     private static IServiceCollection AddUseCases(this IServiceCollection services)
     {
         services.AddScoped<ILoginQueryHandler, LoginQueryHandler>();
         services.AddScoped<IRegisterCommandHandler, RegisterCommandHandler>();
+        services.AddScoped<IChangePasswordCommandHandler, ChangePasswordCommandHandler>();
 
         services.AddScoped<LoginQueryValidator>();
         services.AddScoped<RegisterCommandValidator>();
+        services.AddScoped<ChangePasswordCommandValidator>();
 
         return services;
     }

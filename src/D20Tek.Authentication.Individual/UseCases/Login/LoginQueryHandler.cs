@@ -41,10 +41,7 @@ internal sealed class LoginQueryHandler : ILoginQueryHandler
             return Errors.Authentication.InvalidCredentials;
         }
 
-        // 3. get the account's user roles
-        var roles = await _accountRepository.GetUserRolesAsync(account);
-
-        return _jwtTokenGenerator.GenerateTokenResult(account, roles);
+        return await _jwtTokenGenerator.GenerateTokenResult(_accountRepository, account);
     }
 
     private async Task<Result<UserAccount>> ValidateGuardConditions(LoginQuery query)

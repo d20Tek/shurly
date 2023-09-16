@@ -9,6 +9,7 @@ using D20Tek.Authentication.Individual.UseCases.GetById;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Authentication.Individual.UseCases.RemoveAccount;
+using D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -126,11 +127,13 @@ public static class DependencyInjection
         services.AddScoped<IChangeRoleCommandHandler, ChangeRoleCommandHandler>();
         services.AddScoped<IRemoveCommandHandler, RemoveCommandHandler>();
         services.AddScoped<IGetByIdQueryHandler, GetByIdQueryHandler>();
+        services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();
 
         services.AddScoped<LoginQueryValidator>();
         services.AddScoped<RegisterCommandValidator>();
         services.AddScoped<ChangePasswordCommandValidator>();
         services.AddScoped<ChangeRoleCommandValidator>();
+        services.AddScoped<UpdateCommandValidator>();
 
         return services;
     }

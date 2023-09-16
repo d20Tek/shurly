@@ -44,6 +44,13 @@ internal class Configuration
         public const string DisplayName = "Get Account";
     }
 
+    public class UpdateAccount
+    {
+        public const string RoutePattern = "/";
+        public const string EndpointName = "UpdateAccount";
+        public const string DisplayName = "Update Account";
+    }
+
     public class RemoveAccount
     {
         public const string RoutePattern = "/";

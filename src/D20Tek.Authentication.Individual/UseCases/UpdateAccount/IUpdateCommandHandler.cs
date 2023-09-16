@@ -1,11 +1,12 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Minimal.Endpoints;
-using Microsoft.AspNetCore.Http;
+using D20Tek.Minimal.Domain.Abstractions;
+using D20Tek.Minimal.Result;
 
-namespace D20Tek.Authentication.Individual.Api;
+namespace D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 
-internal sealed record ChangePasswordRequest(
-    string CurrentPassword,
-    string NewPassword) : IRequest<IResult>;
+public interface IUpdateCommandHandler :
+    ICommandHandler<UpdateCommand, Result<AccountResult>>
+{
+}

@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.UseCases.GetById;
 using D20Tek.Authentication.Individual.UseCases.RemoveAccount;
+using D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,7 @@ internal class AccountEndpoints : ICompositeApiEndpoint
     {
         var group = routeBuilder.MapGroup(Configuration.Authentication.BaseUrl)
             .WithTags(Configuration.Authentication.GroupTag)
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapGet(Configuration.GetAccount.RoutePattern, GetAccountAsync)
@@ -27,16 +29,23 @@ internal class AccountEndpoints : ICompositeApiEndpoint
             .WithDisplayName(Configuration.GetAccount.DisplayName)
             .Produces<AccountResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
+
+        group.MapPut(Configuration.UpdateAccount.RoutePattern, UpdateAccountAsync)
+            .WithName(Configuration.UpdateAccount.EndpointName)
+            .WithDisplayName(Configuration.UpdateAccount.DisplayName)
+            .Produces<AccountResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status409Conflict)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status401Unauthorized)
-            .RequireAuthorization();
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
 
         group.MapDelete(Configuration.RemoveAccount.RoutePattern, RemoveAccountAsync)
             .WithName(Configuration.RemoveAccount.EndpointName)
             .WithDisplayName(Configuration.RemoveAccount.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
+            .Produces<AccountResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status401Unauthorized)
-            .RequireAuthorization();
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
     }
 
     public async Task<IResult> GetAccountAsync(
@@ -47,6 +56,24 @@ internal class AccountEndpoints : ICompositeApiEndpoint
         var userId = request.User.FindUserId();
         var query = new GetByIdQuery(userId);
         var authResult = await queryHandler.HandleAsync(query, cancellation);
+
+        return authResult.ToApiResult(_responseMapper.Map);
+    }
+
+    public async Task<IResult> UpdateAccountAsync(
+        [AsParameters] AuthRequestEnvelope<UpdateAccountRequest> request,
+        [FromServices] IUpdateCommandHandler commandHandler,
+        CancellationToken cancellation)
+    {
+        var userId = request.User.FindUserId();
+        var command = new UpdateCommand(
+            userId,
+            request.Body.UserName,
+            request.Body.GivenName,
+            request.Body.FamilyName,
+            request.Body.Email);
+
+        var authResult = await commandHandler.HandleAsync(command, cancellation);
 
         return authResult.ToApiResult(_responseMapper.Map);
     }

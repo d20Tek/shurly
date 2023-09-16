@@ -34,6 +34,19 @@ Content-Type: {{contentType}}
   "newPassword": "Password123!5"
 }
 
+### Update account
+PUT {{host}}/api/v1/account
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro",
+  "givenName": "Pedro",
+  "familyName": "Silva",
+  "email": "darthpedro@gmail.com"
+}
+
+
 ### Get account
 GET {{host}}/api/v1/account
 Authorization: Bearer {{token}}

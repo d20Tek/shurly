@@ -29,7 +29,7 @@ internal class RemoveCommandHandler : IRemoveCommandHandler
         var result = await _accountRepository.DeleteAsync(account);
         if (result.Succeeded is false)
         {
-            return Errors.UserAccount.CannotDelete;
+            return result.ToMinimalResult<AccountResult>();
         }
 
         return new AccountResult(command.UserId);

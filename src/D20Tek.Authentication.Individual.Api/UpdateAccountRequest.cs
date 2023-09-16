@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace D20Tek.Authentication.Individual.Api;
 
-internal sealed record ChangePasswordRequest(
-    string CurrentPassword,
-    string NewPassword) : IRequest<IResult>;
+internal sealed record UpdateAccountRequest(
+    string UserName,
+    string GivenName,
+    string FamilyName,
+    string Email) : IRequest<IResult>;

@@ -58,10 +58,17 @@ internal class Configuration
         public const string DisplayName = "Remove Account";
     }
 
+    public class RefreshToken
+    {
+        public const string RoutePattern = "/token/refresh";
+        public const string EndpointName = "RefreshToken";
+        public const string DisplayName = "Refresh Token";
+    }
+
     public class GetClaims
     {
         public const string RoutePattern = "/claims";
-        public const string EndpointName = "Get Claims";
+        public const string EndpointName = "GetClaims";
         public const string DisplayName = "Get Claims";
     }
 }

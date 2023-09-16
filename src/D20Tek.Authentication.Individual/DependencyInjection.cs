@@ -7,6 +7,7 @@ using D20Tek.Authentication.Individual.UseCases.ChangePassword;
 using D20Tek.Authentication.Individual.UseCases.ChangeRole;
 using D20Tek.Authentication.Individual.UseCases.GetById;
 using D20Tek.Authentication.Individual.UseCases.Login;
+using D20Tek.Authentication.Individual.UseCases.RefreshToken;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Authentication.Individual.UseCases.RemoveAccount;
 using D20Tek.Authentication.Individual.UseCases.UpdateAccount;
@@ -128,6 +129,7 @@ public static class DependencyInjection
         services.AddScoped<IRemoveCommandHandler, RemoveCommandHandler>();
         services.AddScoped<IGetByIdQueryHandler, GetByIdQueryHandler>();
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();
+        services.AddScoped<IRefreshTokenQueryHandler, RefreshTokenQueryHandler>();
 
         services.AddScoped<LoginQueryValidator>();
         services.AddScoped<RegisterCommandValidator>();

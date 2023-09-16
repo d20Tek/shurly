@@ -4,6 +4,7 @@
 using D20Tek.Authentication.Individual.UseCases.ChangePassword;
 using D20Tek.Authentication.Individual.UseCases.ChangeRole;
 using D20Tek.Authentication.Individual.UseCases.Login;
+using D20Tek.Authentication.Individual.UseCases.RefreshToken;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
@@ -55,6 +56,14 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ExcludeFromDescription()
             .RequireAuthorization(AuthorizationPolicies.Admin);
+
+        group.MapPost(Configuration.RefreshToken.RoutePattern, RefreshTokenAsync)
+            .WithName(Configuration.RefreshToken.EndpointName)
+            .WithName(Configuration.RefreshToken.DisplayName)
+            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization(AuthorizationPolicies.Refresh);
 
         group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)
             .WithName(Configuration.GetClaims.EndpointName)
@@ -121,6 +130,19 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
         var authResult = await commandHandler.HandleAsync(command, cancellation);
 
         return authResult.ToApiResult();
+    }
+
+    public async Task<IResult> RefreshTokenAsync(
+        [AsParameters] ClaimsRequest request,
+        [FromServices] IRefreshTokenQueryHandler queryHandler,
+        CancellationToken cancellation)
+    {
+        var userId = request.User.FindUserId();
+        var query = new RefreshTokenQuery(userId);
+
+        var authResult = await queryHandler.HandleAsync(query, cancellation);
+
+        return authResult.ToApiResult(_authResponseMapper.Map);
     }
 
     public IResult GetClaims(ClaimsPrincipal user) =>

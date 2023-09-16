@@ -2,6 +2,7 @@
 @host = https://localhost:7208
 @contentType = application/json
 @token = token
+@refresh = token
 
 ### Register(create) new account
 POST {{host}}/api/v1/account
@@ -54,6 +55,10 @@ Authorization: Bearer {{token}}
 ### Delete account
 DELETE {{host}}/api/v1/account
 Authorization: Bearer {{token}}
+
+### Refresh access token
+POST {{host}}/api/v1/account/token/refresh
+Authorization: Bearer {{refresh}}
 
 ### Get token claims
 GET {{host}}/api/v1/account/claims

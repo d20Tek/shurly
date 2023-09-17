@@ -1,0 +1,14 @@
+﻿@page "/admin/dashboard"
+@attribute [Authorize(Roles = "admin")]
+
+<h3>Dashboard</h3>
+
+<AuthorizeView>
+    <Authorized>
+        @context.User.Identity?.Name | 
+        @context.User.IsInRole("admin")
+    </Authorized>
+</AuthorizeView>
+@code {
+
+}

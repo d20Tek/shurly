@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+<AuthorizeView>
+    <Authorized>
+        <a class="mx-2" href="/authentication/profile">
+            Hello, @(context.User.Identity?.Name ?? "Guest")!
+        </a>|
+        <a class="mx-2" href="/authentication/logout">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a class="mx-2" href="/authentication/register">Register</a>|
+        <a class="mx-2" href="/authentication/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>

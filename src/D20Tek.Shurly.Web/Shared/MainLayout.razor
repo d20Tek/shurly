@@ -7,15 +7,7 @@
 
     <main>
         <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    Welcome, @(context.User.Identity?.Name ?? "Guest")! |
-                    <a class="mx-2" href="/logout">Logout</a>
-                </Authorized>
-                <NotAuthorized>
-                    <a href="/login">Login</a>
-                </NotAuthorized>
-            </AuthorizeView>
+            <LoginDisplay />
         </div>
 
         <article class="content px-4">

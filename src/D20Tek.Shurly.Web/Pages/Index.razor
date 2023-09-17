@@ -6,10 +6,10 @@
 <p>A web application for creating and managing shortened URL redirects to your desired 
    full URLs. We allow authenticated users to save links that are easier to use in 
    social media or advertisements.</p>
+<hr />
 
 <AuthorizeView>
     <Authorized>
-      <hr />
       <div>You are logged in... here is your access token information:</div>
       <table class="table">
         <thead>
@@ -29,4 +29,7 @@
         </tbody>
         </table>
     </Authorized>
+    <NotAuthorized>
+        <LoginDisplay />
+    </NotAuthorized>
 </AuthorizeView>

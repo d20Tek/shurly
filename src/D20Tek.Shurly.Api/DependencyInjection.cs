@@ -22,6 +22,12 @@ internal static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
+        services.AddCors(options =>
+            options.AddDefaultPolicy(config =>
+                config.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()));
+
         return services;
     }
 
@@ -37,6 +43,7 @@ internal static class DependencyInjection
             app.UseSwaggerUI();
         }
 
+        app.UseCors();
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();

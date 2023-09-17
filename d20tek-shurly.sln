@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Domain", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Authentication.Individual", "src\D20Tek.Authentication.Individual\D20Tek.Authentication.Individual.csproj", "{1AE6B67B-6BCF-49CA-B0BF-4B4F3F77C4B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Api", "src\D20Tek.Shurly.Api\D20Tek.Shurly.Api.csproj", "{49CFBF68-5850-4956-8089-8198917B8A27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Api", "src\D20Tek.Shurly.Api\D20Tek.Shurly.Api.csproj", "{49CFBF68-5850-4956-8089-8198917B8A27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Authentication.Individual.Api", "src\D20Tek.Authentication.Individual.Api\D20Tek.Authentication.Individual.Api.csproj", "{15B78401-69F1-42ED-8583-4309D6D29EC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Authentication.Individual.Api", "src\D20Tek.Authentication.Individual.Api\D20Tek.Authentication.Individual.Api.csproj", "{15B78401-69F1-42ED-8583-4309D6D29EC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Web", "src\D20Tek.Shurly.Web\D20Tek.Shurly.Web.csproj", "{131203AB-2A45-411D-AC5D-FFBBEB92CF99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{15B78401-69F1-42ED-8583-4309D6D29EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B78401-69F1-42ED-8583-4309D6D29EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B78401-69F1-42ED-8583-4309D6D29EC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{131203AB-2A45-411D-AC5D-FFBBEB92CF99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{131203AB-2A45-411D-AC5D-FFBBEB92CF99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{131203AB-2A45-411D-AC5D-FFBBEB92CF99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{131203AB-2A45-411D-AC5D-FFBBEB92CF99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

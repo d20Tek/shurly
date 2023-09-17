@@ -1,4 +1,7 @@
-﻿namespace D20Tek.Authentication.Individual.Api;
+﻿//---------------------------------------------------------------------------------------------------------------------
+// Copyright (c) d20Tek.  All rights reserved.
+//---------------------------------------------------------------------------------------------------------------------
+namespace D20Tek.Authentication.Individual.Api;
 
 internal class Configuration
 {

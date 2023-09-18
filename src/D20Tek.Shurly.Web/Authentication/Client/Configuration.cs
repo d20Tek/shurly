@@ -11,5 +11,6 @@ internal static class Configuration
 
         public const string JwtBearerScheme = "Bearer";
         public const string AccessTokenKey = "accessToken";
+        public const string RefreshTokenKey = "refreshToken";
     }
 }

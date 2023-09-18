@@ -39,11 +39,12 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
             return _anonymous;
         }
 
+        var principal = DecodeJwtToken(token);
+
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             Configuration.Authentication.JwtBearerScheme,
             token);
 
-        var principal = DecodeJwtToken(token);
         return new AuthenticationState(principal);
     }
 
@@ -92,7 +93,7 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
         }
         catch (Exception ex)
         {
-            // Handle any exceptions here (e.g., token validation failed)
+            // nandle exceptions here and return anonymous principal
             Console.WriteLine($"Token validation failed: {ex.Message}");
             return new ClaimsPrincipal();
         }

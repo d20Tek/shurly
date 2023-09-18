@@ -49,15 +49,7 @@ internal sealed class AuthenticationService : IAuthenticationService
             return Error.Invalid("Login.Failed", "Invalid format of the authentication response.");
         }
 
-        await _localStorage.SetItemAsync(
-            Configuration.Authentication.AccessTokenKey,
-            response.Token);
-
-        _authStateProvider.NotifyUserAuthentication(response.Token);
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            Configuration.Authentication.JwtBearerScheme,
-            response.Token);
-        
+        await UpdateAuthToken(response);
         return response;
 
     }
@@ -65,8 +57,25 @@ internal sealed class AuthenticationService : IAuthenticationService
     public async Task LogoutAsync()
     {
         await _localStorage.RemoveItemAsync(Configuration.Authentication.AccessTokenKey);
+        await _localStorage.RemoveItemAsync(Configuration.Authentication.RefreshTokenKey);
 
         _authStateProvider.NotifyUserLogout();
         _httpClient.DefaultRequestHeaders.Authorization = null;
+    }
+
+    private async Task UpdateAuthToken(AuthenticationResponse response)
+    {
+        await _localStorage.SetItemAsync(
+            Configuration.Authentication.AccessTokenKey,
+            response.Token);
+
+        await _localStorage.SetItemAsync(
+            Configuration.Authentication.RefreshTokenKey,
+            response.RefreshToken);
+
+        _authStateProvider.NotifyUserAuthentication(response.Token);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            Configuration.Authentication.JwtBearerScheme,
+            response.Token);
     }
 }

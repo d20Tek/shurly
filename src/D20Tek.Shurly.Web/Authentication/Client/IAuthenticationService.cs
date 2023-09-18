@@ -11,4 +11,6 @@ internal interface IAuthenticationService
     public Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request);
 
     public Task LogoutAsync();
+
+    public Task<Result<AuthenticationResponse>> RegisterAsync(RegisterRequest request);
 }

@@ -8,6 +8,7 @@ internal static class Configuration
     public class Authentication
     {
         public const string Login = "/login";
+        public const string Register = "/";
 
         public const string JwtBearerScheme = "Bearer";
         public const string AccessTokenKey = "accessToken";

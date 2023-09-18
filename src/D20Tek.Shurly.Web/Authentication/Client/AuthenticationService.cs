@@ -30,10 +30,10 @@ internal sealed class AuthenticationService : IAuthenticationService
         _baseUrl = endpointOptions.Value.Authentication;
     }
 
-    public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest model)
+    public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request)
     {
         var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Login}";
-        var loginResult = await _httpClient.PostAsJsonAsync(serviceUrl, model);
+        var loginResult = await _httpClient.PostAsJsonAsync(serviceUrl, request);
         if (loginResult.IsSuccessStatusCode is false)
         {
             Console.WriteLine("Login error:");
@@ -51,7 +51,6 @@ internal sealed class AuthenticationService : IAuthenticationService
 
         await UpdateAuthToken(response);
         return response;
-
     }
 
     public async Task LogoutAsync()
@@ -61,6 +60,29 @@ internal sealed class AuthenticationService : IAuthenticationService
 
         _authStateProvider.NotifyUserLogout();
         _httpClient.DefaultRequestHeaders.Authorization = null;
+    }
+
+    public async Task<Result<AuthenticationResponse>> RegisterAsync(RegisterRequest request)
+    {
+        var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Register}";
+        var registerResult = await _httpClient.PostAsJsonAsync(serviceUrl, request);
+        if (registerResult.IsSuccessStatusCode is false)
+        {
+            Console.WriteLine("Registration error:");
+            Console.WriteLine(await registerResult.Content.ReadAsStringAsync());
+            return Error.Invalid(
+                "Register.Failed",
+                "Unable to register user with specified data and credentials.");
+        }
+
+        var response = await registerResult.Content.ReadFromJsonAsync<AuthenticationResponse>();
+        if (response is null)
+        {
+            return Error.Invalid("Register.Failed", "Invalid format of the authentication response.");
+        }
+
+        await UpdateAuthToken(response);
+        return response;
     }
 
     private async Task UpdateAuthToken(AuthenticationResponse response)

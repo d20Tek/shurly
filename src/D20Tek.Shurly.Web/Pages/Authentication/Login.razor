@@ -19,8 +19,7 @@
                 </div>
                 <div class="form-floating my-2">
                     <InputText class="form-control" type="password" @bind-Value=request.Password
-                               autocomplete="current-password" aria-required="true"
-                               placeholder="password" />
+                               autocomplete="current-password" aria-required="true"/>
                     <label class="form-label" for="Password">Password</label>
                     <ValidationMessage For=@(() => request.Password) />
                 </div>

@@ -1,0 +1,76 @@
+﻿@page "/authentication/register"
+@inject IAuthenticationService _authService;
+@inject NavigationManager _nav;
+@using D20Tek.Authentication.Individual.Client.Contracts;
+
+<h3>Register</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@request" OnValidSubmit="PerformRegistration">
+            <h4>Create a new account.</h4>
+            <hr />
+            <DataAnnotationsValidator />
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=request.UserName
+                           autocomplete="username" aria-required="true"
+                           placeholder="UserName" />
+                <label class="form-label" for="UserName">User Name</label>
+                <ValidationMessage For=@(() => request.UserName) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=request.Email 
+                           autocomplete="username" aria-required="true"
+                           placeholder="name@example.com" />
+                <label class="form-label" for="email">Email</label>
+                <ValidationMessage For=@(() => request.Email) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=request.GivenName
+                           autocomplete="first-name" aria-required="true"
+                           placeholder="name" />
+                <label class="form-label" for="given-name">First Name</label>
+                <ValidationMessage For=@(() => request.GivenName) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=request.FamilyName
+                           autocomplete="last-name" aria-required="true"
+                           placeholder="name" />
+                <label class="form-label" for="family-name">Last Name</label>
+                <ValidationMessage For=@(() => request.FamilyName) />
+            </div>
+            <div class="form-floating my-2">
+                <InputText class="form-control" type="password" @bind-Value=request.Password
+                           autocomplete="new-password" aria-required="true"
+                           placeholder="password" />
+                <label class="form-label" for="new-password">Password</label>
+                <ValidationMessage For=@(() => request.Password) />
+            </div>
+            <div class="form-floating my-2">
+                <InputText class="form-control" type="password" @bind-Value=request.ConfirmPassword
+                           autocomplete="confirm-password" aria-required="true"
+                           placeholder="password" />
+                <label class="form-label" for="confirm-password">Confirm Password</label>
+                <ValidationMessage For=@(() => request.ConfirmPassword) />
+            </div>
+
+            <button id="register-submit" type="submit" class="w-100 btn btn-lg btn-primary">
+                Register
+            </button>
+        </EditForm>
+        <div class="my-2">@message</div>
+    </div>
+</div>
+
+@code {
+    RegisterRequest request = new RegisterRequest();
+    string message = string.Empty;
+
+    private async Task PerformRegistration()
+    {
+        var response = await _authService.RegisterAsync(request);
+        response.MatchFirstError(
+            success => _nav.NavigateTo("/"),
+            error => message = error.Message);
+    }
+}

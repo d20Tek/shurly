@@ -3,30 +3,49 @@
 @inject NavigationManager _nav;
 @using D20Tek.Authentication.Individual.Client.Contracts;
 
-<h3>Login</h3>
+<h3>Log in</h3>
 
 <div class="row my-2">
-    <div class="col-md-6">
-        <EditForm Model="@request" OnValidSubmit="PerformLogin">
-            <DataAnnotationsValidator />
-            <div class="form-group my-2">
-                <label for="UserName">User Name</label>
-                <InputText class="form-control" @bind-Value=request.UserName />
-                <ValidationMessage For=@(() => request.UserName) />
-            </div>
-            <div class="form-group my-2">
-                <label for="Password">Password</label>
-                <InputText class="form-control" type="password" @bind-Value=request.Password />
-                <ValidationMessage For=@(() => request.Password) />
-            </div>
+    <div class="col-md-4">
+        <section>
+            <EditForm Model="@request" OnValidSubmit="PerformLogin">
+                <DataAnnotationsValidator />
+                <div class="form-floating my-2">
+                    <InputText class="form-control" @bind-Value=request.UserName 
+                               autocomplete="username" aria-required="true"
+                               placeholder="UserName" />
+                    <label class="form-label" for="UserName">User Name</label>
+                    <ValidationMessage For=@(() => request.UserName) />
+                </div>
+                <div class="form-floating my-2">
+                    <InputText class="form-control" type="password" @bind-Value=request.Password
+                               autocomplete="current-password" aria-required="true"
+                               placeholder="password" />
+                    <label class="form-label" for="Password">Password</label>
+                    <ValidationMessage For=@(() => request.Password) />
+                </div>
 
-            <div class="my-2">
-                @message
-            </div>
-            <div class="my-2">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-        </EditForm>
+                <div class="my-2">
+                    @message
+                </div>
+                <div class="my-2">
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">
+                        Log in
+                    </button>
+                </div>
+                <hr />
+                <div>
+                    <p>
+                        <a id="forgot-password" href="./authentication/forgot-password">
+                            Forgot my password?
+                        </a>
+                    </p>
+                    <p>
+                        <a href="./authentication/register">Register as new user</a>
+                    </p>
+                </div>
+            </EditForm>
+        </section>
     </div>
 </div>
 

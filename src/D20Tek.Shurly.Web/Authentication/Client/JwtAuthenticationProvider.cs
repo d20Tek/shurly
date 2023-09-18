@@ -3,14 +3,21 @@
 //---------------------------------------------------------------------------------------------------------------------
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 
 namespace D20Tek.Authentication.Individual.Client;
 
 internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
 {
+    private const string _jwtAuthenticationType = "jwtAuthType";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
+    private readonly AuthenticationState _anonymous = new (new ClaimsPrincipal());
+    private readonly JwtClientSettings _jwtSettings;
 
     public JwtAuthenticationProvider(
         HttpClient httpClient,
@@ -18,6 +25,12 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
+        _jwtSettings = new JwtClientSettings
+        {
+            Audience = "d20Tek.Shurly",
+            Issuer = "d20Tek.AuthenticationService",
+            Secret = "d20Tek.Shurly.Api.4D8E0544-286C-407C-A8AB-C4A363AC7A5E"
+        };
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -26,28 +39,65 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
             Configuration.Authentication.AccessTokenKey);
         if (string.IsNullOrEmpty(token))
         {
-            return JwtAuthenticationStateFactory.CreateAnonymous();
+            return _anonymous;
         }
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             Configuration.Authentication.JwtBearerScheme,
             token);
 
-        var tokenClaims = JwtParser.ParseClaimsFromJwt(token);
-        return JwtAuthenticationStateFactory.Create(tokenClaims);
+        var principal = DecodeJwtToken(token);
+        return new AuthenticationState(principal);
     }
 
     public void NotifyUserAuthentication(string token)
     {
-        var claims = JwtParser.ParseClaimsFromJwt(token);
-        var authState = JwtAuthenticationStateFactory.Create(claims);
+        var principal = DecodeJwtToken(token);
+        var authState = new AuthenticationState(principal);
 
         NotifyAuthenticationStateChanged(Task.FromResult(authState));
     }
 
     public void NotifyUserLogout()
     {
-        var authState = JwtAuthenticationStateFactory.CreateAnonymous();
-        NotifyAuthenticationStateChanged(Task.FromResult(authState));
+        NotifyAuthenticationStateChanged(Task.FromResult(_anonymous));
+    }
+
+    private ClaimsPrincipal DecodeJwtToken(string token)
+    {
+        try
+        {
+            // define the token validation parameters
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                NameClaimType = JwtRegisteredClaimNames.Name,
+
+                AuthenticationType = _jwtAuthenticationType,
+                ValidIssuer = _jwtSettings.Issuer,
+                ValidAudience = _jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_jwtSettings.Secret))
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            // validate and decode the token
+            ClaimsPrincipal claimsPrincipal = tokenHandler.ValidateToken(
+                token,
+                tokenValidationParameters,
+                out SecurityToken validatedToken);
+
+            return claimsPrincipal;
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions here (e.g., token validation failed)
+            Console.WriteLine($"Token validation failed: {ex.Message}");
+            return new ClaimsPrincipal();
+        }
     }
 }

@@ -10,7 +10,10 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
-    builder.Services.AddPresentationServices(builder.HostEnvironment);
+    builder.Services.AddScoped(sp =>
+        new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+    builder.Services.AddPresentationServices(builder.Configuration);
 }
 
 var app = builder.Build();

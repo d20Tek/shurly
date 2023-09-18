@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
@@ -21,16 +22,12 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
 
     public JwtAuthenticationProvider(
         HttpClient httpClient,
+        IOptions<JwtClientSettings> jwtOptions,
         ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
-        _jwtSettings = new JwtClientSettings
-        {
-            Audience = "d20Tek.Shurly",
-            Issuer = "d20Tek.AuthenticationService",
-            Secret = "d20Tek.Shurly.Api.4D8E0544-286C-407C-A8AB-C4A363AC7A5E"
-        };
+        _jwtSettings = jwtOptions.Value;
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()

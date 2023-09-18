@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Api", "src\D2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Authentication.Individual.Api", "src\D20Tek.Authentication.Individual.Api\D20Tek.Authentication.Individual.Api.csproj", "{15B78401-69F1-42ED-8583-4309D6D29EC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Web", "src\D20Tek.Shurly.Web\D20Tek.Shurly.Web.csproj", "{131203AB-2A45-411D-AC5D-FFBBEB92CF99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Web", "src\D20Tek.Shurly.Web\D20Tek.Shurly.Web.csproj", "{131203AB-2A45-411D-AC5D-FFBBEB92CF99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +50,7 @@ Global
 		{1AE6B67B-6BCF-49CA-B0BF-4B4F3F77C4B4} = {6306A643-AB17-4E17-90E9-1E33015CE725}
 		{49CFBF68-5850-4956-8089-8198917B8A27} = {6306A643-AB17-4E17-90E9-1E33015CE725}
 		{15B78401-69F1-42ED-8583-4309D6D29EC9} = {6306A643-AB17-4E17-90E9-1E33015CE725}
+		{131203AB-2A45-411D-AC5D-FFBBEB92CF99} = {6306A643-AB17-4E17-90E9-1E33015CE725}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA77E2D6-FE25-4362-8047-425E8D855E8F}

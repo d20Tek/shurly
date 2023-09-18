@@ -3,13 +3,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 namespace D20Tek.Authentication.Individual.Client;
 
-internal static class Configuration
+internal class ServiceEndpointSettings
 {
-    public class Authentication
-    {
-        public const string Login = "/login";
+    public string ServiceBase { get; init; } = default!;
 
-        public const string JwtBearerScheme = "Bearer";
-        public const string AccessTokenKey = "accessToken";
-    }
+    public string Authentication { get; init; } = default!;
 }

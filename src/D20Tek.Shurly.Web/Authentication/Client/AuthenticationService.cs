@@ -5,6 +5,7 @@ using Blazored.LocalStorage;
 using D20Tek.Authentication.Individual.Client.Contracts;
 using D20Tek.Minimal.Result;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -12,7 +13,6 @@ namespace D20Tek.Authentication.Individual.Client;
 
 internal sealed class AuthenticationService : IAuthenticationService
 {
-    private const string _hostUrl = "https://localhost:7208";  // todo: replace with app config
     private readonly HttpClient _httpClient;
     private readonly JwtAuthenticationProvider _authStateProvider;
     private readonly ILocalStorageService _localStorage;
@@ -21,12 +21,13 @@ internal sealed class AuthenticationService : IAuthenticationService
     public AuthenticationService(
         HttpClient httpClient,
         AuthenticationStateProvider authStateProvider,
-        ILocalStorageService localStorage)
+        ILocalStorageService localStorage,
+        IOptions<ServiceEndpointSettings> endpointOptions)
     {
         _httpClient = httpClient;
         _authStateProvider = (JwtAuthenticationProvider)authStateProvider;
         _localStorage = localStorage;
-        _baseUrl = $"{_hostUrl}{Configuration.Authentication.BaseUrl}";
+        _baseUrl = endpointOptions.Value.Authentication;
     }
 
     public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest model)

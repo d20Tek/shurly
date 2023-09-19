@@ -32,54 +32,56 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
 
     public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request)
     {
-        var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Login}";
-        var loginResult = await _httpClient.PostAsJsonAsync(serviceUrl, request);
-        var response = await ProcessHttpResponse<AuthenticationResponse>(loginResult);
-
-        if (response.IsSuccess)
+        var response = await InvokeServiceOperation<AuthenticationResponse>(async() =>
         {
-            await UpdateAuthToken(response.Value);
-        }
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Login}";
+            return await _httpClient.PostAsJsonAsync(serviceUrl, request);
+        },
+        UpdateAuthToken);
 
         return response;
     }
 
     public async Task LogoutAsync()
     {
-        await _localStorage.RemoveItemAsync(Configuration.Authentication.AccessTokenKey);
-        await _localStorage.RemoveItemAsync(Configuration.Authentication.RefreshTokenKey);
+        await InvokeOperation(async () =>
+        {
+            await _localStorage.RemoveItemAsync(Configuration.Authentication.AccessTokenKey);
+            await _localStorage.RemoveItemAsync(Configuration.Authentication.RefreshTokenKey);
 
-        _authStateProvider.NotifyUserLogout();
-        _httpClient.DefaultRequestHeaders.Authorization = null;
+            _authStateProvider.NotifyUserLogout();
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+        });
     }
 
     public async Task<Result<AuthenticationResponse>> RegisterAsync(RegisterRequest request)
     {
-        var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Register}";
-        var registerResult = await _httpClient.PostAsJsonAsync(serviceUrl, request);
-        var response = await ProcessHttpResponse<AuthenticationResponse>(registerResult);
-
-        if (response.IsSuccess)
+        var response = await InvokeServiceOperation<AuthenticationResponse>(async () =>
         {
-            await UpdateAuthToken(response.Value);
-        }
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Register}";
+            return await _httpClient.PostAsJsonAsync(serviceUrl, request);
+        },
+        UpdateAuthToken);
 
         return response;
     }
 
-    private async Task UpdateAuthToken(AuthenticationResponse response)
+    private async Task UpdateAuthToken(Result<AuthenticationResponse> response)
     {
-        await _localStorage.SetItemAsync(
-            Configuration.Authentication.AccessTokenKey,
-            response.Token);
+        if (response.IsSuccess)
+        {
+            await _localStorage.SetItemAsync(
+                Configuration.Authentication.AccessTokenKey,
+                response.Value.Token);
 
-        await _localStorage.SetItemAsync(
-            Configuration.Authentication.RefreshTokenKey,
-            response.RefreshToken);
+            await _localStorage.SetItemAsync(
+                Configuration.Authentication.RefreshTokenKey,
+                response.Value.RefreshToken);
 
-        _authStateProvider.NotifyUserAuthentication(response.Token);
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            Configuration.Authentication.JwtBearerScheme,
-            response.Token);
+            _authStateProvider.NotifyUserAuthentication(response.Value.Token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                Configuration.Authentication.JwtBearerScheme,
+                response.Value.Token);
+        }
     }
 }

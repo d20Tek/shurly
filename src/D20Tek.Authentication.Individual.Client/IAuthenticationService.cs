@@ -6,7 +6,7 @@ using D20Tek.Minimal.Result;
 
 namespace D20Tek.Authentication.Individual.Client;
 
-internal interface IAuthenticationService
+public interface IAuthenticationService
 {
     public Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request);
 

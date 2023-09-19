@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace D20Tek.Authentication.Individual.Client.Contracts;
 
-internal sealed class LoginRequest
+public sealed class LoginRequest
 {
     [Required]
     public string UserName { get; set; } = default!;

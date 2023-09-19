@@ -1,6 +1,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Authentication.Individual.Client;
 using D20Tek.Shurly.Web;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -13,7 +14,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
     builder.Services.AddScoped(sp =>
         new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-    builder.Services.AddPresentationServices(builder.Configuration);
+    builder.Services.AddAuthenticationPresentation(builder.Configuration);
 }
 
 var app = builder.Build();

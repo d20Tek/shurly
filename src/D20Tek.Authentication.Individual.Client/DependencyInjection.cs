@@ -2,15 +2,16 @@
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
 using Blazored.LocalStorage;
-using D20Tek.Authentication.Individual.Client;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace D20Tek.Shurly.Web;
+namespace D20Tek.Authentication.Individual.Client;
 
-internal static class DependencyInjection
+public static class DependencyInjection
 {
-    public static IServiceCollection AddPresentationServices(
+    public static IServiceCollection AddAuthenticationPresentation(
         this IServiceCollection services,
         IConfiguration configuration)
     {

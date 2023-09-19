@@ -11,7 +11,7 @@ using System.Net.Http.Json;
 
 namespace D20Tek.Authentication.Individual.Client;
 
-internal sealed class AuthenticationService : IAuthenticationService
+internal sealed class AuthenticationService : ServiceBase, IAuthenticationService
 {
     private readonly HttpClient _httpClient;
     private readonly JwtAuthenticationProvider _authStateProvider;
@@ -34,22 +34,13 @@ internal sealed class AuthenticationService : IAuthenticationService
     {
         var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Login}";
         var loginResult = await _httpClient.PostAsJsonAsync(serviceUrl, request);
-        if (loginResult.IsSuccessStatusCode is false)
+        var response = await ProcessHttpResponse<AuthenticationResponse>(loginResult);
+
+        if (response.IsSuccess)
         {
-            Console.WriteLine("Login error:");
-            Console.WriteLine(await loginResult.Content.ReadAsStringAsync());
-            return Error.Invalid(
-                "Login.Failed",
-                "Unable to login with specified user credentials.");
+            await UpdateAuthToken(response.Value);
         }
 
-        var response = await loginResult.Content.ReadFromJsonAsync<AuthenticationResponse>();
-        if (response is null)
-        {
-            return Error.Invalid("Login.Failed", "Invalid format of the authentication response.");
-        }
-
-        await UpdateAuthToken(response);
         return response;
     }
 
@@ -66,22 +57,13 @@ internal sealed class AuthenticationService : IAuthenticationService
     {
         var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Register}";
         var registerResult = await _httpClient.PostAsJsonAsync(serviceUrl, request);
-        if (registerResult.IsSuccessStatusCode is false)
+        var response = await ProcessHttpResponse<AuthenticationResponse>(registerResult);
+
+        if (response.IsSuccess)
         {
-            Console.WriteLine("Registration error:");
-            Console.WriteLine(await registerResult.Content.ReadAsStringAsync());
-            return Error.Invalid(
-                "Register.Failed",
-                "Unable to register user with specified data and credentials.");
+            await UpdateAuthToken(response.Value);
         }
 
-        var response = await registerResult.Content.ReadFromJsonAsync<AuthenticationResponse>();
-        if (response is null)
-        {
-            return Error.Invalid("Register.Failed", "Invalid format of the authentication response.");
-        }
-
-        await UpdateAuthToken(response);
         return response;
     }
 

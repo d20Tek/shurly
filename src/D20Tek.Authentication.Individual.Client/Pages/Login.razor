@@ -59,6 +59,6 @@
         var response = await _authService.LoginAsync(request);
         response.MatchFirstError(
             success => _nav.NavigateTo("/"),
-            error => message = error.Message);
+            error => message = $"[{error.Code}]: {error.Message}");
     }
 }

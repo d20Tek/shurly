@@ -71,6 +71,6 @@
         var response = await _authService.RegisterAsync(request);
         response.MatchFirstError(
             success => _nav.NavigateTo("/"),
-            error => message = error.Message);
+            error => message = $"[{error.Code}]: {error.Message}");
     }
 }

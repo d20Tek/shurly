@@ -26,15 +26,13 @@ internal abstract class ServiceBase
                     return result;
                 }
 
-                return Error.Invalid(
-                    "Service.CannotParseProblem",
-                    "Unable to parse a problem details from the service response body");
+                return Errors.AuthenticationService.CannotParseProblem;
             }
 
             var response = await message.Content.ReadFromJsonAsync<T>();
             if (response is null)
             {
-                return Error.Invalid("Login.Failed", "Invalid format of the authentication response.");
+                return Errors.AuthenticationService.CannotConvertPayload;
             }
 
             return response;

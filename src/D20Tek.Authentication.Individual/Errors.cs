@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace D20Tek.Authentication.Individual;
 
-internal class Errors
+internal static class Errors
 {
     public static class UserAccount
     {

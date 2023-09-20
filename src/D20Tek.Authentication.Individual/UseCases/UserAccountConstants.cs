@@ -9,4 +9,5 @@ internal class UserAccountConstants
     public const int EmailMaxLength = 128;
     public const int PasswordMinLength = 6;
     public const int PasswordMaxLength = 32;
+    public const int PhoneNumberLength = 32;
 }

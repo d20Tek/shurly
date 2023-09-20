@@ -55,9 +55,9 @@ internal class AccountEndpoints : ICompositeApiEndpoint
     {
         var userId = request.User.FindUserId();
         var query = new GetByIdQuery(userId);
-        var authResult = await queryHandler.HandleAsync(query, cancellation);
+        var accountResult = await queryHandler.HandleAsync(query, cancellation);
 
-        return authResult.ToApiResult(_responseMapper.Map);
+        return accountResult.ToApiResult(_responseMapper.Map);
     }
 
     public async Task<IResult> UpdateAccountAsync(
@@ -71,11 +71,12 @@ internal class AccountEndpoints : ICompositeApiEndpoint
             request.Body.UserName,
             request.Body.GivenName,
             request.Body.FamilyName,
-            request.Body.Email);
+            request.Body.Email,
+            request.Body.PhoneNumber);
 
-        var authResult = await commandHandler.HandleAsync(command, cancellation);
+        var accountResult = await commandHandler.HandleAsync(command, cancellation);
 
-        return authResult.ToApiResult(_responseMapper.Map);
+        return accountResult.ToApiResult(_responseMapper.Map);
     }
 
     public async Task<IResult> RemoveAccountAsync(

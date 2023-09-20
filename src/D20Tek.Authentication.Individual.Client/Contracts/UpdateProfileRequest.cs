@@ -29,5 +29,5 @@ public class UpdateProfileRequest
 
     [Phone]
     [Display(Name = "Phone number")]
-    public string? Phone { get; set; }
+    public string? PhoneNumber { get; set; }
 }

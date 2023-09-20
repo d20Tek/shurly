@@ -82,7 +82,8 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             request.GivenName,
             request.FamilyName,
             request.Email,
-            request.Password);
+            request.Password,
+            request.PhoneNumber);
 
         var authResult = await commandHandler.HandleAsync(command, cancellation);
 

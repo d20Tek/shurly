@@ -39,6 +39,13 @@
                 <label class="form-label" for="family-name">Last Name</label>
                 <ValidationMessage For=@(() => request.FamilyName) />
             </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" type="tel" @bind-Value=request.PhoneNumber
+                           autocomplete="phone" placeholder="Enter your phone number" />
+                <label class="form-label" for="phone">Phone number</label>
+                <ValidationMessage For=@(() => request.PhoneNumber) />
+            </div>
+
             <div class="form-floating my-2">
                 <InputText class="form-control" type="password" @bind-Value=request.Password
                            autocomplete="new-password" aria-required="true"

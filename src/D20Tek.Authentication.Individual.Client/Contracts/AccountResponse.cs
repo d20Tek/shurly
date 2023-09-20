@@ -8,4 +8,5 @@ public sealed record AccountResponse(
     string UserName,
     string GivenName,
     string FamilyName,
-    string Email);
+    string Email,
+    string? PhoneNumber);

@@ -11,4 +11,5 @@ public sealed record UpdateCommand(
     string UserName,
     string GivenName,
     string FamilyName,
-    string Email) : ICommand<Result<AccountResult>>;
+    string Email,
+    string? PhoneNumber) : ICommand<Result<AccountResult>>;

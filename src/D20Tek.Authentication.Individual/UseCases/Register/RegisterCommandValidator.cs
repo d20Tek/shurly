@@ -4,6 +4,7 @@
 using D20Tek.Minimal.Domain.Abstractions;
 using D20Tek.Minimal.Domain.Validations;
 using D20Tek.Minimal.Result;
+using System.Text.RegularExpressions;
 
 namespace D20Tek.Authentication.Individual.UseCases.Register;
 
@@ -48,6 +49,17 @@ internal sealed class RegisterCommandValidator : IValidator<RegisterCommand>
         result.AddOnFailure(
             () => command.Email.IsValidEmailAddress(),
             Errors.UserAccount.EmailInvalidFormat);
+
+        if (command.PhoneNumber is not null)
+        {
+            result.AddOnFailure(
+                () => command.PhoneNumber.InMaxLength(UserAccountConstants.PhoneNumberLength),
+                Errors.UserAccount.PropertyTooLong(nameof(command.PhoneNumber)));
+
+            result.AddOnFailure(
+                () => command.PhoneNumber.IsValidPhoneNumber(),
+                Errors.UserAccount.PhoneInvalidFormat);
+        }
 
         result.AddOnFailure(
             () => command.Password.NotEmpty(),

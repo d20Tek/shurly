@@ -36,6 +36,7 @@ internal class UpdateCommandHandler : IUpdateCommandHandler
         account.GivenName = command.GivenName;
         account.FamilyName = command.FamilyName;
         account.Email = command.Email;
+        account.PhoneNumber = command.PhoneNumber;
 
         // 3. Perform the update
         var result = await _accountRepository.UpdateAsync(account);
@@ -49,7 +50,8 @@ internal class UpdateCommandHandler : IUpdateCommandHandler
             account.UserName,
             account.GivenName,
             account.FamilyName,
-            account.Email);
+            account.Email,
+            account.PhoneNumber);
     }
 
     private async Task<Result<UserAccount>> ValidateGuardConditions(UpdateCommand command)

@@ -16,6 +16,7 @@ internal sealed class AccountResponseMapper :
             source.UserName,
             source.GivenName,
             source.FamilyName,
-            source.Email);
+            source.Email,
+            source.PhoneNumber);
     }
 }

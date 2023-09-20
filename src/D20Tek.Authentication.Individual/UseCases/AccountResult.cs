@@ -8,4 +8,5 @@ public sealed record AccountResult(
     string? UserName = null,
     string? GivenName = null,
     string? FamilyName = null,
-    string? Email = null);
+    string? Email = null,
+    string? PhoneNumber = null);

@@ -13,7 +13,8 @@ Content-Type: {{contentType}}
   "givenName": "Pedro",
   "familyName": "Silva",
   "email": "darthpedro@gmail.com",
-  "password": "Password123!"
+  "password": "Password123!",
+  "phoneNumber": "(555)425-5555"
 }
 
 ### Login
@@ -44,7 +45,8 @@ Content-Type: {{contentType}}
   "userName": "DarthPedro",
   "givenName": "Pedro",
   "familyName": "Silva",
-  "email": "darthpedro@gmail.com"
+  "email": "darthpedro@gmail.com",
+  "phoneNumber": "(555)425-5555"
 }
 
 

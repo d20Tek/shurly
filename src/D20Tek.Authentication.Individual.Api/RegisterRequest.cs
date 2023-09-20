@@ -11,4 +11,5 @@ internal sealed record RegisterRequest(
     string GivenName,
     string FamilyName,
     string Email,
-    string Password) : IRequest<IResult>;
+    string Password,
+    string? PhoneNumber) : IRequest<IResult>;

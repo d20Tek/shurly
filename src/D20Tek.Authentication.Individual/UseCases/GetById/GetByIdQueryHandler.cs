@@ -28,6 +28,7 @@ internal class GetByIdQueryHandler : IGetByIdQueryHandler
             account.UserName,
             account.GivenName,
             account.FamilyName,
-            account.Email);
+            account.Email,
+            account.PhoneNumber);
     }
 }

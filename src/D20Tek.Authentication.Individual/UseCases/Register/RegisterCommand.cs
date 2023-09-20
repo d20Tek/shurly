@@ -11,5 +11,6 @@ public sealed record RegisterCommand(
     string GivenName,
     string FamilyName,
     string Email,
-    string Password) : ICommand<Result<AuthenticationResult>>;
+    string Password,
+    string? PhoneNumber) : ICommand<Result<AuthenticationResult>>;
 

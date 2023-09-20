@@ -34,6 +34,10 @@ internal static class Errors
                 "Email.InvalidFormat",
                 "Email property is not a valid email format.");
 
+        public static readonly Error PhoneInvalidFormat = Error.Validation(
+                "Phone.InvalidFormat",
+                "Phone number property is not a valid format.");
+
         public static readonly Error PasswordLength = Error.Validation(
                 "Password.LengthInvalid",
                 "Password must contain between 6 and 32 characters.");

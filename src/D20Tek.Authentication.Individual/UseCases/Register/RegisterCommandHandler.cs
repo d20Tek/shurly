@@ -42,6 +42,7 @@ internal sealed class RegisterCommandHandler : IRegisterCommandHandler
             FamilyName = command.FamilyName,
             Email = command.Email,
             EmailConfirmed = true,
+            PhoneNumber = command.PhoneNumber,
             SecurityStamp = Guid.NewGuid().ToString()
         };
 

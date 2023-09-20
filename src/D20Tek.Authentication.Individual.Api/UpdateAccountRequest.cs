@@ -10,4 +10,5 @@ internal sealed record UpdateAccountRequest(
     string UserName,
     string GivenName,
     string FamilyName,
-    string Email) : IRequest<IResult>;
+    string Email,
+    string? PhoneNumber) : IRequest<IResult>;

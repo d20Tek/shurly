@@ -19,7 +19,7 @@
                 <ValidationMessage For=@(() => request.UserName) />
             </div>
             <div class="form-floating mb-3">
-                <InputText class="form-control" @bind-Value=request.Email 
+                <InputText class="form-control" typeof="email" @bind-Value=request.Email 
                            autocomplete="username" aria-required="true"
                            placeholder="name@example.com" />
                 <label class="form-label" for="email">Email</label>

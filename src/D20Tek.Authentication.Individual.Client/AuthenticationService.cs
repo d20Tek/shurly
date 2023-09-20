@@ -30,6 +30,18 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         _baseUrl = endpointOptions.Value.Authentication;
     }
 
+    public async Task<Result<AccountResponse>> GetAccountAsync()
+    {
+        var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Get}";
+        var result = await _httpClient.GetFromJsonAsync<AccountResponse>(serviceUrl);
+        if (result is null)
+        {
+            return Error.NotFound("Account.NotFound", "The user's account was not found.");
+        }
+
+        return result;
+    }
+
     public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request)
     {
         var response = await InvokeServiceOperation<AuthenticationResponse>(async() =>
@@ -62,6 +74,17 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
             return await _httpClient.PostAsJsonAsync(serviceUrl, request);
         },
         UpdateAuthToken);
+
+        return response;
+    }
+
+    public async Task<Result<AccountResponse>> UpdateAccountAsync(UpdateProfileRequest request)
+    {
+        var response = await InvokeServiceOperation<AccountResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Update}";
+            return await _httpClient.PutAsJsonAsync(serviceUrl, request);
+        });
 
         return response;
     }

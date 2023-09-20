@@ -1,0 +1,21 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <ProfileNavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <LoginDisplay />
+        </div>
+
+        <article class="content px-4">
+            <h2 class="mb-2">Manage your account</h2>
+            <h3>Change your account settings</h3>
+            <hr />
+
+            @Body
+        </article>
+    </main>
+</div>

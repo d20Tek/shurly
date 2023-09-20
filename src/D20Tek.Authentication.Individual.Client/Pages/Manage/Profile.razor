@@ -1,0 +1,78 @@
+﻿@page "/authentication/profile"
+@inject IAuthenticationService _authService;
+@using D20Tek.Authentication.Individual.Client.Contracts;
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@input" OnValidSubmit="PerformUpdate">
+            <DataAnnotationsValidator />
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=input.UserName
+                           autocomplete="username" aria-required="true" disabled />
+                <label class="form-label" for="UserName">User Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=input.GivenName
+                           autocomplete="first-name" aria-required="true"
+                           placeholder="name" />
+                <label class="form-label" for="given-name">First Name</label>
+                <ValidationMessage For=@(() => input.GivenName) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" @bind-Value=input.FamilyName
+                           autocomplete="last-name" aria-required="true"
+                           placeholder="name" />
+                <label class="form-label" for="family-name">Last Name</label>
+                <ValidationMessage For=@(() => input.FamilyName) />
+            </div>
+
+            <div class="form-floating mb-3">
+                <InputText class="form-control" type="email" @bind-Value=input.Email
+                           autocomplete="username" aria-required="true"
+                           placeholder="name@example.com" />
+                <label class="form-label" for="email">Email</label>
+                <ValidationMessage For=@(() => input.Email) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" type="tel" @bind-Value=input.Phone
+                           autocomplete="phone" aria-required="true"
+                           placeholder="Enter your phone number" />
+                <label class="form-label" for="phone">Phone number</label>
+                <ValidationMessage For=@(() => input.Phone) />
+            </div>
+
+            <button id="register-submit" type="submit" class="w-100 btn btn-lg btn-primary">
+                Save
+            </button>
+        </EditForm>
+        <div class="my-2">@message</div>
+    </div>
+</div>
+@code {
+    UpdateProfileRequest input = new();
+    string message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _authService.GetAccountAsync();
+        result.MatchFirstError(
+            account => input = new UpdateProfileRequest
+            {
+                UserName = result.Value.UserName,
+                GivenName = result.Value.GivenName,
+                FamilyName = result.Value.FamilyName,
+                Email = result.Value.Email
+            },
+            error => message = $"[{error.Code}]: {error.Message}");
+    }
+
+    private async Task PerformUpdate()
+    {
+        message = string.Empty;
+
+        var response = await _authService.UpdateAccountAsync(input);
+        response.MatchFirstError(
+            success => message = "Account profile saved.",
+            error => message = $"[{error.Code}]: {error.Message}");
+    }
+}

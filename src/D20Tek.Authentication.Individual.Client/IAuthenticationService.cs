@@ -8,6 +8,8 @@ namespace D20Tek.Authentication.Individual.Client;
 
 public interface IAuthenticationService
 {
+    public Task<Result<AuthenticationResponse>> ChangePasswordAsync(ChangePasswordRequest request);
+
     public Task<Result<AccountResponse>> GetAccountAsync();
 
     public Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request);

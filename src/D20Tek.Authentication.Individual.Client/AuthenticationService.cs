@@ -30,13 +30,26 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         _baseUrl = endpointOptions.Value.Authentication;
     }
 
+    public async Task<Result<AuthenticationResponse>> ChangePasswordAsync(
+        ChangePasswordRequest request)
+    {
+        var response = await InvokeServiceOperation<AuthenticationResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.ChangePassword}";
+            return await _httpClient.PatchAsJsonAsync(serviceUrl, request);
+        },
+        UpdateAuthToken);
+
+        return response;
+    }
+
     public async Task<Result<AccountResponse>> GetAccountAsync()
     {
         var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Get}";
         var result = await _httpClient.GetFromJsonAsync<AccountResponse>(serviceUrl);
         if (result is null)
         {
-            return Error.NotFound("Account.NotFound", "The user's account was not found.");
+            return Errors.AuthenticationService.AccountNotFound;
         }
 
         return result;

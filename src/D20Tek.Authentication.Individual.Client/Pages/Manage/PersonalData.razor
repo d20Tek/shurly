@@ -1,0 +1,70 @@
+﻿@page "/authentication/personal-data"
+@inject IAuthenticationService _authService;
+@inject NavigationManager _nav;
+@attribute [Authorize]
+
+<h3>Personal data</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            Your account contains personal data that you have given us.
+            This page allows you to download or delete that data.
+        </p>
+        <p>
+            <strong>Deleting this data will permanently remove your account,
+                    and it cannot be recovered.</strong>
+        </p>
+
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary" @onclick=DownloadData>Download</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-danger" @onclick=DeleteAccount>
+                    Delete data and close account
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mt-4">
+        @if (hasDisplayData)
+        {
+            <textarea class="col-6" style="height: 50vh" readonly>
+                @displayData
+            </textarea>
+        }
+    </div>
+</div>
+
+@code {
+    string displayData = string.Empty;
+    bool hasDisplayData => !string.IsNullOrEmpty(displayData);
+
+    JsonSerializerOptions jsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = true
+    };
+
+    private async Task DownloadData()
+    {
+        var result = await _authService.GetAccountAsync();
+        result.MatchFirstError(
+            account => displayData = ProcessAccountData(account),
+            error => displayData = $"[{error.Code}]: {error.Message}");
+    }
+
+    private string ProcessAccountData(AccountResponse account)
+    {
+        return JsonSerializer.Serialize<AccountResponse>(account, jsonOptions);
+    }
+
+    private async Task DeleteAccount()
+    {
+        var result = await _authService.DeleteAccountAsync();
+        result.MatchFirstError(
+            account => _nav.NavigateTo("/"),
+            error => displayData = $"[{error.Code}]: {error.Message}");
+    }
+}

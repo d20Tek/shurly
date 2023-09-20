@@ -43,6 +43,22 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         return response;
     }
 
+    public async Task<Result<AccountResponse>> DeleteAccountAsync()
+    {
+        var response = await InvokeServiceOperation<AccountResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Delete}";
+            return await _httpClient.DeleteAsync(serviceUrl);
+        });
+
+        if (response.IsSuccess is true)
+        {
+            await LogoutAsync();
+        }
+        return response;
+    }
+
+
     public async Task<Result<AccountResponse>> GetAccountAsync()
     {
         var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Get}";

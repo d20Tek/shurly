@@ -8,6 +8,7 @@ internal static class Configuration
     public class Authentication
     {
         public const string ChangePassword = "/password";
+        public const string Delete = "/";
         public const string Get = "/";
         public const string Login = "/login";
         public const string Register = "/";

@@ -1,6 +1,6 @@
 ﻿@page "/authentication/profile"
 @inject IAuthenticationService _authService;
-@using D20Tek.Authentication.Individual.Client.Contracts;
+@attribute [Authorize]
 
 <div class="row">
     <div class="col-md-4">

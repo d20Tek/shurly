@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm Model="@input" OnValidSubmit="PerformUpdate">
+        <EditForm Model="@input" OnValidSubmit="OnPostAsync">
             <DataAnnotationsValidator />
             <div class="form-floating mb-3">
                 <InputText class="form-control" @bind-Value=input.UserName
@@ -48,32 +48,3 @@
         <div class="my-2">@message</div>
     </div>
 </div>
-@code {
-    UpdateProfileRequest input = new();
-    string message = string.Empty;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var result = await _authService.GetAccountAsync();
-        result.MatchFirstError(
-            account => input = new UpdateProfileRequest
-            {
-                UserName = account.UserName,
-                GivenName = account.GivenName,
-                FamilyName = account.FamilyName,
-                Email = account.Email,
-                PhoneNumber = account.PhoneNumber
-            },
-            error => message = $"[{error.Code}]: {error.Message}");
-    }
-
-    private async Task PerformUpdate()
-    {
-        message = string.Empty;
-
-        var response = await _authService.UpdateAccountAsync(input);
-        response.MatchFirstError(
-            success => message = "Account profile saved.",
-            error => message = $"[{error.Code}]: {error.Message}");
-    }
-}

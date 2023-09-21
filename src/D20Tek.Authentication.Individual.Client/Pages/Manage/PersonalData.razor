@@ -18,10 +18,12 @@
 
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary" @onclick=DownloadData>Download</button>
+                <button class="btn btn-primary" @onclick=DownloadDataAsync>
+                    Download
+                </button>
             </div>
             <div class="col">
-                <button class="btn btn-danger" @onclick=DeleteAccount>
+                <button class="btn btn-danger" @onclick=DeleteAccountAsync>
                     Delete data and close account
                 </button>
             </div>
@@ -36,35 +38,3 @@
         }
     </div>
 </div>
-
-@code {
-    string displayData = string.Empty;
-    bool hasDisplayData => !string.IsNullOrEmpty(displayData);
-
-    JsonSerializerOptions jsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        WriteIndented = true
-    };
-
-    private async Task DownloadData()
-    {
-        var result = await _authService.GetAccountAsync();
-        result.MatchFirstError(
-            account => displayData = ProcessAccountData(account),
-            error => displayData = $"[{error.Code}]: {error.Message}");
-    }
-
-    private string ProcessAccountData(AccountResponse account)
-    {
-        return JsonSerializer.Serialize<AccountResponse>(account, jsonOptions);
-    }
-
-    private async Task DeleteAccount()
-    {
-        var result = await _authService.DeleteAccountAsync();
-        result.MatchFirstError(
-            account => _nav.NavigateTo("/"),
-            error => displayData = $"[{error.Code}]: {error.Message}");
-    }
-}

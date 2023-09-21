@@ -1,13 +1,12 @@
 ﻿@page "/authentication/register"
 @inject IAuthenticationService _authService;
 @inject NavigationManager _nav;
-@using D20Tek.Authentication.Individual.Client.Contracts;
 
 <h3>Register</h3>
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm Model="@request" OnValidSubmit="PerformRegistration">
+        <EditForm Model="@request" OnValidSubmit="OnPostAsync">
             <h4>Create a new account.</h4>
             <hr />
             <DataAnnotationsValidator />
@@ -68,16 +67,3 @@
         <div class="my-2">@message</div>
     </div>
 </div>
-
-@code {
-    RegisterRequest request = new RegisterRequest();
-    string message = string.Empty;
-
-    private async Task PerformRegistration()
-    {
-        var response = await _authService.RegisterAsync(request);
-        response.MatchFirstError(
-            success => _nav.NavigateTo("/"),
-            error => message = $"[{error.Code}]: {error.Message}");
-    }
-}

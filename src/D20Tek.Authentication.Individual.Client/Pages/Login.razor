@@ -1,14 +1,13 @@
 ﻿@page "/authentication/login"
 @inject IAuthenticationService _authService;
 @inject NavigationManager _nav;
-@using D20Tek.Authentication.Individual.Client.Contracts;
 
 <h3>Log in</h3>
 
 <div class="row my-2">
     <div class="col-md-4">
         <section>
-            <EditForm Model="@request" OnValidSubmit="PerformLogin">
+            <EditForm Model="@request" OnValidSubmit="OnPostAsync">
                 <DataAnnotationsValidator />
                 <div class="form-floating my-2">
                     <InputText class="form-control" @bind-Value=request.UserName 
@@ -47,18 +46,3 @@
         </section>
     </div>
 </div>
-
-@code {
-    LoginRequest request = new();
-    string message = string.Empty;
-
-    private async Task PerformLogin()
-    {
-        message = "Wait...";
-
-        var response = await _authService.LoginAsync(request);
-        response.MatchFirstError(
-            success => _nav.NavigateTo("/"),
-            error => message = $"[{error.Code}]: {error.Message}");
-    }
-}

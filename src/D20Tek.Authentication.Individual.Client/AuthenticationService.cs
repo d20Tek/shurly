@@ -71,6 +71,17 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         return result;
     }
 
+    public async Task<Result<ResetResponse>> GetPasswordResetTokenAsync(GetResetTokenRequest request)
+    {
+        var response = await InvokeServiceOperation<ResetResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.ResetPassword}";
+            return await _httpClient.PostAsJsonAsync(serviceUrl, request);
+        });
+
+        return response;
+    }
+
     public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request)
     {
         var response = await InvokeServiceOperation<AuthenticationResponse>(async() =>
@@ -95,23 +106,25 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         });
     }
 
-    public async Task<Result<ResetResponse>> GetPasswordResetTokenAsync(GetResetTokenRequest request)
-    {
-        var response = await InvokeServiceOperation<ResetResponse>(async () =>
-        {
-            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.ResetPassword}";
-            return await _httpClient.PostAsJsonAsync(serviceUrl, request);
-        });
-
-        return response;
-    }
-
     public async Task<Result<AuthenticationResponse>> RegisterAsync(RegisterRequest request)
     {
         var response = await InvokeServiceOperation<AuthenticationResponse>(async () =>
         {
             var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Register}";
             return await _httpClient.PostAsJsonAsync(serviceUrl, request);
+        },
+        UpdateAuthToken);
+
+        return response;
+    }
+
+    public async Task<Result<AuthenticationResponse>> ResetPasswordAsync(
+        ResetPasswordRequest request)
+    {
+        var response = await InvokeServiceOperation<AuthenticationResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.ResetPassword}";
+            return await _httpClient.PatchAsJsonAsync(serviceUrl, request);
         },
         UpdateAuthToken);
 

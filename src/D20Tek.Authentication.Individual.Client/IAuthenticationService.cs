@@ -22,5 +22,7 @@ public interface IAuthenticationService
 
     public Task<Result<AuthenticationResponse>> RegisterAsync(RegisterRequest request);
 
+    public Task<Result<AuthenticationResponse>> ResetPasswordAsync(ResetPasswordRequest request);
+
     public Task<Result<AccountResponse>> UpdateAccountAsync(UpdateProfileRequest request);
 }

@@ -53,6 +53,7 @@ public static partial class DependencyInjection
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();
         services.AddScoped<IRefreshTokenQueryHandler, RefreshTokenQueryHandler>();
         services.AddScoped<IGetResetTokenQueryHandler, GetResetTokenQueryHandler>();
+        services.AddScoped<IResetPasswordCommandHandler, ResetPasswordCommandHandler>();
 
         services.AddScoped<LoginQueryValidator>();
         services.AddScoped<RegisterCommandValidator>();
@@ -60,6 +61,7 @@ public static partial class DependencyInjection
         services.AddScoped<ChangeRoleCommandValidator>();
         services.AddScoped<UpdateCommandValidator>();
         services.AddScoped<GetResetTokenQueryValidator>();
+        services.AddScoped<ResetPasswordCommandValidator>();
 
         return services;
     }

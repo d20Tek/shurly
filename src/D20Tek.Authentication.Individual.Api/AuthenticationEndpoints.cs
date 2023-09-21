@@ -47,7 +47,16 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .RequireAuthorization();
+
+        group.MapPatch(Configuration.ResetPassword.RoutePattern, ResetPasswordAsync)
+            .WithName(Configuration.ResetPassword.EndpointName)
+            .WithDisplayName(Configuration.ResetPassword.DisplayName)
+            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
 
         group.MapPatch(Configuration.ChangeRole.RoutePattern, ChangeRoleAsync)
             .WithName(Configuration.ChangeRole.EndpointName)
@@ -122,6 +131,21 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             userId,
             request.Body.CurrentPassword,
             request.Body.NewPassword);
+
+        var authResult = await commandHandler.HandleAsync(command, cancellation);
+
+        return authResult.ToApiResult(_authResponseMapper.Map);
+    }
+
+    public async Task<IResult> ResetPasswordAsync(
+        [FromBody] ResetPasswordRequest request,
+        [FromServices] IResetPasswordCommandHandler commandHandler,
+        CancellationToken cancellation)
+    {
+        var command = new ResetPasswordCommand(
+            request.Email,
+            request.ResetToken,
+            request.NewPassword);
 
         var authResult = await commandHandler.HandleAsync(command, cancellation);
 

@@ -3,6 +3,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.Abstractions;
 using D20Tek.Minimal.Result;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace D20Tek.Authentication.Individual.UseCases.ResetPassword;
 
@@ -32,12 +34,14 @@ internal sealed class GetResetTokenQueryHandler : IGetResetTokenQueryHandler
 
         // 2. generate a reset code
         var account = existingAccount.Value;
-        var resetCode = await _accountRepository.GeneratePasswordResetTokenAsync(account);
-        if (resetCode is null)
+        var rawCode = await _accountRepository.GeneratePasswordResetTokenAsync(account);
+        if (rawCode is null)
         {
             return Errors.UserAccount.CannotGenerateResetToken;
         }
 
+        // 3. encode the reset token, so it can be used in a url
+        var resetCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(rawCode));
         return new ResetTokenResult(resetCode);
     }
 

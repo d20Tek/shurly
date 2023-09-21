@@ -66,6 +66,14 @@ internal sealed class UserAccountRepository : UserAccountReadRepository, IUserAc
             await _userManager.GeneratePasswordResetTokenAsync(userAccount));
     }
 
+    public async Task<IdentityResult> ResetPasswordAsync(
+        UserAccount userAccount,
+        string resetToken,
+        string newPassword)
+    {
+        return await _opsManager.OperationAsync(async () =>
+            await _userManager.ResetPasswordAsync(userAccount, resetToken, newPassword));
+    }
 
     public async Task<IdentityResult> UpdateAsync(UserAccount userAccount)
     {

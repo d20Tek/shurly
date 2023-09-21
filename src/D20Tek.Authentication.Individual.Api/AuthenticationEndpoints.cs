@@ -6,6 +6,7 @@ using D20Tek.Authentication.Individual.UseCases.ChangeRole;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.RefreshToken;
 using D20Tek.Authentication.Individual.UseCases.Register;
+using D20Tek.Authentication.Individual.UseCases.ResetPassword;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
 using Microsoft.AspNetCore.Builder;
@@ -19,6 +20,7 @@ namespace D20Tek.Authentication.Individual.Api;
 internal class AuthenticationEndpoints : ICompositeApiEndpoint
 {
     private readonly AuthenticationResponseMapper _authResponseMapper = new();
+    private readonly ResetTokenResponseMapper _resetTokenMapper = new();
 
     public void MapRoutes(IEndpointRouteBuilder routeBuilder)
     {
@@ -64,6 +66,13 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .RequireAuthorization(AuthorizationPolicies.Refresh);
+
+        group.MapPost(Configuration.GetResetToken.RoutePattern, GetPasswordResetTokenAsync)
+            .WithName(Configuration.GetResetToken.EndpointName)
+            .WithName(Configuration.GetResetToken.DisplayName)
+            .Produces<ResetTokenResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
 
         group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)
             .WithName(Configuration.GetClaims.EndpointName)
@@ -144,6 +153,18 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
         var authResult = await queryHandler.HandleAsync(query, cancellation);
 
         return authResult.ToApiResult(_authResponseMapper.Map);
+    }
+
+    public async Task<IResult> GetPasswordResetTokenAsync(
+        [FromBody] GetResetTokenRequest request,
+        [FromServices] IGetResetTokenQueryHandler queryHandler,
+        CancellationToken cancellation)
+    {
+        var query = new GetResetTokenQuery(request.Email);
+
+        var tokenResult = await queryHandler.HandleAsync(query, cancellation);
+
+        return tokenResult.ToApiResult(_resetTokenMapper.Map);
     }
 
     public IResult GetClaims(ClaimsPrincipal user) =>

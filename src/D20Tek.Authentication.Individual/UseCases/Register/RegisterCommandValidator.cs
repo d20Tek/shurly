@@ -4,7 +4,6 @@
 using D20Tek.Minimal.Domain.Abstractions;
 using D20Tek.Minimal.Domain.Validations;
 using D20Tek.Minimal.Result;
-using System.Text.RegularExpressions;
 
 namespace D20Tek.Authentication.Individual.UseCases.Register;
 

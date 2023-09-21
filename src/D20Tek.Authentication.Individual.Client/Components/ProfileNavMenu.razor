@@ -16,9 +16,18 @@
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/authentication/change-password" Match="NavLinkMatch.All">
-                Password
+                Change Password
             </NavLink>
         </div>
+        <AuthorizeView>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/authentication/forgot-password" Match="NavLinkMatch.All">
+                        Forgot Password
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/authentication/personal-data" Match="NavLinkMatch.All">
                 Personal data

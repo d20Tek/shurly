@@ -21,4 +21,6 @@ internal interface IUserAccountRepository : IUserAccountReadRepository
     public Task<IdentityResult> UpdateAsync(UserAccount userAccount);
 
     public Task<IdentityResult> DeleteAsync(UserAccount userAccount);
+
+    public Task<string?> GeneratePasswordResetTokenAsync(UserAccount userAccount);
 }

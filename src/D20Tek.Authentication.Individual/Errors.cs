@@ -18,6 +18,10 @@ internal static class Errors
                 "Account.NotFound",
                 $"The account with UserName [{userName}] was not found.");
 
+        public static Error EmailNotFound(string email) => Error.NotFound(
+                "Account.NotFound",
+                $"The account with the associate email ({email}) was not found.");
+
         public static readonly Error IdInvalid = Error.Validation(
                 "AccountId.Empty",
                 "The specified account id is invalid.");
@@ -65,6 +69,10 @@ internal static class Errors
         public static readonly Error CannotDelete = Error.Invalid(
                 "Account.CannotDelete",
                 "Cannot delete this user's account.");
+
+        public static readonly Error CannotGenerateResetToken = Error.Unexpected(
+                "ResetToken.CannotGenerate",
+                "Cannot generate a password reset token for this user.");
     }
 
     public static class Authentication
@@ -80,7 +88,7 @@ internal static class Errors
         public static readonly IdentityError AccountNotFound = new()
         {
             Code = "Account.NotFound",
-            Description = "Test specified user account was not found"
+            Description = "The specified user account was not found."
         };
     }
 }

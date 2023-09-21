@@ -60,6 +60,13 @@ internal sealed class UserAccountRepository : UserAccountReadRepository, IUserAc
             (await _userManager.RemoveFromRolesAsync(userAccount, userRoles)).Succeeded);
     }
 
+    public async Task<string?> GeneratePasswordResetTokenAsync(UserAccount userAccount)
+    {
+        return await _opsManager.OperationAsync<string>(async () =>
+            await _userManager.GeneratePasswordResetTokenAsync(userAccount));
+    }
+
+
     public async Task<IdentityResult> UpdateAsync(UserAccount userAccount)
     {
         return await _opsManager.OperationAsync(async () =>

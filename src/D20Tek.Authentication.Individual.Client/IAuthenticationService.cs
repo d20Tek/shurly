@@ -14,6 +14,8 @@ public interface IAuthenticationService
 
     public Task<Result<AccountResponse>> GetAccountAsync();
 
+    public Task<Result<ResetResponse>> GetPasswordResetTokenAsync(GetResetTokenRequest request);
+
     public Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request);
 
     public Task LogoutAsync();

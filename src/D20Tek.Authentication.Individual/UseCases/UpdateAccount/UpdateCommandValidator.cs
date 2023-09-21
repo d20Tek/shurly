@@ -4,7 +4,6 @@
 using D20Tek.Minimal.Domain.Abstractions;
 using D20Tek.Minimal.Domain.Validations;
 using D20Tek.Minimal.Result;
-using System.Text.RegularExpressions;
 
 namespace D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 
@@ -66,11 +65,5 @@ internal class UpdateCommandValidator : IValidator<UpdateCommand>
         }
 
         return result;
-    }
-
-    private static bool IsValidPhoneNumber(string phoneNumber)
-    {
-        var result = Regex.Match(phoneNumber, "^([\\+]?33[-]?|[0])?[1-9][0-9]{8}$");
-        return result.Success;
     }
 }

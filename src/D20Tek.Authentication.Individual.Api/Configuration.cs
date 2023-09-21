@@ -68,6 +68,13 @@ internal class Configuration
         public const string DisplayName = "Refresh Token";
     }
 
+    public class GetResetToken
+    {
+        public const string RoutePattern = "/password/reset";
+        public const string EndpointName = "GetPasswordResetToken";
+        public const string DisplayName = "Get Password Reset Token";
+    }
+
     public class GetClaims
     {
         public const string RoutePattern = "/claims";

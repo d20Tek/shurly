@@ -10,6 +10,7 @@ using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.RefreshToken;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Authentication.Individual.UseCases.RemoveAccount;
+using D20Tek.Authentication.Individual.UseCases.ResetPassword;
 using D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,12 +52,14 @@ public static partial class DependencyInjection
         services.AddScoped<IGetByIdQueryHandler, GetByIdQueryHandler>();
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();
         services.AddScoped<IRefreshTokenQueryHandler, RefreshTokenQueryHandler>();
+        services.AddScoped<IGetResetTokenQueryHandler, GetResetTokenQueryHandler>();
 
         services.AddScoped<LoginQueryValidator>();
         services.AddScoped<RegisterCommandValidator>();
         services.AddScoped<ChangePasswordCommandValidator>();
         services.AddScoped<ChangeRoleCommandValidator>();
         services.AddScoped<UpdateCommandValidator>();
+        services.AddScoped<GetResetTokenQueryValidator>();
 
         return services;
     }

@@ -95,6 +95,17 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         });
     }
 
+    public async Task<Result<ResetResponse>> GetPasswordResetTokenAsync(GetResetTokenRequest request)
+    {
+        var response = await InvokeServiceOperation<ResetResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}{Configuration.Authentication.ResetPassword}";
+            return await _httpClient.PostAsJsonAsync(serviceUrl, request);
+        });
+
+        return response;
+    }
+
     public async Task<Result<AuthenticationResponse>> RegisterAsync(RegisterRequest request)
     {
         var response = await InvokeServiceOperation<AuthenticationResponse>(async () =>

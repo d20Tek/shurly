@@ -12,6 +12,7 @@ internal static class DependencyInjection
     public static IServiceCollection AddPresentationServices(
         this IServiceCollection services)
     {
+        services.AddApplicationInsightsTelemetry();
         services.AddAuthenticationApiEndpoints();
 
         // add ApiEndpoint definitions to the container
@@ -19,9 +20,11 @@ internal static class DependencyInjection
             typeof(DependencyInjection).Assembly,
             ServiceLifetime.Scoped);
 
+        // add swagger services
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
+        // add CORS settings
         services.AddCors(options =>
             options.AddDefaultPolicy(config =>
                 config.AllowAnyOrigin()
@@ -35,13 +38,14 @@ internal static class DependencyInjection
         this IApplicationBuilder app,
         IWebHostEnvironment env)
     {
-        app.UseExceptionHandler<EndpointExceptionHandler>();
-
         if (env.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseExceptionHandler<EndpointExceptionHandler>();
+        app.UseApiEndpointLogging();
 
         app.UseCors();
         app.UseHttpsRedirection();

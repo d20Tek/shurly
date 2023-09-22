@@ -8,6 +8,11 @@ using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Logging.AddConsole();
+    }
+
     builder.Services
         .AddPresentationServices()
         .AddIndividualAuthentication(builder.Configuration);

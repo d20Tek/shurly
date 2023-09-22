@@ -29,7 +29,7 @@ internal abstract class ServiceBase
         }
         catch (Exception ex)
         {
-            return DefaultErrors.UnhandledExpection(ex.Message);
+            return ex;
         }
     }
 
@@ -42,7 +42,7 @@ internal abstract class ServiceBase
         }
         catch (Exception ex)
         {
-            return DefaultErrors.UnhandledExpection(ex.Message);
+            return ex;
         }
     }
 

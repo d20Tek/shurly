@@ -10,27 +10,32 @@
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="/authentication/profile" Match="NavLinkMatch.All">
-                Profile
+                <span class="oi oi-person" aria-hidden="true"></span> Profile
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/authentication/change-password" Match="NavLinkMatch.All">
-                Change Password
+                <span class="oi oi-key" aria-hidden="true"></span> Change Password
             </NavLink>
         </div>
         <AuthorizeView>
             <NotAuthorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="/authentication/forgot-password" Match="NavLinkMatch.All">
-                        Forgot Password
+                        <span class="oi oi-lock-locked" aria-hidden="true"></span> Forgot Password
                     </NavLink>
                 </div>
             </NotAuthorized>
         </AuthorizeView>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/authentication/personal-data" Match="NavLinkMatch.All">
-                Personal data
+                <span class="oi oi-cloud-download" aria-hidden="true"></span> Personal data
             </NavLink>
         </div>
     </nav>

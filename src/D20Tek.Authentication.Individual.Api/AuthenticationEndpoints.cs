@@ -185,7 +185,6 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
         CancellationToken cancellation)
     {
         var query = new GetResetTokenQuery(request.Email);
-
         var tokenResult = await queryHandler.HandleAsync(query, cancellation);
 
         return tokenResult.ToApiResult(_resetTokenMapper.Map);

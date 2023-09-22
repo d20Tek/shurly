@@ -1,10 +1,10 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Authentication.Individual.Client.Result;
 using D20Tek.Minimal.Result;
 using Res = D20Tek.Minimal.Result;
 using System.Net.Http.Json;
+using D20Tek.Minimal.Result.Client;
 
 namespace D20Tek.Authentication.Individual.Client;
 
@@ -55,8 +55,8 @@ internal abstract class ServiceBase
             if (problem is not null)
             {
                 var result = problem.ToResult<T>();
-                Console.WriteLine("Login error:");
-                Console.WriteLine(string.Join(Environment.NewLine, result.Errors));
+                Console.WriteLine("AuthenticationService error:");
+                Console.WriteLine(problem.ToString());
 
                 return result;
             }

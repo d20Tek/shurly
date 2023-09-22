@@ -15,6 +15,6 @@ public partial class Register
         var response = await _authService.RegisterAsync(request);
         response.MatchFirstError(
             success => _nav.NavigateTo("/"),
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 }

@@ -30,7 +30,7 @@ internal class ChangePasswordCommandHandler : IChangePasswordCommandHandler
         var guardResult = await ValidateGuardConditions(command);
         if (guardResult.IsFailure)
         {
-            return guardResult.Errors.ToArray();
+            return guardResult.ErrorsList;
         }
 
         // 2. check if current password is correct

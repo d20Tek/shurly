@@ -20,6 +20,6 @@ public partial class ForgotPassword
         var response = await _authService.GetPasswordResetTokenAsync(input);
         response.MatchFirstError(
             success => resetCode = success.ResetToken,
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 }

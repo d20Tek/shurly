@@ -36,6 +36,6 @@ public partial class PersonalData
         var result = await _authService.DeleteAccountAsync();
         result.MatchFirstError(
             account => _nav.NavigateTo("/"),
-            error => displayData = $"[{error.Code}]: {error.Message}");
+            error => displayData = error.ToString());
     }
 }

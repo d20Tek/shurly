@@ -30,7 +30,7 @@ internal class ChangeRoleCommandHandler : IChangeRoleCommandHandler
         var guardResult = await ValidateGuardConditions(command);
         if (guardResult.IsFailure)
         {
-            return guardResult.Errors.ToArray();
+            return guardResult.ErrorsList;
         }
 
         // 2. convert the user's role

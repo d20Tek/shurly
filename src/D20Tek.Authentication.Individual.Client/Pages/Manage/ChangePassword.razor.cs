@@ -21,6 +21,6 @@ public partial class ChangePassword
                 message = "Password changed successfully!";
                 _nav.NavigateTo("/authentication/profile");
             },
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 }

@@ -30,7 +30,7 @@ internal sealed class RegisterCommandHandler : IRegisterCommandHandler
         var guardResult = await ValidateGuardConditions(command);
         if (guardResult.IsFailure)
         {
-            return guardResult.Errors.ToArray();
+            return guardResult.ErrorsList;
         }
 
         // 2. create user account (generate guid)

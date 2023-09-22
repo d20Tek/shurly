@@ -17,6 +17,6 @@ public partial class Login
         var response = await _authService.LoginAsync(request);
         response.MatchFirstError(
             success => _nav.NavigateTo("/"),
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 }

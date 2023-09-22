@@ -32,7 +32,7 @@ internal class ResetPasswordCommandHandler : IResetPasswordCommandHandler
         var existingAccount = await ValidateGuardConditions(command);
         if (existingAccount.IsFailure)
         {
-            return existingAccount.Errors.ToArray();
+            return existingAccount.ErrorsList;
         }
 
         // 2. decode the reset token

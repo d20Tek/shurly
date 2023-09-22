@@ -30,7 +30,7 @@ internal sealed class LoginQueryHandler : ILoginQueryHandler
         var guardResult = await ValidateGuardConditions(query);
         if (guardResult.IsFailure)
         {
-            return guardResult.Errors.ToArray();
+            return guardResult.ErrorsList;
         }
 
         // 2. validate password matches the one in the identity store

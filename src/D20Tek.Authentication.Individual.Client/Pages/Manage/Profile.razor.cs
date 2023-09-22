@@ -32,6 +32,6 @@ public partial class Profile
         var response = await _authService.UpdateAccountAsync(input);
         response.MatchFirstError(
             success => message = "Account profile saved.",
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 }

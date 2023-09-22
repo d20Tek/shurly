@@ -26,6 +26,6 @@ public partial class ResetPassword
                 message = "Password reset successfully!";
                 _nav.NavigateTo("/");
             },
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 }

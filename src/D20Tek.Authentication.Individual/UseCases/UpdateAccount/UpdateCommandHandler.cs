@@ -27,7 +27,7 @@ internal class UpdateCommandHandler : IUpdateCommandHandler
         var existingAccount = await ValidateGuardConditions(command);
         if (existingAccount.IsFailure)
         {
-            return existingAccount.Errors.ToArray();
+            return existingAccount.ErrorsList;
         }
 
         // 2. Modify the account with command entries.

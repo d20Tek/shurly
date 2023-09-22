@@ -29,7 +29,7 @@ internal sealed class GetResetTokenQueryHandler : IGetResetTokenQueryHandler
         var existingAccount = await ValidateGuardConditions(query);
         if (existingAccount.IsFailure)
         {
-            return existingAccount.Errors.ToArray();
+            return existingAccount.ErrorsList;
         }
 
         // 2. generate a reset code

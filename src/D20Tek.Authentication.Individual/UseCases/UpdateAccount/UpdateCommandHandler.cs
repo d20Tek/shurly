@@ -2,7 +2,9 @@
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.Abstractions;
+using D20Tek.Minimal.Domain;
 using D20Tek.Minimal.Result;
+using Microsoft.Extensions.Logging;
 
 namespace D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 
@@ -10,48 +12,56 @@ internal class UpdateCommandHandler : IUpdateCommandHandler
 {
     private readonly IUserAccountRepository _accountRepository;
     private readonly UpdateCommandValidator _validator;
+    private readonly ILogger _logger;
 
     public UpdateCommandHandler(
         IUserAccountRepository accountRepository,
-        UpdateCommandValidator validator)
+        UpdateCommandValidator validator,
+        ILogger<UpdateCommandHandler> logger)
     {
         _accountRepository = accountRepository;
         _validator = validator;
+        _logger = logger;
     }
 
     public async Task<Result<AccountResult>> HandleAsync(
         UpdateCommand command,
         CancellationToken cancellationToken)
     {
-        // 1. test guard conditions
-        var existingAccount = await ValidateGuardConditions(command);
-        if (existingAccount.IsFailure)
-        {
-            return existingAccount.ErrorsList;
-        }
+        return await UseCaseOperation.InvokeAsync<AccountResult>(
+            _logger,
+            async () =>
+            {
+                // 1. test guard conditions
+                var existingAccount = await ValidateGuardConditions(command);
+                if (existingAccount.IsFailure)
+                {
+                    return existingAccount.ErrorsList;
+                }
 
-        // 2. Modify the account with command entries.
-        var account = existingAccount.Value;
-        account.UserName = command.UserName;
-        account.GivenName = command.GivenName;
-        account.FamilyName = command.FamilyName;
-        account.Email = command.Email;
-        account.PhoneNumber = command.PhoneNumber;
+                // 2. Modify the account with command entries.
+                var account = existingAccount.Value;
+                account.UserName = command.UserName;
+                account.GivenName = command.GivenName;
+                account.FamilyName = command.FamilyName;
+                account.Email = command.Email;
+                account.PhoneNumber = command.PhoneNumber;
 
-        // 3. Perform the update
-        var result = await _accountRepository.UpdateAsync(account);
-        if (result.Succeeded is false)
-        {
-            return result.ToMinimalResult<AccountResult>();
-        }
+                // 3. Perform the update
+                var result = await _accountRepository.UpdateAsync(account);
+                if (result.Succeeded is false)
+                {
+                    return result.ToMinimalResult<AccountResult>();
+                }
 
-        return new AccountResult(
-            new Guid(account.Id),
-            account.UserName,
-            account.GivenName,
-            account.FamilyName,
-            account.Email,
-            account.PhoneNumber);
+                return new AccountResult(
+                    new Guid(account.Id),
+                    account.UserName,
+                    account.GivenName,
+                    account.FamilyName,
+                    account.Email,
+                    account.PhoneNumber);
+            });
     }
 
     private async Task<Result<UserAccount>> ValidateGuardConditions(UpdateCommand command)

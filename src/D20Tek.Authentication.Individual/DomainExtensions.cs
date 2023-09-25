@@ -24,11 +24,7 @@ public static class UseCaseOperation
         logger.LogInformation($"==> UseCase started: {operationName}.");
 
         var result = await operation();
-
-        logger.LogInformation($"==> UseCase completed: {operationName}.");
-        result.Match(
-            success => logger.LogInformation($"==> Result = {result}"),
-            errors => logger.LogError($"==> Result = {result}"));
+        LogResult(logger, operationName, result);
 
         return result;
     }
@@ -42,13 +38,18 @@ public static class UseCaseOperation
         logger.LogInformation($"==> UseCase started: {operationName}.");
 
         var result = await operation();
+        LogResult(logger, operationName, result);
 
-        logger.LogInformation($"==> UseCase completed: {operationName}.");
+        return result;
+    }
+
+    private static void LogResult(ILogger logger, string operationName, Res.Result result)
+    {
         if (result.IsSuccess is true)
             logger.LogInformation($"==> Result = {result}");
         else
             logger.LogError($"==> Result = {result}");
 
-        return result;
+        logger.LogInformation($"==> UseCase completed: {operationName}.");
     }
 }

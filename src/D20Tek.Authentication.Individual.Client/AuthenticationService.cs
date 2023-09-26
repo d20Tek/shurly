@@ -5,6 +5,7 @@ using Blazored.LocalStorage;
 using D20Tek.Authentication.Individual.Client.Contracts;
 using D20Tek.Minimal.Result;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -22,7 +23,9 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
         HttpClient httpClient,
         AuthenticationStateProvider authStateProvider,
         ILocalStorageService localStorage,
-        IOptions<ServiceEndpointSettings> endpointOptions)
+        IOptions<ServiceEndpointSettings> endpointOptions,
+        ILogger<AuthenticationService> logger)
+        : base(logger)
     {
         _httpClient = httpClient;
         _authStateProvider = (JwtAuthenticationProvider)authStateProvider;

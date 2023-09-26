@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,19 +20,23 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
     private readonly ILocalStorageService _localStorage;
     private readonly AuthenticationState _anonymous = new (new ClaimsPrincipal());
     private readonly JwtClientSettings _jwtSettings;
+    private readonly ILogger _logger;
 
     public JwtAuthenticationProvider(
         HttpClient httpClient,
         IOptions<JwtClientSettings> jwtOptions,
-        ILocalStorageService localStorage)
+        ILocalStorageService localStorage,
+        ILogger<JwtAuthenticationProvider> logger)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
         _jwtSettings = jwtOptions.Value;
+        _logger = logger;
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
+        _logger.LogInformation($"==> GetAuthenticationStateAsync started.");
         var token = await _localStorage.GetItemAsync<string>(
             Configuration.Authentication.AccessTokenKey);
         if (string.IsNullOrEmpty(token))
@@ -45,11 +50,13 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
             Configuration.Authentication.JwtBearerScheme,
             token);
 
+        _logger.LogInformation($"==> GetAuthenticationStateAsync completed.");
         return new AuthenticationState(principal);
     }
 
     public void NotifyUserAuthentication(string token)
     {
+        _logger.LogInformation($"==> NotifyUserAuthentication called.");
         var principal = DecodeJwtToken(token);
         var authState = new AuthenticationState(principal);
 
@@ -58,6 +65,7 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
 
     public void NotifyUserLogout()
     {
+        _logger.LogInformation($"==> NotifyUserLogout called.");
         NotifyAuthenticationStateChanged(Task.FromResult(_anonymous));
     }
 
@@ -65,6 +73,8 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
     {
         try
         {
+            _logger.LogInformation($"==> DecodeJwtToken started.");
+
             // define the token validation parameters
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -89,12 +99,13 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
                 tokenValidationParameters,
                 out SecurityToken validatedToken);
 
+            _logger.LogInformation($"Token validation succeeded and ClaimsPrincipal returned.");
             return claimsPrincipal;
         }
         catch (Exception ex)
         {
-            // nandle exceptions here and return anonymous principal
-            Console.WriteLine($"Token validation failed: {ex.Message}");
+            // handle exceptions here and return anonymous principal
+            _logger.LogError($"Token validation failed: {ex.Message}", ex);
             return new ClaimsPrincipal();
         }
     }

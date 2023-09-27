@@ -5,6 +5,7 @@ using D20Tek.Authentication.Individual.UseCases.GetById;
 using D20Tek.Authentication.Individual.UseCases.RemoveAccount;
 using D20Tek.Authentication.Individual.UseCases.UpdateAccount;
 using D20Tek.Minimal.Endpoints;
+using D20Tek.Minimal.Endpoints.Configuration;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -25,27 +26,13 @@ internal class AccountEndpoints : ICompositeApiEndpoint
             .WithOpenApi();
 
         group.MapGet(Configuration.GetAccount.RoutePattern, GetAccountAsync)
-            .WithName(Configuration.GetAccount.EndpointName)
-            .WithDisplayName(Configuration.GetAccount.DisplayName)
-            .Produces<AccountResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status401Unauthorized);
+            .WithConfiguration(Configuration.GetAccount);
 
         group.MapPut(Configuration.UpdateAccount.RoutePattern, UpdateAccountAsync)
-            .WithName(Configuration.UpdateAccount.EndpointName)
-            .WithDisplayName(Configuration.UpdateAccount.DisplayName)
-            .Produces<AccountResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status401Unauthorized)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+            .WithConfiguration(Configuration.UpdateAccount);
 
         group.MapDelete(Configuration.RemoveAccount.RoutePattern, RemoveAccountAsync)
-            .WithName(Configuration.RemoveAccount.EndpointName)
-            .WithDisplayName(Configuration.RemoveAccount.DisplayName)
-            .Produces<AccountResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status401Unauthorized);
+            .WithConfiguration(Configuration.RemoveAccount);
     }
 
     public async Task<IResult> GetAccountAsync(

@@ -8,6 +8,7 @@ using D20Tek.Authentication.Individual.UseCases.RefreshToken;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Authentication.Individual.UseCases.ResetPassword;
 using D20Tek.Minimal.Endpoints;
+using D20Tek.Minimal.Endpoints.Configuration;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -29,65 +30,29 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
             .WithOpenApi();
 
         group.MapPost(Configuration.Register.RoutePattern, RegisterAsync)
-            .WithName(Configuration.Register.EndpointName)
-            .WithDisplayName(Configuration.Register.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status201Created)
-            .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+            .WithConfiguration(Configuration.Register);
 
         group.MapPost(Configuration.Login.RoutePattern, LoginAsync)
-            .WithName(Configuration.Login.EndpointName)
-            .WithDisplayName(Configuration.Login.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+            .WithConfiguration(Configuration.Login);
 
         group.MapPatch(Configuration.ChangePassword.RoutePattern, ChangePasswordAsync)
-            .WithName(Configuration.ChangePassword.EndpointName)
-            .WithDisplayName(Configuration.ChangePassword.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status403Forbidden)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest)
-            .RequireAuthorization();
+            .WithConfiguration(Configuration.ChangePassword);
 
         group.MapPatch(Configuration.ResetPassword.RoutePattern, ResetPasswordAsync)
-            .WithName(Configuration.ResetPassword.EndpointName)
-            .WithDisplayName(Configuration.ResetPassword.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status403Forbidden)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+            .WithConfiguration(Configuration.ResetPassword);
 
         group.MapPatch(Configuration.ChangeRole.RoutePattern, ChangeRoleAsync)
-            .WithName(Configuration.ChangeRole.EndpointName)
-            .WithDisplayName(Configuration.ChangeRole.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest)
-            .ExcludeFromDescription()
-            .RequireAuthorization(AuthorizationPolicies.Admin);
+            .WithConfiguration(Configuration.ChangeRole)
+            .ExcludeFromDescription();
 
         group.MapPost(Configuration.RefreshToken.RoutePattern, RefreshTokenAsync)
-            .WithName(Configuration.RefreshToken.EndpointName)
-            .WithName(Configuration.RefreshToken.DisplayName)
-            .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status401Unauthorized)
-            .RequireAuthorization(AuthorizationPolicies.Refresh);
+            .WithConfiguration(Configuration.RefreshToken);
 
         group.MapPost(Configuration.GetResetToken.RoutePattern, GetPasswordResetTokenAsync)
-            .WithName(Configuration.GetResetToken.EndpointName)
-            .WithName(Configuration.GetResetToken.DisplayName)
-            .Produces<ResetTokenResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+            .WithConfiguration(Configuration.GetResetToken);
 
         group.MapGet(Configuration.GetClaims.RoutePattern, GetClaims)
-            .WithName(Configuration.GetClaims.EndpointName)
-            .WithDisplayName(Configuration.GetClaims.DisplayName)
-            .Produces(StatusCodes.Status200OK)
-            .RequireAuthorization();
+            .WithConfiguration(Configuration.GetClaims);
     }
 
     public async Task<IResult> RegisterAsync(
@@ -107,7 +72,7 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
 
         return authResult.ToCreatedApiResult(
             _authResponseMapper.Map,
-            Configuration.Register.CreatedAtUrl);
+            Configuration.Authentication.CreatedAtUrl);
     }
 
     public async Task<IResult> LoginAsync(

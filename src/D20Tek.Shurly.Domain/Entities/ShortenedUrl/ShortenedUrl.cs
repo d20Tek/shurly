@@ -9,6 +9,8 @@ public sealed class ShortenedUrl
 
     public LongUrl LongUrl { get; }
 
+    public Summary Summary { get; }
+
     public ShortUrlCode ShortUrlCode { get; }
 
     public UrlMetadata UrlMetadata { get; }
@@ -16,23 +18,27 @@ public sealed class ShortenedUrl
     private ShortenedUrl(
         ShortenedUrlId id,
         LongUrl longUrl,
+        Summary summary,
         ShortUrlCode shortUrlCode,
         UrlMetadata urlMetadata)
     {
         Id = id;
         LongUrl = longUrl;
+        Summary = summary;
         ShortUrlCode = shortUrlCode;
         UrlMetadata = urlMetadata;
     }
 
     public static ShortenedUrl Create(
         LongUrl longUrl,
+        Summary summary,
         ShortUrlCode shortUrlCode,
         AccountId creatorId)
     {
         return new ShortenedUrl(
             ShortenedUrlId.Create(),
             longUrl,
+            summary,
             shortUrlCode,
             UrlMetadata.Create(creatorId));
     }
@@ -40,9 +46,10 @@ public sealed class ShortenedUrl
     public static ShortenedUrl Hydrate(
         ShortenedUrlId id,
         LongUrl longUrl,
+        Summary summary,
         ShortUrlCode shortUrlCode,
         UrlMetadata urlMetadata)
     {
-        return new ShortenedUrl(id, longUrl, shortUrlCode, urlMetadata);
+        return new ShortenedUrl(id, longUrl, summary, shortUrlCode, urlMetadata);
     }
 }

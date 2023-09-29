@@ -26,7 +26,9 @@ public static partial class DependencyInjection
                 $"Connection string '{_defaultDbConnectionKey}' not found.");
 
         services.AddDbContext<UserAccountDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(
+                connectionString,
+                b => b.MigrationsAssembly("D20Tek.Authentication.Individual")));
 
         services.AddIdentity<UserAccount, IdentityRole>(options =>
         {

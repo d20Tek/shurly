@@ -11,9 +11,9 @@ public sealed class UrlMetadata : ValueObject
 
     public UrlState State { get; private set; }
 
-    public AccountId OwnerId { get; }
+    public AccountId OwnerId { get; private set; }
 
-    public DateTime CreatedOn { get; }
+    public DateTime CreatedOn { get; private set; }
 
     public DateTime PublishOn { get; private set; }
 
@@ -21,13 +21,13 @@ public sealed class UrlMetadata : ValueObject
 
     private UrlMetadata(
         UrlState state,
-        AccountId creatorId,
+        AccountId ownerId,
         DateTime createdOn,
         DateTime publishOn,
         DateTime modifiedOn)
     {
         State = state;
-        OwnerId = creatorId;
+        OwnerId = ownerId;
         CreatedOn = createdOn;
         PublishOn = publishOn;
         ModifiedOn = modifiedOn;

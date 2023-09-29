@@ -1,19 +1,19 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Minimal.Domain;
+
 namespace D20Tek.Shurly.Domain.Entities.ShortenedUrl;
 
-public sealed class ShortenedUrl
+public sealed class ShortenedUrl : Entity<ShortenedUrlId>
 {
-    public ShortenedUrlId Id { get; }
+    public LongUrl LongUrl { get; private set; } = default!;
 
-    public LongUrl LongUrl { get; }
+    public Summary Summary { get; private set; } = default!;
 
-    public Summary Summary { get; }
+    public ShortUrlCode ShortUrlCode { get; private set; } = default!;
 
-    public ShortUrlCode ShortUrlCode { get; }
-
-    public UrlMetadata UrlMetadata { get; }
+    public UrlMetadata UrlMetadata { get; private set; } = default!;
 
     private ShortenedUrl(
         ShortenedUrlId id,
@@ -21,12 +21,17 @@ public sealed class ShortenedUrl
         Summary summary,
         ShortUrlCode shortUrlCode,
         UrlMetadata urlMetadata)
+        : base( id )
     {
-        Id = id;
         LongUrl = longUrl;
         Summary = summary;
         ShortUrlCode = shortUrlCode;
         UrlMetadata = urlMetadata;
+    }
+
+    private ShortenedUrl()
+        : base(ShortenedUrlId.Create())
+    {
     }
 
     public static ShortenedUrl Create(

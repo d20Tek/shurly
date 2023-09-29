@@ -18,7 +18,7 @@ public static class DependencyInjection
     {
         services.AddDatabaseServices(configuration);
 
-        services.AddSingleton<IUrlShorteningService, UrlShorteningService>();
+        services.AddScoped<IUrlShorteningService, UrlShorteningService>();
         services.AddScoped<IShortenedUrlRepository, ShortenedUrlRepository>();
 
         return services;
@@ -33,7 +33,9 @@ public static class DependencyInjection
                 $"Connection string '{_defaultDbConnectionKey}' not found.");
 
         services.AddDbContext<ShurlyDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(
+                connectionString,
+                b => b.MigrationsAssembly("D20Tek.Shurly.Infrastructure")));
 
         return services;
     }

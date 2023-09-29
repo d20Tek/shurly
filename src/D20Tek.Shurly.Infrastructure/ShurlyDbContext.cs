@@ -8,7 +8,7 @@ namespace D20Tek.Shurly.Infrastructure;
 
 internal class ShurlyDbContext : DbContext
 {
-    public ShurlyDbContext(DbContextOptions options)
+    public ShurlyDbContext(DbContextOptions<ShurlyDbContext> options)
         : base(options)
     {
     }
@@ -46,15 +46,13 @@ internal class ShurlyDbContext : DbContext
 
             builder.HasIndex(x => x.ShortUrlCode).IsUnique();
 
-            builder.OwnsOne<UrlMetadata>(x => x.UrlMetadata);
-        });
-
-        modelBuilder.Entity<UrlMetadata>(builder =>
-        {
-            builder.Property(x => x.OwnerId)
-                .HasConversion(
-                    id => id.Value,
-                    value => AccountId.Create(value));
+            builder.OwnsOne<UrlMetadata>(x => x.UrlMetadata, b =>
+            {
+                b.Property(x => x.OwnerId)
+                    .HasConversion(
+                        id => id.Value,
+                        value => AccountId.Create(value));
+            });
         });
 
         modelBuilder.FinalizeModel();

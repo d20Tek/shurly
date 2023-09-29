@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
     }
 
     builder.Services
-        .AddPresentationServices()
+        .AddPresentationServices(builder.Configuration)
         .AddIndividualAuthentication(builder.Configuration);
 }
 

@@ -38,14 +38,15 @@ public sealed class ShortenedUrl : Entity<ShortenedUrlId>
         LongUrl longUrl,
         Summary summary,
         ShortUrlCode shortUrlCode,
-        AccountId creatorId)
+        AccountId creatorId,
+        DateTime? publishOn)
     {
         return new ShortenedUrl(
             ShortenedUrlId.Create(),
             longUrl,
             summary,
             shortUrlCode,
-            UrlMetadata.Create(creatorId));
+            UrlMetadata.Create(creatorId, publishOn));
     }
 
     public static ShortenedUrl Hydrate(

@@ -61,13 +61,13 @@ public sealed class UrlMetadata : ValueObject
         ModifiedOn = DateTime.UtcNow;
     }
 
-    public static UrlMetadata Create(AccountId creatorId)
+    public static UrlMetadata Create(AccountId creatorId, DateTime? publishOn = null)
     {
         return new UrlMetadata(
             UrlState.New,
             creatorId,
             DateTime.UtcNow,
-            DateTime.UtcNow,
+            publishOn ?? DateTime.UtcNow,
             DateTime.UtcNow);
     }
 

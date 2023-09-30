@@ -4,6 +4,7 @@
 using D20Tek.Authentication.Individual.Api;
 using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Endpoints.Exceptions;
+using D20Tek.Shurly.Application;
 using D20Tek.Shurly.Infrastructure;
 
 namespace D20Tek.Shurly.Api;
@@ -16,7 +17,8 @@ internal static class DependencyInjection
     {
         services.AddApplicationInsightsTelemetry()
                 .AddAuthenticationApiEndpoints()
-                .AddInfrastructureServices(configuration);
+                .AddInfrastructureServices(configuration)
+                .AddApplicationServices();
 
         // add ApiEndpoint definitions to the container
         services.AddApiEndpointsFromAssembly(

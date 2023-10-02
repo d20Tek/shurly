@@ -16,16 +16,16 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
         _dbContext = dbContext;
     }
 
-    public async Task<ShortenedUrl?> GetByShortUrlCodeAsync(string shortUrlCode)
+    public async Task<ShortenedUrl?> GetByShortUrlCodeAsync(ShortUrlCode code)
     {
         var entity = await _dbContext.ShortenedUrls
-            .FirstOrDefaultAsync(x => x.ShortUrlCode.Value == shortUrlCode);
+            .FirstOrDefaultAsync(x => x.ShortUrlCode == code);
 
         return entity;
     }
 
     public async Task<bool> IsUrlCodeUniqueAsync(string shortUrlCode) =>
-        await GetByShortUrlCodeAsync(shortUrlCode) is null;
+        await GetByShortUrlCodeAsync(ShortUrlCode.Create(shortUrlCode)) is null;
 
     public async Task<bool> CreateAync(ShortenedUrl shortenedUrl)
     {

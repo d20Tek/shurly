@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Web", "src\D2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Authentication.Individual.Client", "src\D20Tek.Authentication.Individual.Client\D20Tek.Authentication.Individual.Client.csproj", "{0EA3C9B9-9A2F-442E-B513-4DA7D88E1C1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Application", "src\D20Tek.Shurly.Application\D20Tek.Shurly.Application.csproj", "{7F9FF8C3-C631-455C-90F3-C43D2E36352D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Application", "src\D20Tek.Shurly.Application\D20Tek.Shurly.Application.csproj", "{7F9FF8C3-C631-455C-90F3-C43D2E36352D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Infrastructure", "src\D20Tek.Shurly.Infrastructure\D20Tek.Shurly.Infrastructure.csproj", "{FA934E9F-577D-4803-9F90-B210EEBB7A1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Infrastructure", "src\D20Tek.Shurly.Infrastructure\D20Tek.Shurly.Infrastructure.csproj", "{FA934E9F-577D-4803-9F90-B210EEBB7A1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

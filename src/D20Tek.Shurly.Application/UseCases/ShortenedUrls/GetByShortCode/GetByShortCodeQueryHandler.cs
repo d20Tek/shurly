@@ -31,7 +31,8 @@ internal class GetByShortCodeQueryHandler : IGetByShortCodeQueryHandler
             _logger,
             async () =>
             {
-                var entity = await _repository.GetByShortUrlCodeAsync(query.ShortUrlCode);
+                var code = ShortUrlCode.Create(query.ShortUrlCode);
+                var entity = await _repository.GetByShortUrlCodeAsync(code);
                 if (entity is null)
                 {
                     return DomainErrors.ShortUrlNotFound;

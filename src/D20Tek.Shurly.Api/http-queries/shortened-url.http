@@ -1,0 +1,14 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host = https://localhost:7208
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTk2Yjk1Ny01YTM3LTRjYzgtYjU5ZC1jZTU2YmMyYmQyZTIiLCJnaXZlbl9uYW1lIjoiUGVkcm8iLCJmYW1pbHlfbmFtZSI6IlNpbHZhIiwibmFtZSI6IkRhcnRoUGVkcm8iLCJlbWFpbCI6ImRhcnRocGVkcm9AZ21haWwuY29tIiwianRpIjoiNDUyYWRmMWEtOTEwZC00ZjU5LWE2YTctYzEzMjllOTE4YzJhIiwic2NvcGUiOlsiZDIwVGVrLlNodXJseS5SZWFkIiwiZDIwVGVrLlNodXJseS5Xcml0ZSJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwiZXhwIjoxNjk2MjgxMTY4LCJpc3MiOiJkMjBUZWsuQXV0aGVudGljYXRpb25TZXJ2aWNlIiwiYXVkIjoiZDIwVGVrLlNodXJseSJ9.Jdurf9gNCrkytE2tBefmwLS0GQlhubXcJ2HiLNCPXZw
+
+### Create ShortenedUrl
+POST {{host}}/api/v1/short-url
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "longUrl" : "https://darthpedro.net/blazor-how-to-articles/",
+    "summary" : "DarthPedro's Blazor blog series"
+}

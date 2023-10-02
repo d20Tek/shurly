@@ -52,6 +52,8 @@ internal class ShurlyDbContext : DbContext
                     .HasConversion(
                         id => id.Value,
                         value => AccountId.Create(value));
+
+                b.HasIndex(x => x.OwnerId);
             });
         });
 

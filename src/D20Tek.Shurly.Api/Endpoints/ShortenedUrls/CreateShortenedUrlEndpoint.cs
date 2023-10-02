@@ -5,20 +5,14 @@ using D20Tek.Minimal.Endpoints;
 using D20Tek.Minimal.Endpoints.Configuration;
 using D20Tek.Minimal.Result.AspNetCore.MinimalApi;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.Create;
+using Microsoft.AspNetCore.Mvc;
 
 namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
 internal class CreateShortenedUrlEndpoint :
-    IApiEndpoint<HttpContextEnvelope<CreateShortenedUrlRequest>>
+    IApiEndpoint<HttpContextEnvelope<CreateShortenedUrlRequest>, ICreateShortenedUrlCommandHandler>
 {
-    private readonly ICreateShortenedUrlCommandHandler _handler;
-    private readonly ShortenedUrlResponseMapper _responseMapper;
-
-    public CreateShortenedUrlEndpoint(ICreateShortenedUrlCommandHandler handler)
-    {
-        _handler = handler;
-        _responseMapper = new ShortenedUrlResponseMapper();
-    }
+    private readonly ShortenedUrlResponseMapper _responseMapper = new();
 
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
@@ -28,6 +22,7 @@ internal class CreateShortenedUrlEndpoint :
 
     public async Task<IResult> HandleAsync(
         [AsParameters] HttpContextEnvelope<CreateShortenedUrlRequest> request,
+        [FromServices] ICreateShortenedUrlCommandHandler handler,
         CancellationToken cancellation)
     {
         var creatorId = request.User.FindUserId();
@@ -37,7 +32,7 @@ internal class CreateShortenedUrlEndpoint :
             creatorId,
             request.Body.PublishOn);
 
-        var result = await _handler.HandleAsync(command, cancellation);
+        var result = await handler.HandleAsync(command, cancellation);
         return result.Match<IResult>(
             success => TypedResults.Ok(_responseMapper.Map(success, request.Context)),
             errors => Results.Extensions.Problem(errors));

@@ -18,8 +18,8 @@ public static class DependencyInjection
     {
         services.AddDatabaseServices(configuration);
 
-        services.AddSingleton<IUrlShorteningService, UrlShorteningService>();
-        services.AddSingleton<IShortenedUrlRepository, ShortenedUrlRepository>();
+        services.AddScoped<IUrlShorteningService, UrlShorteningService>();
+        services.AddScoped<IShortenedUrlRepository, ShortenedUrlRepository>();
 
         return services;
     }
@@ -35,8 +35,7 @@ public static class DependencyInjection
         services.AddDbContext<ShurlyDbContext>(options =>
             options.UseSqlServer(
                 connectionString,
-                b => b.MigrationsAssembly("D20Tek.Shurly.Infrastructure")),
-            ServiceLifetime.Singleton);
+                b => b.MigrationsAssembly("D20Tek.Shurly.Infrastructure")));
 
         return services;
     }

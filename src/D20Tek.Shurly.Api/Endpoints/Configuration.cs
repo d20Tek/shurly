@@ -26,14 +26,14 @@ internal class Configuration
             });
 
         public static ApiEndpointConfig GetByShortCode = new(
-            "/",
+            "/{shortCode}",
             "GetByShortCode",
             "Get Url By ShortCode",
             Summary: "Gets the short code from the Url and redirects to the full Url.",
             Tags: GroupTags,
             Produces: new[]
             {
-                Config.Produces(StatusCodes.Status307TemporaryRedirect),
+                Config.Produces<string>(StatusCodes.Status307TemporaryRedirect, "text/plain"),
                 Config.ProducesProblem(StatusCodes.Status404NotFound)
             });
     }

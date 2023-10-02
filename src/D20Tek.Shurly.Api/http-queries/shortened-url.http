@@ -15,3 +15,7 @@ Content-Type: {{contentType}}
 
 ### Get ShortUrl by code
 GET {{host}}/L4qvKm8D
+
+### Get ShortUrl by id
+GET {{host}}/api/v1/short-url/9748ef51-ef45-43e5-90c0-1609f7a007e2
+Authorization: Bearer {{token}}

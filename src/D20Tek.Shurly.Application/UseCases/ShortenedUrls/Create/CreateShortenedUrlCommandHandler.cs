@@ -54,7 +54,7 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
                     return DomainErrors.CreateFailed;
                 }
 
-                return MapResult(entity);
+                return ShortenedUrlResult.FromEntity(entity);
             });
     }
 
@@ -87,16 +87,5 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
             command.PublishOn);
 
         return entity;
-    }
-
-    private Result<ShortenedUrlResult> MapResult(ShortenedUrl entity)
-    {
-        return new ShortenedUrlResult(
-            entity.Id.Value,
-            entity.LongUrl.Value,
-            entity.ShortUrlCode.Value,
-            entity.Summary.Value,
-            (int)entity.UrlMetadata.State,
-            entity.UrlMetadata.PublishOn);
     }
 }

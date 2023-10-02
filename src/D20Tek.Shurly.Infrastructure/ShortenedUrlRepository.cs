@@ -16,6 +16,14 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
         _dbContext = dbContext;
     }
 
+    public async Task<ShortenedUrl?> GetByIdAsync(ShortenedUrlId id)
+    {
+        var entity = await _dbContext.ShortenedUrls
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        return entity;
+    }
+
     public async Task<ShortenedUrl?> GetByShortUrlCodeAsync(ShortUrlCode code)
     {
         var entity = await _dbContext.ShortenedUrls

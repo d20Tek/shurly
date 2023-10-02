@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
-internal class CreateShortenedUrlEndpoint :
+internal sealed class CreateShortenedUrlEndpoint :
     IApiEndpoint<HttpContextEnvelope<CreateShortenedUrlRequest>, ICreateShortenedUrlCommandHandler>
 {
     private readonly ShortenedUrlResponseMapper _responseMapper = new();

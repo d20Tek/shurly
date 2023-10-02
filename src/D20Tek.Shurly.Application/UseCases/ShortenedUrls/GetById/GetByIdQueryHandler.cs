@@ -4,18 +4,19 @@
 using D20Tek.Minimal.Domain;
 using D20Tek.Minimal.Result;
 using D20Tek.Shurly.Application.Abstractions;
+using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByShortCode;
 using D20Tek.Shurly.Domain.Entities.ShortenedUrl;
 using D20Tek.Shurly.Domain.Errors;
 using Microsoft.Extensions.Logging;
 
-namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByShortCode;
+namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetById;
 
-internal class GetByShortCodeQueryHandler : IGetByShortCodeQueryHandler
+internal sealed class GetByIdQueryHandler : IGetByIdQueryHandler
 {
     private readonly IShortenedUrlRepository _repository;
     private readonly ILogger _logger;
 
-    public GetByShortCodeQueryHandler(
+    public GetByIdQueryHandler(
         IShortenedUrlRepository repository,
         ILogger<GetByShortCodeQueryHandler> logger)
     {
@@ -24,18 +25,18 @@ internal class GetByShortCodeQueryHandler : IGetByShortCodeQueryHandler
     }
 
     public async Task<Result<ShortenedUrlResult>> HandleAsync(
-        GetByShortCodeQuery query,
+        GetByIdQuery query,
         CancellationToken cancellationToken)
     {
         return await UseCaseOperation.InvokeAsync<ShortenedUrlResult>(
             _logger,
             async () =>
             {
-                var code = ShortUrlCode.Create(query.ShortUrlCode);
-                var entity = await _repository.GetByShortUrlCodeAsync(code);
+                var id = ShortenedUrlId.Create(query.Id);
+                var entity = await _repository.GetByIdAsync(id);
                 if (entity is null)
                 {
-                    return DomainErrors.ShortUrlNotFound;
+                    return DomainErrors.EntityNotFound("ShortenedUrl", query.Id);
                 }
 
                 return ShortenedUrlResult.FromEntity(entity);

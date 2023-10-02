@@ -25,6 +25,20 @@ internal class Configuration
                 Config.ProducesValidationProblem(StatusCodes.Status400BadRequest)
             });
 
+        public static ApiEndpointConfig GetById = new(
+            $"{BaseUrl}/{{id:Guid}}",
+            "GetById",
+            "Get Url By Id",
+            Summary: "Gets the ShortenedUrl asset based on its ShortUrlId.",
+            Tags: GroupTags,
+            RequiresAuthorization: true,
+            Produces: new[]
+            {
+                Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
+                Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status401Unauthorized)
+            });
+
         public static ApiEndpointConfig GetByShortCode = new(
             "/{shortCode}",
             "GetByShortCode",

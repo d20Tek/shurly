@@ -7,6 +7,8 @@ namespace D20Tek.Shurly.Application.Abstractions;
 
 public interface IShortenedUrlRepository
 {
+    public Task<ShortenedUrl?> GetByIdAsync(ShortenedUrlId id);
+
     public Task<ShortenedUrl?> GetByShortUrlCodeAsync(ShortUrlCode code);
 
     public Task<bool> IsUrlCodeUniqueAsync(string shortUrlCode);

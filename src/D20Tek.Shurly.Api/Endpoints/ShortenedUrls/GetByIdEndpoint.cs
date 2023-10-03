@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
-internal sealed class GetByIdEndpoint : IApiEndpoint
+internal sealed class GetByIdEndpoint :
+    IApiEndpoint<GetByIdRequest, IGetByIdQueryHandler>
+
 {
     private readonly ShortenedUrlResponseMapper _responseMapper = new();
 
@@ -20,16 +22,16 @@ internal sealed class GetByIdEndpoint : IApiEndpoint
     }
 
     public async Task<IResult> HandleAsync(
-        [FromRoute] Guid id,
+        [AsParameters] GetByIdRequest request,
         [FromServices] IGetByIdQueryHandler handler,
-        HttpContext httpContext,
         CancellationToken cancellation)
     {
-        var query = new GetByIdQuery(id);
+        var userId = request.User.FindUserId();
+        var query = new GetByIdQuery(request.Id, userId);
         var result = await handler.HandleAsync(query, cancellation);
 
         return result.Match<IResult>(
-            success => TypedResults.Ok(_responseMapper.Map(success, httpContext)),
+            success => TypedResults.Ok(_responseMapper.Map(success, request.Context)),
             errors => Results.Extensions.Problem(errors));
     }
 }

@@ -31,11 +31,16 @@ internal sealed class GetByIdQueryHandler : IGetByIdQueryHandler
             _logger,
             async () =>
             {
-                var id = ShortenedUrlId.Create(query.Id);
+                var id = ShortenedUrlId.Create(query.ShortUrlId);
                 var entity = await _repository.GetByIdAsync(id);
                 if (entity is null)
                 {
-                    return DomainErrors.EntityNotFound(nameof(ShortenedUrl), query.Id);
+                    return DomainErrors.EntityNotFound(nameof(ShortenedUrl), query.ShortUrlId);
+                }
+
+                if (entity.UrlMetadata.OwnerId.Value != query.OwnerId)
+                {
+                    return DomainErrors.ShortUrlNotOwner;
                 }
 
                 return ShortenedUrlResult.FromEntity(entity);

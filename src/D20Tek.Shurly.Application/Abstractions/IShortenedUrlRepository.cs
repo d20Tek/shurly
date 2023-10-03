@@ -14,4 +14,6 @@ public interface IShortenedUrlRepository
     public Task<bool> IsUrlCodeUniqueAsync(string shortUrlCode);
 
     public Task<bool> CreateAync(ShortenedUrl shortenedUrl);
+
+    public Task<bool> DeleteAsync(ShortenedUrl shortenedUrl);
 }

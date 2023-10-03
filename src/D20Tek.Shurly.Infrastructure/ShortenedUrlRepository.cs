@@ -42,4 +42,12 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
 
         return true;
     }
+
+    public async Task<bool> DeleteAsync(ShortenedUrl shortenedUrl)
+    {
+        _dbContext.ShortenedUrls.Remove(shortenedUrl);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
+    }
 }

@@ -31,7 +31,15 @@ public static class DomainErrors
         "ShortenedUrl.NotFound",
         "Cannot find the short url with the specified code.");
 
+    public static Error ShortUrlNotOwner = Error.Forbidden(
+        "ShortenedUrl.NotOwner",
+        "Cannot operate on a short url entity that user does not own.");
+
     public static Error CreateFailed = Error.Failure(
         "ShortenedUrl.CreateFailed",
         "Unable to create the specified short url.");
+
+    public static Error DeleteFailed = Error.Failure(
+        "ShortenedUrl.DeleteFailed",
+        "Unable to delete the specified short url entity.");
 }

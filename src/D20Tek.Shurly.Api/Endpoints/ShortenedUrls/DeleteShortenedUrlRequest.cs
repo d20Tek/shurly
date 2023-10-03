@@ -1,13 +1,12 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-namespace D20Tek.Minimal.Endpoints;
+using D20Tek.Minimal.Endpoints;
+using System.Security.Claims;
 
-public interface IApiEndpoint<TRequest, THandler> : IApiEndpoint
-    where TRequest : IRequest<IResult>
-{
-    public Task<IResult> HandleAsync(
-        TRequest request,
-        THandler handler,
-        CancellationToken cancellation);
-}
+namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
+
+public sealed record DeleteShortenedUrlRequest(
+    Guid Id,
+    HttpContext Context,
+    ClaimsPrincipal User) : IRequest<IResult>;

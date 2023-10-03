@@ -50,5 +50,19 @@ internal class Configuration
                 Config.Produces<string>(StatusCodes.Status307TemporaryRedirect, "text/plain"),
                 Config.ProducesProblem(StatusCodes.Status404NotFound)
             });
+
+        public static ApiEndpointConfig Delete = new(
+            $"{BaseUrl}/{{id:Guid}}",
+            "DeleteShortUrl",
+            "Delete Shortened Url",
+            Summary: "Deletes the ShortenedUrl asset based on its ShortUrlId.",
+            Tags: GroupTags,
+            RequiresAuthorization: true,
+            Produces: new[]
+            {
+                Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
+                Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status401Unauthorized)
+            });
     }
 }

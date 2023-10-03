@@ -49,6 +49,7 @@ internal class ShurlyDbContext : DbContext
             builder.OwnsOne<UrlMetadata>(x => x.UrlMetadata, b =>
             {
                 b.Property(x => x.OwnerId)
+                    .ValueGeneratedNever()
                     .HasConversion(
                         id => id.Value,
                         value => AccountId.Create(value));

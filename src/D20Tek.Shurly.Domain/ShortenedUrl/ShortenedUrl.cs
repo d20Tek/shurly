@@ -5,7 +5,7 @@ using D20Tek.Minimal.Domain;
 
 namespace D20Tek.Shurly.Domain.ShortenedUrl;
 
-public sealed class ShortenedUrl : Entity<ShortenedUrlId>
+public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
 {
     public LongUrl LongUrl { get; private set; } = default!;
 

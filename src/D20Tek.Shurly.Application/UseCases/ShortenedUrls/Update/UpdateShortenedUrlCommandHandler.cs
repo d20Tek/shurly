@@ -87,22 +87,14 @@ internal class UpdateShortenedUrlCommandHandler : IUpdateShortenedUrlCommandHand
         ShortenedUrl existingEntity,
         UpdateShortenedUrlCommand command)
     {
+        existingEntity.ChangeLongUrl(LongUrl.Create(command.LongUrl));
+        existingEntity.ChangeSummary(Summary.Create(command.Summary));
+
         if (command.PublishOn is not null)
         {
-            existingEntity.UrlMetadata.UpdatePublishOn(command.PublishOn.Value);
-        }
-        else
-        {
-            existingEntity.UrlMetadata.Modified();
+            existingEntity.ChangePublishOn(command.PublishOn.Value);
         }
 
-        var entity = ShortenedUrl.Hydrate(
-            existingEntity.Id,
-            LongUrl.Create(command.LongUrl),
-            Summary.Create(command.Summary),
-            existingEntity.ShortUrlCode,
-            existingEntity.UrlMetadata);
-
-        return entity;
+        return existingEntity;
     }
 }

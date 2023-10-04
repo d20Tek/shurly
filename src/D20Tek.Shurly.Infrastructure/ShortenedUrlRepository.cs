@@ -56,15 +56,6 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
 
     public async Task<bool> UpdateAsync(ShortenedUrl shortenedUrl)
     {
-        // get existing entity, and if not available return false.
-        var existingEntity = _dbContext.ShortenedUrls.Find(shortenedUrl.Id);
-        if (existingEntity is null)
-        {
-            return false;
-        }
-        
-        // update the existing entity with the updated shortenedUrl.
-        _dbContext.ShortenedUrls.Entry(existingEntity).CurrentValues.SetValues(shortenedUrl);
         await _dbContext.SaveChangesAsync();
 
         return true;

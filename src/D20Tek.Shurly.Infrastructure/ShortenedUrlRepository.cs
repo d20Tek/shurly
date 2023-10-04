@@ -20,6 +20,7 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
     {
         var entities = await _dbContext.ShortenedUrls
             .Where(x => x.UrlMetadata.OwnerId == ownerId)
+            .OrderBy(x => x.UrlMetadata.CreatedOn)
             .ToListAsync();
 
         return entities;
@@ -36,7 +37,8 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
     public async Task<ShortenedUrl?> GetByShortUrlCodeAsync(ShortUrlCode code)
     {
         var entity = await _dbContext.ShortenedUrls
-            .SingleOrDefaultAsync(x => x.ShortUrlCode == code);
+            .SingleOrDefaultAsync(
+                x => x.ShortUrlCode == code && x.UrlMetadata.State == UrlState.Published);
 
         return entity;
     }

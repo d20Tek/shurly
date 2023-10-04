@@ -45,18 +45,15 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
 
     public async Task<bool> UpdateAsync(ShortenedUrl shortenedUrl)
     {
-        // detach the existing entity before applying the updated instance.
-        var entityToDetach = _dbContext.ShortenedUrls.Find(shortenedUrl.Id);
-        if (entityToDetach is not null)
+        // get existing entity, and if not available return false.
+        var existingEntity = _dbContext.ShortenedUrls.Find(shortenedUrl.Id);
+        if (existingEntity is null)
         {
-            var detach = _dbContext.Entry(entityToDetach);
-            if (detach.State != EntityState.Detached)
-            {
-                detach.State = EntityState.Detached;
-            }
+            return false;
         }
-
-        _dbContext.ShortenedUrls.Update(shortenedUrl);
+        
+        // update the existing entity with the updated shortenedUrl.
+        _dbContext.ShortenedUrls.Entry(existingEntity).CurrentValues.SetValues(shortenedUrl);
         await _dbContext.SaveChangesAsync();
 
         return true;

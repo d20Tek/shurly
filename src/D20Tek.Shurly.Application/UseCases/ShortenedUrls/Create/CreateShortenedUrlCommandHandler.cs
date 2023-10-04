@@ -14,13 +14,13 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
 {
     private readonly IShortenedUrlRepository _repository;
     private readonly IUrlShorteningService _urlService;
-    private readonly CreateShortendUrlCommandValidator _validator;
+    private readonly CreateShortenedUrlCommandValidator _validator;
     private readonly ILogger _logger;
 
     public CreateShortenedUrlCommandHandler(
         IShortenedUrlRepository repository,
         IUrlShorteningService urlService,
-        CreateShortendUrlCommandValidator validator,
+        CreateShortenedUrlCommandValidator validator,
         ILogger<CreateShortenedUrlCommandHandler> logger)
     {
         _repository = repository;

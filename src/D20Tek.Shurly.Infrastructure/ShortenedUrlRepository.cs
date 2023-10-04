@@ -43,6 +43,25 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
         return true;
     }
 
+    public async Task<bool> UpdateAsync(ShortenedUrl shortenedUrl)
+    {
+        // detach the existing entity before applying the updated instance.
+        var entityToDetach = _dbContext.ShortenedUrls.Find(shortenedUrl.Id);
+        if (entityToDetach is not null)
+        {
+            var detach = _dbContext.Entry(entityToDetach);
+            if (detach.State != EntityState.Detached)
+            {
+                detach.State = EntityState.Detached;
+            }
+        }
+
+        _dbContext.ShortenedUrls.Update(shortenedUrl);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
     public async Task<bool> DeleteAsync(ShortenedUrl shortenedUrl)
     {
         _dbContext.ShortenedUrls.Remove(shortenedUrl);

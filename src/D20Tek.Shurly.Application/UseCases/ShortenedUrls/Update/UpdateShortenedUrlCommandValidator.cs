@@ -7,11 +7,11 @@ using D20Tek.Minimal.Result;
 using D20Tek.Shurly.Domain.Entities.ShortenedUrl;
 using D20Tek.Shurly.Domain.Errors;
 
-namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Create;
+namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Update;
 
-internal class CreateShortendUrlCommandValidator : IValidator<CreateShortenedUrlCommand>
+internal class UpdateShortenedUrlCommandValidator : IValidator<UpdateShortenedUrlCommand>
 {
-    public ValidationsResult Validate(CreateShortenedUrlCommand command)
+    public ValidationsResult Validate(UpdateShortenedUrlCommand command)
     {
         var result = new ValidationsResult();
 

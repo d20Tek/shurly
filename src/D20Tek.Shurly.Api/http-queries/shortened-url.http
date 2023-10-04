@@ -20,6 +20,16 @@ GET {{host}}/L4qvKm8D
 GET {{host}}/api/v1/short-url/9d09f2d6-9205-49c8-a685-cda3629d6100
 Authorization: Bearer {{token}}
 
+### Update ShortenedUrl
+PUT {{host}}/api/v1/short-url/9d09f2d6-9205-49c8-a685-cda3629d6100
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "longUrl" : "https://darthpedro.net/blazor-how-to-articles222/",
+    "summary" : "DarthPedro's Blazor blog series222"
+}
+
 ### Delete ShortUrl
 DELETE {{host}}/api/v1/short-url/003d9df9-600b-4b01-befe-e855251e1724
 Authorization: Bearer {{token}}

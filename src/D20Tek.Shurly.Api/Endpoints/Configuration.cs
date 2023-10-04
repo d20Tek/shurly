@@ -36,6 +36,7 @@ internal class Configuration
             {
                 Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
                 Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status403Forbidden),
                 Config.ProducesProblem(StatusCodes.Status401Unauthorized)
             });
 
@@ -51,6 +52,22 @@ internal class Configuration
                 Config.ProducesProblem(StatusCodes.Status404NotFound)
             });
 
+        public static ApiEndpointConfig Update = new(
+            $"{BaseUrl}/{{id:Guid}}",
+            "UpdateShortUrl",
+            "Update Shortened Url",
+            Summary: "Updates the ShortenedUrl asset based on its ShortUrlId.",
+            Tags: GroupTags,
+            RequiresAuthorization: true,
+            Produces: new[]
+            {
+                Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
+                Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status401Unauthorized),
+                Config.ProducesProblem(StatusCodes.Status403Forbidden),
+                Config.ProducesValidationProblem(StatusCodes.Status400BadRequest)
+            });
+
         public static ApiEndpointConfig Delete = new(
             $"{BaseUrl}/{{id:Guid}}",
             "DeleteShortUrl",
@@ -62,6 +79,7 @@ internal class Configuration
             {
                 Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
                 Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status403Forbidden),
                 Config.ProducesProblem(StatusCodes.Status401Unauthorized)
             });
     }

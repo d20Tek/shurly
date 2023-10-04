@@ -15,5 +15,7 @@ public interface IShortenedUrlRepository
 
     public Task<bool> CreateAync(ShortenedUrl shortenedUrl);
 
+    public Task<bool> UpdateAsync(ShortenedUrl shortenedUrl);
+
     public Task<bool> DeleteAsync(ShortenedUrl shortenedUrl);
 }

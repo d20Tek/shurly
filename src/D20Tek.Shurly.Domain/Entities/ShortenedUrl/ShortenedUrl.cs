@@ -34,6 +34,17 @@ public sealed class ShortenedUrl : Entity<ShortenedUrlId>
     {
     }
 
+    public void Update(LongUrl longUrl, Summary summary, DateTime? publishOn)
+    {
+        LongUrl = longUrl;
+        Summary = summary;
+
+        if (publishOn is not null)
+        {
+            
+        }
+    }
+
     public static ShortenedUrl Create(
         LongUrl longUrl,
         Summary summary,

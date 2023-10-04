@@ -39,6 +39,10 @@ public static class DomainErrors
         "ShortenedUrl.CreateFailed",
         "Unable to create the specified short url.");
 
+    public static Error UpdateFailed = Error.Failure(
+        "ShortenedUrl.UpdateFailed",
+        "Unable to update the specified short url.");
+
     public static Error DeleteFailed = Error.Failure(
         "ShortenedUrl.DeleteFailed",
         "Unable to delete the specified short url entity.");

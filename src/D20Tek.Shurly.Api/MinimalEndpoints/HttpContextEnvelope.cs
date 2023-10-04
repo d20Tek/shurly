@@ -10,3 +10,7 @@ public sealed record HttpContextEnvelope<TBody>(
     ClaimsPrincipal User,
     TBody Body) : IRequest<IResult>
         where TBody : class;
+
+public sealed record HttpContextRequest(
+    HttpContext Context,
+    ClaimsPrincipal User) : IRequest<IResult>;

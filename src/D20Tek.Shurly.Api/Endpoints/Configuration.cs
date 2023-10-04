@@ -25,6 +25,19 @@ internal class Configuration
                 Config.ProducesValidationProblem(StatusCodes.Status400BadRequest)
             });
 
+        public static ApiEndpointConfig GetByOwner = new(
+            BaseUrl,
+            "GetByOwner",
+            "Get Urls By Ower",
+            Summary: "Gets the list of ShortenedUrls for the owner.",
+            Tags: GroupTags,
+            RequiresAuthorization: true,
+            Produces: new[]
+            {
+                Config.Produces<IEnumerable<ShortenedUrlResponse>>(StatusCodes.Status200OK),
+                Config.ProducesProblem(StatusCodes.Status401Unauthorized)
+            });
+
         public static ApiEndpointConfig GetById = new(
             $"{BaseUrl}/{{id:Guid}}",
             "GetById",

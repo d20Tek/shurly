@@ -1,7 +1,7 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Shurly.Domain.Entities.ShortenedUrl;
+using D20Tek.Shurly.Domain.ShortenedUrl;
 
 namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls;
 

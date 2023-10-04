@@ -3,15 +3,15 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Minimal.Domain;
 
-namespace D20Tek.Shurly.Domain.Entities.ShortenedUrl;
+namespace D20Tek.Shurly.Domain.ShortenedUrl;
 
-public sealed class Summary : ValueObject
+public sealed class LongUrl : ValueObject
 {
-    public const int MaxLength = 1024;
+    public const int MaxLength = 2048;
 
     public string Value { get; }
 
-    public Summary(string value)
+    public LongUrl(string value)
     {
         Value = value;
     }
@@ -21,5 +21,5 @@ public sealed class Summary : ValueObject
         yield return Value;
     }
 
-    public static Summary Create(string summary) => new Summary(summary);
+    public static LongUrl Create(string longUrl) => new LongUrl(longUrl);
 }

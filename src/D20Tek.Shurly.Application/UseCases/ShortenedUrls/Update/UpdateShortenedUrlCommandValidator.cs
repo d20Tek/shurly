@@ -4,8 +4,8 @@
 using D20Tek.Minimal.Domain.Abstractions;
 using D20Tek.Minimal.Domain.Validations;
 using D20Tek.Minimal.Result;
-using D20Tek.Shurly.Domain.Entities.ShortenedUrl;
 using D20Tek.Shurly.Domain.Errors;
+using D20Tek.Shurly.Domain.ShortenedUrl;
 
 namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Update;
 

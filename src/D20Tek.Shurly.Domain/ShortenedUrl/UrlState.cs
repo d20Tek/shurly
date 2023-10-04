@@ -1,7 +1,8 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-namespace D20Tek.Shurly.Domain.Entities.ShortenedUrl;
+
+namespace D20Tek.Shurly.Domain.ShortenedUrl;
 
 public enum UrlState
 {

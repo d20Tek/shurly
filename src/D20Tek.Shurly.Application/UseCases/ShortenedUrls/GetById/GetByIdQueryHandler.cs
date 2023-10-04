@@ -4,8 +4,8 @@
 using D20Tek.Minimal.Domain;
 using D20Tek.Minimal.Result;
 using D20Tek.Shurly.Application.Abstractions;
-using D20Tek.Shurly.Domain.Entities.ShortenedUrl;
 using D20Tek.Shurly.Domain.Errors;
+using D20Tek.Shurly.Domain.ShortenedUrl;
 using Microsoft.Extensions.Logging;
 
 namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetById;

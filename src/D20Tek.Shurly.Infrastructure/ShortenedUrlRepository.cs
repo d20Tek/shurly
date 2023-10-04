@@ -2,7 +2,7 @@
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Shurly.Application.Abstractions;
-using D20Tek.Shurly.Domain.Entities.ShortenedUrl;
+using D20Tek.Shurly.Domain.ShortenedUrl;
 using Microsoft.EntityFrameworkCore;
 
 namespace D20Tek.Shurly.Infrastructure;

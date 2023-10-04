@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Minimal.Domain;
 
-namespace D20Tek.Shurly.Domain.Entities.ShortenedUrl;
+namespace D20Tek.Shurly.Domain.ShortenedUrl;
 
 public sealed class UrlMetadata : ValueObject
 {

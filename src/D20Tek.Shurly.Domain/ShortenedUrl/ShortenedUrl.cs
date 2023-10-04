@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Minimal.Domain;
 
-namespace D20Tek.Shurly.Domain.Entities.ShortenedUrl;
+namespace D20Tek.Shurly.Domain.ShortenedUrl;
 
 public sealed class ShortenedUrl : Entity<ShortenedUrlId>
 {
@@ -21,7 +21,7 @@ public sealed class ShortenedUrl : Entity<ShortenedUrlId>
         Summary summary,
         ShortUrlCode shortUrlCode,
         UrlMetadata urlMetadata)
-        : base( id )
+        : base(id)
     {
         LongUrl = longUrl;
         Summary = summary;
@@ -41,7 +41,7 @@ public sealed class ShortenedUrl : Entity<ShortenedUrlId>
 
         if (publishOn is not null)
         {
-            
+
         }
     }
 

@@ -78,12 +78,17 @@ public sealed class UrlMetadata : ValueObject
     public static UrlMetadata Create(AccountId creatorId, DateTime? publishOn = null)
     {
         var now = DateTime.UtcNow;
-        return new UrlMetadata(
-            UrlState.New,
-            creatorId,
-            now,
-            publishOn ?? now,
-            now);
+        var newState = UrlState.New;
+        var newPublishOn = publishOn ?? now;
+
+        // see if the shortened url should be auto-published
+        if (ShouldEntityAutoPublish(publishOn))
+        {
+            newState = UrlState.Published;
+            newPublishOn = now;
+        }
+
+        return new UrlMetadata(newState, creatorId, now, newPublishOn, now);
     }
 
     public static UrlMetadata Hydrate(
@@ -95,4 +100,7 @@ public sealed class UrlMetadata : ValueObject
     {
         return new(state, creatorId, createdOn, publishOn, modifiedOn);
     }
+
+    private static bool ShouldEntityAutoPublish(DateTime? publishOn) =>
+        (publishOn is null || publishOn <= DateTime.UtcNow);
 }

@@ -34,16 +34,20 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
     {
     }
 
-    public void Update(LongUrl longUrl, Summary summary, DateTime? publishOn)
+    public void ChangeLongUrl(LongUrl longUrl)
     {
         LongUrl = longUrl;
-        Summary = summary;
-
-        if (publishOn is not null)
-        {
-
-        }
+        UrlMetadata.Modified();
     }
+
+    public void ChangeSummary(Summary summary)
+    {
+        Summary = summary;
+        UrlMetadata.Modified();
+    }
+
+    public void ChangePublishOn(DateTime publishOn) =>
+        UrlMetadata.UpdatePublishOn(publishOn);
 
     public static ShortenedUrl Create(
         LongUrl longUrl,

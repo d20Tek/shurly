@@ -13,6 +13,17 @@ Content-Type: {{contentType}}
     "summary" : "DarthPedro's Blazor blog series"
 }
 
+### Create ShortenedUrl - future publish
+POST {{host}}/api/v1/short-url
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+    "longUrl" : "https://darthpedro.net/blazor-how-to-articles-future/",
+    "summary" : "DarthPedro's Blazor blog series future",
+    "publishOn": "2024-10-04T18:44:51.5859981"
+}
+
 ### Get ShortUrl by code
 GET {{host}}/L4qvKm8D
 
@@ -21,7 +32,7 @@ GET {{host}}/api/v1/short-url/
 Authorization: Bearer {{token}}
 
 ### Get ShortUrl by id
-GET {{host}}/api/v1/short-url/9d09f2d6-9205-49c8-a685-cda3629d6100
+GET {{host}}/api/v1/short-url/09bc8bf9-4e70-4fb6-a15a-a3f07f1b1e59
 Authorization: Bearer {{token}}
 
 ### Update ShortenedUrl

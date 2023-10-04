@@ -25,7 +25,7 @@ Content-Type: {{contentType}}
 }
 
 ### Get ShortUrl by code
-GET {{host}}/L4qvKm8D
+GET {{host}}/ajLmSGyX
 
 ### Get ShortUrls by owner
 GET {{host}}/api/v1/short-url/

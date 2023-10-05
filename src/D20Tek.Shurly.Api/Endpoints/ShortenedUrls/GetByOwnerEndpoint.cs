@@ -16,7 +16,8 @@ internal class GetByOwnerEndpoint : IApiEndpoint<HttpContextRequest, IGetByOwner
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapGet(Configuration.ShortUrl.GetByOwner.RoutePattern, HandleAsync)
-            .WithConfiguration(Configuration.ShortUrl.GetByOwner);
+            .WithConfiguration(Configuration.ShortUrl.GetByOwner)
+            .WithOpenApi();
     }
 
     public async Task<IResult> HandleAsync(

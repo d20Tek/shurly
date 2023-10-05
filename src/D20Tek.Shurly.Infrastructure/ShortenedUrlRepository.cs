@@ -12,19 +12,19 @@ namespace D20Tek.Shurly.Infrastructure;
 internal class ShortenedUrlRepository : IShortenedUrlRepository
 {
     private readonly ShurlyDbContext _dbContext;
-    private readonly OperationManager _opsManager;
+    private readonly ILogger _logger;
 
     public ShortenedUrlRepository(
         ShurlyDbContext dbContext,
         ILogger<ShortenedUrlRepository> logger)
     {
         _dbContext = dbContext;
-        _opsManager = new OperationManager(logger, nameof(ShortenedUrlRepository));
+        _logger = logger;
     }
 
     public async Task<IList<ShortenedUrl>> GetForOwnerAsync(AccountId ownerId)
     {
-        return await _opsManager.OperationAsync<IList<ShortenedUrl>>(async () =>
+        return await OperationLogManager.OperationAsync<IList<ShortenedUrl>>(async () =>
         {
             var entities = await _dbContext.ShortenedUrls
             .Where(x => x.UrlMetadata.OwnerId == ownerId)
@@ -32,30 +32,30 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
             .ToListAsync();
 
             return entities;
-        }) ?? Array.Empty<ShortenedUrl>();
+        }, _logger) ?? Array.Empty<ShortenedUrl>();
     }
 
     public async Task<ShortenedUrl?> GetByIdAsync(ShortenedUrlId id)
     {
-        return await _opsManager.OperationAsync<ShortenedUrl?>(async () =>
+        return await OperationLogManager.OperationAsync<ShortenedUrl?>(async () =>
         {
             var entity = await _dbContext.ShortenedUrls
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             return entity;
-        });
+        }, _logger);
     }
 
     public async Task<ShortenedUrl?> GetByShortUrlCodeAsync(ShortUrlCode code)
     {
-        return await _opsManager.OperationAsync<ShortenedUrl?>(async () =>
+        return await OperationLogManager.OperationAsync<ShortenedUrl?>(async () =>
         {
             var entity = await _dbContext.ShortenedUrls
             .SingleOrDefaultAsync(
                 x => x.ShortUrlCode == code && x.UrlMetadata.State == UrlState.Published);
 
             return entity;
-        });
+        }, _logger);
     }
 
     public async Task<bool> IsUrlCodeUniqueAsync(string shortUrlCode) =>
@@ -63,30 +63,30 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
 
     public async Task<bool> CreateAync(ShortenedUrl shortenedUrl)
     {
-        return await _opsManager.ValueOperationAsync<bool>(async () =>
+        return await OperationLogManager.ValueOperationAsync<bool>(async () =>
         {
             await _dbContext.ShortenedUrls.AddAsync(shortenedUrl);
             var itemsSaved = await _dbContext.SaveChangesAsync();
             return itemsSaved > 0;
-        });
+        }, _logger);
     }
 
     public async Task<bool> UpdateAsync(ShortenedUrl shortenedUrl)
     {
-        return await _opsManager.ValueOperationAsync<bool>(async () =>
+        return await OperationLogManager.ValueOperationAsync<bool>(async () =>
         {
             await _dbContext.SaveChangesAsync();
             return true;
-        });
+        }, _logger);
     }
 
     public async Task<bool> DeleteAsync(ShortenedUrl shortenedUrl)
     {
-        return await _opsManager.ValueOperationAsync<bool>(async () =>
+        return await OperationLogManager.ValueOperationAsync<bool>(async () =>
         {
             _dbContext.ShortenedUrls.Remove(shortenedUrl);
             var itemsSaved = await _dbContext.SaveChangesAsync();
             return itemsSaved > 0;
-        });
+        }, _logger);
     }
 }

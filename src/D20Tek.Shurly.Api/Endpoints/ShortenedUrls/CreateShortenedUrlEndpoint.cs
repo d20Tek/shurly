@@ -17,7 +17,8 @@ internal sealed class CreateShortenedUrlEndpoint :
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapPost(Configuration.ShortUrl.Create.RoutePattern, HandleAsync)
-            .WithConfiguration(Configuration.ShortUrl.Create);
+            .WithConfiguration(Configuration.ShortUrl.Create)
+            .WithOpenApi();
     }
 
     public async Task<IResult> HandleAsync(

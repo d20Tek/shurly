@@ -18,7 +18,8 @@ internal sealed class GetByIdEndpoint :
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapGet(Configuration.ShortUrl.GetById.RoutePattern, HandleAsync)
-            .WithConfiguration(Configuration.ShortUrl.GetById);
+            .WithConfiguration(Configuration.ShortUrl.GetById)
+            .WithOpenApi();
     }
 
     public async Task<IResult> HandleAsync(

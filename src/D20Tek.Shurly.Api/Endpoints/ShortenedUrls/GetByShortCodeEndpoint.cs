@@ -15,7 +15,8 @@ internal sealed class GetByShortCodeEndpoint :
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapGet(Configuration.ShortUrl.GetByShortCode.RoutePattern, HandleAsync)
-            .WithConfiguration(Configuration.ShortUrl.GetByShortCode);
+            .WithConfiguration(Configuration.ShortUrl.GetByShortCode)
+            .WithOpenApi();
     }
 
     public async Task<IResult> HandleAsync(

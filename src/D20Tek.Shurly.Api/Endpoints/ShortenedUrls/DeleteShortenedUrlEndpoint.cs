@@ -17,7 +17,8 @@ public class DeleteShortenedUrlEndpoint :
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapDelete(Configuration.ShortUrl.Delete.RoutePattern, HandleAsync)
-            .WithConfiguration(Configuration.ShortUrl.Delete);
+            .WithConfiguration(Configuration.ShortUrl.Delete)
+            .WithOpenApi();
     }
 
     public async Task<IResult> HandleAsync(

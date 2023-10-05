@@ -17,7 +17,8 @@ internal sealed class UpdateShortenedUrlEndpoint :
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapPut(Configuration.ShortUrl.Update.RoutePattern, HandleAsync)
-            .WithConfiguration(Configuration.ShortUrl.Update);
+            .WithConfiguration(Configuration.ShortUrl.Update)
+            .WithOpenApi();
     }
 
     public async Task<IResult> HandleAsync(

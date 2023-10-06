@@ -5,7 +5,6 @@ using D20Tek.Minimal.Domain;
 using D20Tek.Minimal.Result;
 using D20Tek.Shurly.Application.Abstractions;
 using D20Tek.Shurly.Domain.Errors;
-using D20Tek.Shurly.Domain.ShortenedUrl;
 using Microsoft.Extensions.Logging;
 
 namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Delete;
@@ -31,18 +30,14 @@ internal class DeleteShortenedUrlCommandHandler : IDeleteShortenedUrlCommandHand
             _logger,
             async () =>
             {
-                var id = ShortenedUrlId.Create(command.ShortUrlId);
-                var entity = await _repository.GetByIdAsync(id);
-                if (entity is null)
-                {
-                    return DomainErrors.EntityNotFound(nameof(ShortenedUrl), command.ShortUrlId);
-                }
+                var result = await ShortenedUrlHelpers.GetByIdForOwner(
+                    _repository,
+                    command.ShortUrlId,
+                    command.OwnerId);
 
-                if (entity.UrlMetadata.OwnerId.Value != command.OwnerId)
-                {
-                    return DomainErrors.ShortUrlNotOwner;
-                }
+                if (result.IsFailure) return result.ErrorsList;
 
+                var entity = result.Value;
                 if (await _repository.DeleteAsync(entity) is false)
                 {
                     return DomainErrors.DeleteFailed;

@@ -73,20 +73,10 @@ internal class UpdateShortenedUrlCommandHandler : IUpdateShortenedUrlCommandHand
         }
 
         // 3. get the existing ShortenedUrl by id
-        var id = ShortenedUrlId.Create(command.ShortUrlId);
-        var existingUrl = await _repository.GetByIdAsync(id);
-        if (existingUrl is null)
-        {
-            return DomainErrors.EntityNotFound(nameof(ShortenedUrl), command.ShortUrlId);
-        }
-
-        // 4. ensure only owner can change the entity
-        if (existingUrl.UrlMetadata.OwnerId.Value != command.OwnerId)
-        {
-            return DomainErrors.ShortUrlNotOwner;
-        }
-
-        return existingUrl;
+        return await ShortenedUrlHelpers.GetByIdForOwner(
+            _repository,
+            command.ShortUrlId,
+            command.OwnerId);
     }
 
     private ShortenedUrl MergeUpdatedEntity(

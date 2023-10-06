@@ -32,7 +32,7 @@ internal class UpdateShortenedUrlCommandValidator : IValidator<UpdateShortenedUr
             DomainErrors.EntityPropertyTooLong(nameof(command.Summary)));
 
         result.AddOnFailure(
-        () => command.CreatorId.NotEmpty(),
+        () => command.OwnerId.NotEmpty(),
             DomainErrors.OwnerIdInvalid);
 
         return result;

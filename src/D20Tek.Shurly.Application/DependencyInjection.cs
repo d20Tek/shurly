@@ -6,6 +6,8 @@ using D20Tek.Shurly.Application.UseCases.ShortenedUrls.Delete;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetById;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByOwner;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByShortCode;
+using D20Tek.Shurly.Application.UseCases.ShortenedUrls.PublishUrl;
+using D20Tek.Shurly.Application.UseCases.ShortenedUrls.UnpublishUrl;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.Update;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +22,8 @@ public static class DependencyInjection
         services.AddScoped<IGetByIdQueryHandler, GetByIdQueryHandler>();
         services.AddScoped<IGetByShortCodeQueryHandler, GetByShortCodeQueryHandler>();
         services.AddScoped<IUpdateShortenedUrlCommandHandler, UpdateShortenedUrlCommandHandler>();
+        services.AddScoped<IPublishShortenedUrlCommandHandler, PublishShortenedUrlCommandHandler>();
+        services.AddScoped<IUnpublishShortenedUrlCommandHandler, UnpublishShortenedUrlCommandHandler>();
         services.AddScoped<IDeleteShortenedUrlCommandHandler, DeleteShortenedUrlCommandHandler>();
 
         services.AddScoped<CreateShortenedUrlCommandValidator>();

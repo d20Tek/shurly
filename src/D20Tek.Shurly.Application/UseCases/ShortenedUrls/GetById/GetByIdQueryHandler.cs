@@ -4,8 +4,6 @@
 using D20Tek.Minimal.Domain;
 using D20Tek.Minimal.Result;
 using D20Tek.Shurly.Application.Abstractions;
-using D20Tek.Shurly.Domain.Errors;
-using D20Tek.Shurly.Domain.ShortenedUrl;
 using Microsoft.Extensions.Logging;
 
 namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetById;
@@ -31,19 +29,14 @@ internal sealed class GetByIdQueryHandler : IGetByIdQueryHandler
             _logger,
             async () =>
             {
-                var id = ShortenedUrlId.Create(query.ShortUrlId);
-                var entity = await _repository.GetByIdAsync(id);
-                if (entity is null)
-                {
-                    return DomainErrors.EntityNotFound(nameof(ShortenedUrl), query.ShortUrlId);
-                }
+                var result = await ShortenedUrlHelpers.GetByIdForOwner(
+                    _repository,
+                    query.ShortUrlId,
+                    query.OwnerId);
 
-                if (entity.UrlMetadata.OwnerId.Value != query.OwnerId)
-                {
-                    return DomainErrors.ShortUrlNotOwner;
-                }
-
-                return ShortenedUrlResult.FromEntity(entity);
+                return result.Match<Result<ShortenedUrlResult>>(
+                    entity => ShortenedUrlResult.FromEntity(entity),
+                    errors => errors.ToArray());
             });
     }
 }

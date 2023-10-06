@@ -4,11 +4,8 @@
 using D20Tek.Minimal.Domain.Abstractions;
 using D20Tek.Minimal.Result;
 
-namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Update;
+namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.UnpublishUrl;
 
-public sealed record UpdateShortenedUrlCommand(
+public sealed record UnpublishShortenedUrlCommand(
     Guid ShortUrlId,
-    string LongUrl,
-    string Summary,
-    Guid OwnerId,
-    DateTime? PublishOn = null) : ICommand<Result<ShortenedUrlResult>>;
+    Guid OwnerId) : ICommand<Result<ShortenedUrlResult>>;

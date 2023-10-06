@@ -81,6 +81,36 @@ internal class Configuration
                 Config.ProducesValidationProblem(StatusCodes.Status400BadRequest)
             });
 
+        public static ApiEndpointConfig Publish = new(
+            $"{BaseUrl}/{{id:Guid}}/publish",
+            "PublishShortUrl",
+            "Publish Shortened Url",
+            Summary: "Updates the ShortenedUrl state flag to Published based on its ShortUrlId.",
+            Tags: GroupTags,
+            RequiresAuthorization: true,
+            Produces: new[]
+            {
+                Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
+                Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status401Unauthorized),
+                Config.ProducesProblem(StatusCodes.Status403Forbidden)
+            });
+
+        public static ApiEndpointConfig Unpublish = new(
+            $"{BaseUrl}/{{id:Guid}}/unpublish",
+            "UnpublishShortUrl",
+            "Unpublish Shortened Url",
+            Summary: "Updates the ShortenedUrl state flag to Obsolete based on its ShortUrlId.",
+            Tags: GroupTags,
+            RequiresAuthorization: true,
+            Produces: new[]
+            {
+                Config.Produces<ShortenedUrlResponse>(StatusCodes.Status200OK),
+                Config.ProducesProblem(StatusCodes.Status404NotFound),
+                Config.ProducesProblem(StatusCodes.Status401Unauthorized),
+                Config.ProducesProblem(StatusCodes.Status403Forbidden)
+            });
+
         public static ApiEndpointConfig Delete = new(
             $"{BaseUrl}/{{id:Guid}}",
             "DeleteShortUrl",

@@ -80,6 +80,12 @@ internal class UpdateShortenedUrlCommandHandler : IUpdateShortenedUrlCommandHand
             return DomainErrors.EntityNotFound(nameof(ShortenedUrl), command.ShortUrlId);
         }
 
+        // 4. ensure only owner can change the entity
+        if (existingUrl.UrlMetadata.OwnerId.Value != command.OwnerId)
+        {
+            return DomainErrors.ShortUrlNotOwner;
+        }
+
         return existingUrl;
     }
 

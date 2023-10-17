@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="D20Tek.Authentication.Individual.Api" Version="1.0.3-prerelease" />
     <PackageReference Include="D20Tek.Minimal.Endpoints" Version="0.0.7-prerelease" />
     <PackageReference Include="D20Tek.Minimal.Result.AspNetCore" Version="0.1.4-prerelease" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -19,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\D20Tek.Authentication.Individual.Api\D20Tek.Authentication.Individual.Api.csproj" />
     <ProjectReference Include="..\D20Tek.Shurly.Application\D20Tek.Shurly.Application.csproj" />
     <ProjectReference Include="..\D20Tek.Shurly.Infrastructure\D20Tek.Shurly.Infrastructure.csproj" />
   </ItemGroup>

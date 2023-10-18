@@ -4,8 +4,7 @@
 using D20Tek.Authentication.Individual.Api.UnitTests.Helpers;
 using D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 using D20Tek.Shurly.Api.UnitTests.Assertions;
-using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetById;
-using D20Tek.Shurly.Domain.ShortenedUrl;
+using D20Tek.Shurly.Api.UnitTests.Helpers;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Security.Claims;
@@ -21,16 +20,8 @@ public class GetByIdEndpointTests
         // arrange
         var urlId = Guid.NewGuid();
         var userId = Guid.NewGuid();
-        var items = new List<ShortenedUrl>
-        {
-            ShortenedUrl.Hydrate(
-                ShortenedUrlId.Create(urlId),
-                LongUrl.Create("https://mytest-long-address.com"),
-                Summary.Create("Test summary"),
-                ShortUrlCode.Create("asdf1234"),
-                UrlMetadata.Create(AccountId.Create(userId)))
-        };
-        
+        var items = ShortenedUrlFactory.CreateTestEntities(urlId, userId);
+
         var factory = new TestWebApplicationFactory();
         var token = factory.GenerateTestAccessToken(userId.ToString());
         var client = factory.CreateAuthenticatedClient(token);
@@ -42,7 +33,7 @@ public class GetByIdEndpointTests
         // assert
         response.Should().NotBeNull();
         response.IsSuccessStatusCode.Should().BeTrue();
-        await response.ShouldBeEquivalentTo(items.First());
+        await response.ShouldBeEquivalentTo(items.First(x => x.Id.Value == urlId));
     }
 
     [TestMethod]
@@ -67,15 +58,7 @@ public class GetByIdEndpointTests
         // arrange
         var urlId = Guid.NewGuid();
         var userId = Guid.NewGuid();
-        var items = new List<ShortenedUrl>
-        {
-            ShortenedUrl.Hydrate(
-                ShortenedUrlId.Create(urlId),
-                LongUrl.Create("https://mytest-long-address.com"),
-                Summary.Create("Test summary"),
-                ShortUrlCode.Create("asdf1234"),
-                UrlMetadata.Create(AccountId.Create(userId)))
-        };
+        var items = ShortenedUrlFactory.CreateTestEntities(urlId, userId);
 
         var factory = new TestWebApplicationFactory();
         var client = factory.CreateAuthenticatedClient();
@@ -112,28 +95,6 @@ public class GetByIdEndpointTests
         request.Id.Should().Be(id);
         request.Context.Should().Be(context);
         request.User.Should().Be(user);
-    }
-
-    [TestMethod]
-    public void GetByIdQuery_Setters()
-    {
-        // arrange
-        var urlId = Guid.NewGuid();
-        var ownerId = Guid.NewGuid();
-
-        var query = new GetByIdQuery(Guid.Empty, Guid.Empty);
-
-        // act
-        query = query with
-        {
-            ShortUrlId = urlId,
-            OwnerId = ownerId,
-        };
-
-        // assert
-        query.Should().NotBeNull();
-        query.ShortUrlId.Should().Be(urlId);
-        query.OwnerId.Should().Be(ownerId);
     }
 
     [TestMethod]

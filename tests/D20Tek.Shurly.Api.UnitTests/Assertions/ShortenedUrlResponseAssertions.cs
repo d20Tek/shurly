@@ -23,4 +23,23 @@ internal static class ShortenedUrlResponseAssertions
         shortUrl.PublishOn.Should().Be(entity.UrlMetadata.PublishOn);
         shortUrl.State.Should().Be((int)entity.UrlMetadata.State);
     }
+
+    public static async Task ShouldBeEquivalentTo(
+        this HttpResponseMessage httpResponse,
+        List<ShortenedUrl> entities)
+    {
+        var list = await httpResponse.Content.ReadFromJsonAsync<List<ShortenedUrlResponse>>();
+
+        list.Should().NotBeNull();
+        list!.Count().Should().Be(entities.Count());
+        for (int i = 0; i < list!.Count(); i++)
+        {
+            list![i].Id.Should().Be(entities[i].Id.Value.ToString());
+            list[i].LongUrl.Should().Be(entities[i].LongUrl.Value);
+            list[i].Summary.Should().Be(entities[i].Summary.Value);
+            list[i].ShortUrl.Should().Be($"http://localhost/{entities[i].ShortUrlCode.Value}");
+            list[i].PublishOn.Should().Be(entities[i].UrlMetadata.PublishOn);
+            list[i].State.Should().Be((int)entities[i].UrlMetadata.State);
+        }
+    }
 }

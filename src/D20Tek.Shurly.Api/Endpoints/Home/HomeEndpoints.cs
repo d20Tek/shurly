@@ -20,9 +20,6 @@ internal class HomeEndpoints : ICompositeApiEndpoint
 
         group.MapGet("/admin", GetAuthenticatedAdmin)
             .RequireAuthorization(AuthorizationPolicies.Admin);
-
-        group.MapGet("/refresh", GetRefreshToken)
-            .RequireAuthorization(AuthorizationPolicies.Refresh);
     }
 
     internal string GetHome() => "Shurly Api - Link shortening and management";
@@ -32,7 +29,4 @@ internal class HomeEndpoints : ICompositeApiEndpoint
 
     internal string GetAuthenticatedAdmin() =>
         "Authenticated admin accessed this api.";
-
-    internal string GetRefreshToken() =>
-        "Authenticated refresh policy accessed this api.";
 }

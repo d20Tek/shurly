@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Application",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Infrastructure", "src\D20Tek.Shurly.Infrastructure\D20Tek.Shurly.Infrastructure.csproj", "{FA934E9F-577D-4803-9F90-B210EEBB7A1D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9652D467-A892-48CF-95B8-74C770BCA3B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Api.UnitTests", "tests\D20Tek.Shurly.Api.UnitTests\D20Tek.Shurly.Api.UnitTests.csproj", "{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,10 @@ Global
 		{FA934E9F-577D-4803-9F90-B210EEBB7A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA934E9F-577D-4803-9F90-B210EEBB7A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA934E9F-577D-4803-9F90-B210EEBB7A1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,7 @@ Global
 		{131203AB-2A45-411D-AC5D-FFBBEB92CF99} = {6306A643-AB17-4E17-90E9-1E33015CE725}
 		{7F9FF8C3-C631-455C-90F3-C43D2E36352D} = {6306A643-AB17-4E17-90E9-1E33015CE725}
 		{FA934E9F-577D-4803-9F90-B210EEBB7A1D} = {6306A643-AB17-4E17-90E9-1E33015CE725}
+		{AC841725-10E6-45B9-8B0A-FD1AAD957DD4} = {9652D467-A892-48CF-95B8-74C770BCA3B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA77E2D6-FE25-4362-8047-425E8D855E8F}

@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetById;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByOwner;
+using D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByShortCode;
 
 namespace D20Tek.Shurly.Api.UnitTests.Application.UseCases;
 
@@ -48,5 +49,24 @@ public class QueryTests
         // assert
         query.Should().NotBeNull();
         query.OwnerId.Should().Be(ownerId);
+    }
+
+    [TestMethod]
+    public void GetByShortCodeQuery_Setters()
+    {
+        // arrange
+        var shortCode = "t3stC0D3";
+
+        var query = new GetByShortCodeQuery("");
+
+        // act
+        query = query with
+        {
+            ShortUrlCode = shortCode,
+        };
+
+        // assert
+        query.Should().NotBeNull();
+        query.ShortUrlCode.Should().Be(shortCode);
     }
 }

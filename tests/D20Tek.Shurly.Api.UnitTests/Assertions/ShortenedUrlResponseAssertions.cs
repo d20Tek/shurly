@@ -42,4 +42,20 @@ internal static class ShortenedUrlResponseAssertions
             list[i].State.Should().Be((int)entities[i].UrlMetadata.State);
         }
     }
+
+    public static async Task ShouldBeEquivalentTo(
+        this HttpResponseMessage httpResponse,
+        string longUrl,
+        string summary,
+        int state = 0)
+    {
+        var shortUrl = await httpResponse.Content.ReadFromJsonAsync<ShortenedUrlResponse>();
+
+        shortUrl.Should().NotBeNull();
+        shortUrl!.Id.Should().NotBeNull();
+        shortUrl.LongUrl.Should().Be(longUrl);
+        shortUrl.Summary.Should().Be(summary);
+        shortUrl.ShortUrl.Should().NotBeNull();
+        shortUrl.State.Should().Be(state);
+    }
 }

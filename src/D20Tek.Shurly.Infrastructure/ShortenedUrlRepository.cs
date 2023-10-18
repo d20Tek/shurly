@@ -51,7 +51,7 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
         return await OperationLogManager.OperationAsync<ShortenedUrl?>(async () =>
         {
             var entity = await _dbContext.ShortenedUrls
-            .SingleOrDefaultAsync(
+            .FirstOrDefaultAsync(
                 x => x.ShortUrlCode == code && x.UrlMetadata.State == UrlState.Published);
 
             return entity;

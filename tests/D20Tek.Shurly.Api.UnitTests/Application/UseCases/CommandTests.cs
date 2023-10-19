@@ -3,6 +3,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.Create;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.Delete;
+using D20Tek.Shurly.Application.UseCases.ShortenedUrls.PublishUrl;
+using D20Tek.Shurly.Application.UseCases.ShortenedUrls.UnpublishUrl;
 using D20Tek.Shurly.Application.UseCases.ShortenedUrls.Update;
 
 namespace D20Tek.Shurly.Api.UnitTests.Application.UseCases;
@@ -77,6 +79,50 @@ public class CommandTests
         var ownerId = Guid.NewGuid();
 
         var command = new DeleteShortenedUrlCommand(Guid.Empty, Guid.Empty);
+
+        // act
+        command = command with
+        {
+            ShortUrlId = urlId,
+            OwnerId = ownerId
+        };
+
+        // assert
+        command.Should().NotBeNull();
+        command.ShortUrlId.Should().Be(urlId);
+        command.OwnerId.Should().Be(ownerId);
+    }
+
+    [TestMethod]
+    public void PublishShortenedUrlCommand_Setters()
+    {
+        // arrange
+        var urlId = Guid.NewGuid();
+        var ownerId = Guid.NewGuid();
+
+        var command = new PublishShortenedUrlCommand(Guid.Empty, Guid.Empty);
+
+        // act
+        command = command with
+        {
+            ShortUrlId = urlId,
+            OwnerId = ownerId
+        };
+
+        // assert
+        command.Should().NotBeNull();
+        command.ShortUrlId.Should().Be(urlId);
+        command.OwnerId.Should().Be(ownerId);
+    }
+
+    [TestMethod]
+    public void UnpublishShortenedUrlCommand_Setters()
+    {
+        // arrange
+        var urlId = Guid.NewGuid();
+        var ownerId = Guid.NewGuid();
+
+        var command = new UnpublishShortenedUrlCommand(Guid.Empty, Guid.Empty);
 
         // act
         command = command with

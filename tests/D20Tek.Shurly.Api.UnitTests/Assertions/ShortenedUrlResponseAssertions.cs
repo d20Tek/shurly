@@ -58,4 +58,16 @@ internal static class ShortenedUrlResponseAssertions
         shortUrl.ShortUrl.Should().NotBeNull();
         shortUrl.State.Should().Be(state);
     }
+
+    public static async Task ShouldBePublishedState(
+        this HttpResponseMessage httpResponse,
+        string urlId,
+        int state)
+    {
+        var shortUrl = await httpResponse.Content.ReadFromJsonAsync<ShortenedUrlResponse>();
+
+        shortUrl.Should().NotBeNull();
+        shortUrl!.Id.Should().Be(urlId);
+        shortUrl.State.Should().Be(state);
+    }
 }

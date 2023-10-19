@@ -121,10 +121,10 @@ public class CreateShortenedUrlEndpointTests
         var summary = "test summary";
         var publishOn = DateTime.UtcNow;
 
-        var command = new CreateShortenedUrlRequest("", "");
+        var request = new CreateShortenedUrlRequest("", "");
 
         // act
-        command = command with
+        request = request with
         {
             LongUrl = longUrl,
             Summary = summary,
@@ -132,9 +132,9 @@ public class CreateShortenedUrlEndpointTests
         };
 
         // assert
-        command.Should().NotBeNull();
-        command.LongUrl.Should().Be(longUrl);
-        command.Summary.Should().Be(summary);
-        command.PublishOn.Should().Be(publishOn);
+        request.Should().NotBeNull();
+        request.LongUrl.Should().Be(longUrl);
+        request.Summary.Should().Be(summary);
+        request.PublishOn.Should().Be(publishOn);
     }
 }

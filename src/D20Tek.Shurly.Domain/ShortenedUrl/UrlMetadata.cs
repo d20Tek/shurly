@@ -102,5 +102,5 @@ public sealed class UrlMetadata : ValueObject
     }
 
     private static bool ShouldEntityAutoPublish(DateTime? publishOn) =>
-        (publishOn is null || publishOn <= DateTime.UtcNow);
+        publishOn is null || publishOn < DateTime.UtcNow;
 }

@@ -1,0 +1,45 @@
+﻿@page "/short-url"
+@attribute [Authorize]
+@inject ShurlyApiService _service;
+
+<h4>My Links</h4>
+@if (_urlList.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Long Url</th>
+                <th>Short Url</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var shortUrl in _urlList)
+            {
+                <tr>
+                    <td>@shortUrl.LongUrl</td>
+                    <td>@shortUrl.ShortUrl</td>
+                    <td>@shortUrl.State</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<button>New Short Link</button>
+<div>@message</div>
+
+@code {
+    IEnumerable<ShortenedUrlResponse> _urlList = new List<ShortenedUrlResponse>();
+    string message = "Loading...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _service.GetByOwnerAsync();
+        result.MatchFirstError(
+            success => {
+                message = string.Empty;
+                _urlList = success;
+            },
+            error => message = error.ToString());
+    }
+}

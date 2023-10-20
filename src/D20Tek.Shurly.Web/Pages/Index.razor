@@ -10,24 +10,7 @@
 
 <AuthorizeView>
     <Authorized>
-      <div>You are logged in... here is your access token information:</div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Claim Type</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-        @foreach(var claim in context.User.Claims)
-        {
-          <tr>
-            <td>@claim.Type</td>
-            <td>@claim.Value</td>
-          </tr>
-        }
-        </tbody>
-        </table>
+        <div>Operation buttons coming soon...</div>
     </Authorized>
     <NotAuthorized>
         <LoginDisplay />

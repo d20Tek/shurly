@@ -126,10 +126,12 @@ public class CommandHandlerErrorTests
         var repo = new Mock<IShortenedUrlRepository>();
         repo.Setup(x => x.GetByIdAsync(It.IsAny<ShortenedUrlId>()))
             .ReturnsAsync(ShortenedUrl.Create(
+                Title.Create("Test Title"),
                 LongUrl.Create("https://longurl.test.com"),
                 Summary.Create("test summary"),
                 ShortUrlCode.Create("foo-bar1"),
                 AccountId.Create(ownerId),
+                new List<string>(),
                 null));
 
         return repo;

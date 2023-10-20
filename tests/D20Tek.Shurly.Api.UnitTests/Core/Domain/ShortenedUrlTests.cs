@@ -13,17 +13,27 @@ public class ShortenedUrlTests
     {
         // arrange
         var longUrl = LongUrl.Create("https://testing.test.com/longurl");
+        var title = Title.Create("Test Title");
         var summary = Summary.Create("test summary");
         var shortCode = ShortUrlCode.Create("foo-bar");
         var ownerId = AccountId.Create();
+        var tags = new List<string>();
         var publishOn = DateTime.UtcNow.AddDays(10);
 
         // act
-        var entity = ShortenedUrl.Create(longUrl, summary, shortCode, ownerId, publishOn);
+        var entity = ShortenedUrl.Create(
+            title,
+            longUrl,
+            summary,
+            shortCode,
+            ownerId,
+            tags,
+            publishOn);
 
         // assert
         entity.Should().NotBeNull();
         entity.Id.Value.Should().NotBeEmpty();
+        entity.Title.Should().Be(title);
         entity.LongUrl.Should().Be(longUrl);
         entity.Summary.Should().Be(summary);
         entity.UrlMetadata.OwnerId.Should().Be(ownerId);
@@ -36,12 +46,14 @@ public class ShortenedUrlTests
     {
         // arrange
         var longUrl = LongUrl.Create("https://testing.test.com/longurl");
+        var title = Title.Create("Test Title");
         var summary = Summary.Create("test summary");
         var shortCode = ShortUrlCode.Create("foo-bar");
         var ownerId = AccountId.Create();
+        var tags = new List<string>();
 
         // act
-        var entity = ShortenedUrl.Create(longUrl, summary, shortCode, ownerId, null);
+        var entity = ShortenedUrl.Create(title, longUrl, summary, shortCode, ownerId, tags, null);
 
         // assert
         entity.Should().NotBeNull();
@@ -57,13 +69,22 @@ public class ShortenedUrlTests
     {
         // arrange
         var longUrl = LongUrl.Create("https://testing.test.com/longurl");
+        var title = Title.Create("Test Title");
         var summary = Summary.Create("test summary");
         var shortCode = ShortUrlCode.Create("foo-bar");
         var ownerId = AccountId.Create();
+        var tags = new List<string> { "foo" };
         var publishOn = DateTime.UtcNow.AddDays(-1);
 
         // act
-        var entity = ShortenedUrl.Create(longUrl, summary, shortCode, ownerId, publishOn);
+        var entity = ShortenedUrl.Create(
+            title,
+            longUrl,
+            summary,
+            shortCode,
+            ownerId,
+            tags,
+            publishOn);
 
         // assert
         entity.Should().NotBeNull();
@@ -79,15 +100,17 @@ public class ShortenedUrlTests
     {
         // arrange
         var urlId = ShortenedUrlId.Create();
+        var title = Title.Create("Test Title");
         var longUrl = LongUrl.Create("https://testing.test.com/longurl");
         var summary = Summary.Create("test summary");
         var shortCode = ShortUrlCode.Create("foo-bar");
         var ownerId = AccountId.Create();
+        var tags = new List<string> { "foo" };
         var date = DateTime.UtcNow;
-        var metadata = UrlMetadata.Hydrate(UrlState.Published, ownerId, date, date, date);
+        var metadata = UrlMetadata.Hydrate(UrlState.Published, ownerId, tags, date, date, date);
 
         // act
-        var entity = ShortenedUrl.Hydrate(urlId, longUrl, summary, shortCode, metadata);
+        var entity = ShortenedUrl.Hydrate(urlId, title, longUrl, summary, shortCode, metadata);
 
         // assert
         entity.Should().NotBeNull();
@@ -102,12 +125,21 @@ public class ShortenedUrlTests
     {
         // arrange
         var longUrl = LongUrl.Create("https://testing.test.com/longurl");
+        var title = Title.Create("Test Title");
         var summary = Summary.Create("test summary");
         var shortCode = ShortUrlCode.Create("foo-bar");
         var ownerId = AccountId.Create();
+        var tags = new List<string>();
         var publishOn = DateTime.UtcNow.AddDays(10);
 
-        var entity = ShortenedUrl.Create(longUrl, summary, shortCode, ownerId, publishOn);
+        var entity = ShortenedUrl.Create(
+            title,
+            longUrl,
+            summary,
+            shortCode,
+            ownerId,
+            tags,
+            publishOn);
 
         // act
         var newPublish = DateTime.UtcNow.AddDays(1);
@@ -124,12 +156,21 @@ public class ShortenedUrlTests
     {
         // arrange
         var longUrl = LongUrl.Create("https://testing.test.com/longurl");
+        var title = Title.Create("Test Title");
         var summary = Summary.Create("test summary");
         var shortCode = ShortUrlCode.Create("foo-bar");
         var ownerId = AccountId.Create();
+        var tags = new List<string>();
         var publishOn = DateTime.UtcNow.AddDays(10);
 
-        var entity = ShortenedUrl.Create(longUrl, summary, shortCode, ownerId, publishOn);
+        var entity = ShortenedUrl.Create(
+            title,
+            longUrl,
+            summary,
+            shortCode,
+            ownerId,
+            tags,
+            publishOn);
 
         // act
         var newPublish = DateTime.UtcNow.AddDays(-1);

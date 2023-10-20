@@ -32,6 +32,12 @@ internal class ShurlyDbContext : DbContext
                     url => url.Value,
                     value => LongUrl.Create(value));
 
+            builder.Property(x => x.Title)
+                .HasMaxLength(Title.MaxLength)
+                .HasConversion(
+                    title => title.Value,
+                    value => Title.Create(value));
+
             builder.Property(x => x.Summary)
                 .HasMaxLength(Summary.MaxLength)
                 .HasConversion(
@@ -55,6 +61,11 @@ internal class ShurlyDbContext : DbContext
                         value => AccountId.Create(value));
 
                 b.HasIndex(x => x.OwnerId);
+
+                b.Property(x => x.Tags)
+                    .HasConversion(
+                        tags => string.Join(';', tags),
+                        value => value.Split(";", StringSplitOptions.None).ToList());
             });
         });
 

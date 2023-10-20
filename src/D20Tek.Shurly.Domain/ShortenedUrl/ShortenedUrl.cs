@@ -9,6 +9,8 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
 {
     public LongUrl LongUrl { get; private set; } = default!;
 
+    public Title Title { get; private set; } = default!;
+
     public Summary Summary { get; private set; } = default!;
 
     public ShortUrlCode ShortUrlCode { get; private set; } = default!;
@@ -17,12 +19,14 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
 
     private ShortenedUrl(
         ShortenedUrlId id,
+        Title title,
         LongUrl longUrl,
         Summary summary,
         ShortUrlCode shortUrlCode,
         UrlMetadata urlMetadata)
         : base(id)
     {
+        Title = title;
         LongUrl = longUrl;
         Summary = summary;
         ShortUrlCode = shortUrlCode;
@@ -50,27 +54,31 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
         UrlMetadata.UpdatePublishOn(publishOn);
 
     public static ShortenedUrl Create(
+        Title title,
         LongUrl longUrl,
         Summary summary,
         ShortUrlCode shortUrlCode,
         AccountId creatorId,
+        List<string> tags,
         DateTime? publishOn)
     {
         return new ShortenedUrl(
             ShortenedUrlId.Create(),
+            title,
             longUrl,
             summary,
             shortUrlCode,
-            UrlMetadata.Create(creatorId, publishOn));
+            UrlMetadata.Create(creatorId, tags, publishOn));
     }
 
     public static ShortenedUrl Hydrate(
         ShortenedUrlId id,
+        Title title,
         LongUrl longUrl,
         Summary summary,
         ShortUrlCode shortUrlCode,
         UrlMetadata urlMetadata)
     {
-        return new ShortenedUrl(id, longUrl, summary, shortUrlCode, urlMetadata);
+        return new ShortenedUrl(id, title, longUrl, summary, shortUrlCode, urlMetadata);
     }
 }

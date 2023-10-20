@@ -20,6 +20,7 @@ internal class ShortenedUrlFactory
         {
             entities.Add(CreateTestEntity(
                 (i == 0) ? shortUrlId.Value : Guid.NewGuid(),
+                "Test Title",
                 $"https://mytest-long-address-{i}.com",
                 $"Test summary for {i}",
                 $"asdf42{i}",
@@ -32,6 +33,7 @@ internal class ShortenedUrlFactory
 
     public static ShortenedUrl CreateTestEntity(
         Guid shortUrlId,
+        string title,
         string longUrl,
         string summary,
         string shortCode,
@@ -39,6 +41,7 @@ internal class ShortenedUrlFactory
     {
         return ShortenedUrl.Hydrate(
             ShortenedUrlId.Create(shortUrlId),
+            Title.Create(title),
             LongUrl.Create(longUrl),
             Summary.Create(summary),
             ShortUrlCode.Create(shortCode),

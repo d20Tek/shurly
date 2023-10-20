@@ -80,10 +80,12 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
     {
         var code = await _urlService.GenerateUniqueCodeAsync();
         var entity = ShortenedUrl.Create(
+            Title.Create("Link"),  // todo: replace with actual value from command.
             LongUrl.Create(command.LongUrl),
             Summary.Create(command.Summary),
             ShortUrlCode.Create(code),
             AccountId.Create(command.CreatorId),
+            new List<string>(),
             command.PublishOn);
 
         return entity;

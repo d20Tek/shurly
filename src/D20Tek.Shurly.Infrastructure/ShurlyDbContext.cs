@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Shurly.Domain.ShortenedUrl;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace D20Tek.Shurly.Infrastructure;
 
@@ -63,9 +64,15 @@ internal class ShurlyDbContext : DbContext
                 b.HasIndex(x => x.OwnerId);
 
                 b.Property(x => x.Tags)
+                    .HasMaxLength(1024)
                     .HasConversion(
                         tags => string.Join(';', tags),
-                        value => value.Split(";", StringSplitOptions.None).ToList());
+                        value => value.Split(";", StringSplitOptions.None).ToList())
+                    .Metadata.SetValueComparer(
+                        new ValueComparer<List<string>>(
+                            (c1, c2) => c1!.SequenceEqual(c2!),
+                            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                            c => c.ToList()));
             });
         });
 

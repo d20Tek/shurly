@@ -29,9 +29,11 @@ internal sealed class UpdateShortenedUrlEndpoint :
         var creatorId = request.User.FindUserId();
         var command = new UpdateShortenedUrlCommand(
             request.Id,
+            request.Body.Title,
             request.Body.LongUrl,
             request.Body.Summary,
             creatorId,
+            request.Body.Tags,
             request.Body.PublishOn);
 
         var result = await handler.HandleAsync(command, cancellation);

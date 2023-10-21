@@ -8,7 +8,9 @@ namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Update;
 
 public sealed record UpdateShortenedUrlCommand(
     Guid ShortUrlId,
+    string Title,
     string LongUrl,
-    string Summary,
+    string? Summary,
     Guid OwnerId,
+    List<string>? Tags = null,
     DateTime? PublishOn = null) : ICommand<Result<ShortenedUrlResult>>;

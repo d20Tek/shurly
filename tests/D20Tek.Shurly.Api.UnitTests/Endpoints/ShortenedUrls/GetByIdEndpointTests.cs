@@ -102,21 +102,33 @@ public class GetByIdEndpointTests
     {
         // arrange
         var id = "test-url-id";
+        var title = "test title";
         var longUrl = "https://tester-test.test.com/longurl";
         var shortUrl = "short-url";
         var summary = "test-summary";
+        var tags = new List<string> { "tag" };
         var state = 1;
         var publishOn = DateTime.UtcNow;
 
-        var response = new ShortenedUrlResponse("", "", "", "", 0, DateTime.Now);
+        var response = new ShortenedUrlResponse(
+            "",
+            "",
+            "",
+            "",
+            "",
+            new List<string>(),
+            0,
+            DateTime.Now);
 
         // act
         response = response with
         {
             Id = id,
+            Title = title,
             LongUrl = longUrl,
             ShortUrl = shortUrl,
             Summary = summary,
+            Tags = tags,
             State = state,
             PublishOn = publishOn
         };
@@ -124,9 +136,11 @@ public class GetByIdEndpointTests
         // assert
         response.Should().NotBeNull();
         response.Id.Should().Be(id);
+        response.Title.Should().Be(title);
         response.LongUrl.Should().Be(longUrl);
         response.ShortUrl.Should().Be(shortUrl);
         response.Summary.Should().Be(summary);
+        response.Tags.Should().BeEquivalentTo(tags);
         response.State.Should().Be(state);
         response.PublishOn.Should().Be(publishOn);
     }

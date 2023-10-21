@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace D20Tek.Shurly.Api.UnitTests.Endpoints.ShortenedUrls;
 
@@ -22,6 +21,7 @@ public class UpdateShortenedUrlEndpointTests
         // arrange
         var urlId = Guid.NewGuid();
         var userId = Guid.NewGuid();
+        var title = "updated title";
         var longUrl = "https://tester-test.test.com/longurl";
         var items = ShortenedUrlFactory.CreateTestEntities(urlId, userId, 1);
 
@@ -31,8 +31,10 @@ public class UpdateShortenedUrlEndpointTests
         await factory.SeedDatabase(items);
 
         var request = new UpdateShortenedUrlRequest.RequestBody(
+            title,
             longUrl,
             "test summary update",
+            null,
             DateTime.UtcNow.AddDays(5));
 
         // act
@@ -43,7 +45,7 @@ public class UpdateShortenedUrlEndpointTests
         // assert
         response.Should().NotBeNull();
         response.IsSuccessStatusCode.Should().BeTrue();
-        await response.ShouldBeEquivalentTo(longUrl, "test summary update", 0);
+        await response.ShouldBeEquivalentTo(title, longUrl, "test summary update", 0);
 
         var expected = await client.GetAsync($"/api/v1/short-url/{urlId}");
         response.Content.Should().BeEquivalentTo(expected.Content);
@@ -61,7 +63,10 @@ public class UpdateShortenedUrlEndpointTests
         var token = factory.GenerateTestAccessToken(userId.ToString());
         var client = factory.CreateAuthenticatedClient(token);
 
-        var request = new UpdateShortenedUrlRequest.RequestBody(longUrl, "error summary");
+        var request = new UpdateShortenedUrlRequest.RequestBody(
+            "update",
+            longUrl,
+            "error summary");
 
         // act
         var response = await client.PutAsJsonAsync<UpdateShortenedUrlRequest.RequestBody>(
@@ -85,7 +90,7 @@ public class UpdateShortenedUrlEndpointTests
         var token = factory.GenerateTestAccessToken(userId.ToString());
         var client = factory.CreateAuthenticatedClient(token);
 
-        var request = new UpdateShortenedUrlRequest.RequestBody(longUrl, "");
+        var request = new UpdateShortenedUrlRequest.RequestBody("update", longUrl, "");
 
         // act
         var response = await client.PutAsJsonAsync<UpdateShortenedUrlRequest.RequestBody>(
@@ -108,7 +113,7 @@ public class UpdateShortenedUrlEndpointTests
         var token = factory.GenerateTestAccessToken(userId.ToString());
         var client = factory.CreateAuthenticatedClient(token);
 
-        var request = new UpdateShortenedUrlRequest.RequestBody("foo-bar", "test error");
+        var request = new UpdateShortenedUrlRequest.RequestBody("update", "foo-bar", "test error");
 
         // act
         var response = await client.PutAsJsonAsync<UpdateShortenedUrlRequest.RequestBody>(
@@ -134,7 +139,7 @@ public class UpdateShortenedUrlEndpointTests
         var client = factory.CreateAuthenticatedClient(token);
         await factory.SeedDatabase(items);
 
-        var request = new UpdateShortenedUrlRequest.RequestBody(longUrl, "owner error");
+        var request = new UpdateShortenedUrlRequest.RequestBody("update", longUrl, "owner error");
 
         // act
         var response = await client.PutAsJsonAsync<UpdateShortenedUrlRequest.RequestBody>(
@@ -151,20 +156,24 @@ public class UpdateShortenedUrlEndpointTests
     {
         // arrange
         var id = Guid.NewGuid();
+        var title = "test title 3";
         var longUrl = "https://tester.test.com";
         var summary = "test summary";
+        var tags = new List<string> { "test-2" };
         var publishOn = DateTime.UtcNow;
         var context = new DefaultHttpContext();
         var user = new ClaimsPrincipal();
 
-        var body = new UpdateShortenedUrlRequest.RequestBody("", "");
+        var body = new UpdateShortenedUrlRequest.RequestBody("", "", "");
         var request = new UpdateShortenedUrlRequest(new Guid(), body, null!, null!);
 
         // act
         body = body with
         {
+            Title = title,
             LongUrl = longUrl,
             Summary = summary,
+            Tags = tags,
             PublishOn = publishOn
         };
 
@@ -179,8 +188,10 @@ public class UpdateShortenedUrlEndpointTests
         // assert
         request.Should().NotBeNull();
         request.Id.Should().Be(id);
+        request.Body.Title.Should().Be(title);
         request.Body.LongUrl.Should().Be(longUrl);
         request.Body.Summary.Should().Be(summary);
+        request.Body.Tags.Should().BeEquivalentTo(tags);
         request.Body.PublishOn.Should().Be(publishOn);
         request.Context.Should().Be(context);
         request.User.Should().Be(user);

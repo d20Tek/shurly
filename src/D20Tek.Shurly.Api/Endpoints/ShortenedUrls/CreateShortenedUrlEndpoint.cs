@@ -28,9 +28,11 @@ internal sealed class CreateShortenedUrlEndpoint :
     {
         var creatorId = request.User.FindUserId();
         var command = new CreateShortenedUrlCommand(
+            request.Body.Title,
             request.Body.LongUrl,
             request.Body.Summary,
             creatorId,
+            request.Body.Tags,
             request.Body.PublishOn);
 
         var result = await handler.HandleAsync(command, cancellation);

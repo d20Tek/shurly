@@ -33,6 +33,7 @@ public class CommandHandlerErrorTests
             logger);
 
         var command = new CreateShortenedUrlCommand(
+            "test title",
             "https://test.com/longurl",
             "test summary",
             Guid.NewGuid());
@@ -74,6 +75,7 @@ public class CommandHandlerErrorTests
         var handler = new UpdateShortenedUrlCommandHandler(repo.Object, validator, logger);
         var command = new UpdateShortenedUrlCommand(
             Guid.NewGuid(),
+            "updated",
             "https://test.com/longurl",
             "test summary",
             ownerId);

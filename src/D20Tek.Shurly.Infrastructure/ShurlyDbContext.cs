@@ -67,7 +67,7 @@ internal class ShurlyDbContext : DbContext
                     .HasMaxLength(1024)
                     .HasConversion(
                         tags => string.Join(';', tags),
-                        value => value.Split(";", StringSplitOptions.None).ToList())
+                        value => value.Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList())
                     .Metadata.SetValueComparer(
                         new ValueComparer<List<string>>(
                             (c1, c2) => c1!.SequenceEqual(c2!),

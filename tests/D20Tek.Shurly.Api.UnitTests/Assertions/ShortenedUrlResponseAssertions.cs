@@ -20,6 +20,7 @@ internal static class ShortenedUrlResponseAssertions
         shortUrl.LongUrl.Should().Be(entity.LongUrl.Value);
         shortUrl.Summary.Should().Be(entity.Summary.Value);
         shortUrl.ShortUrl.Should().Be($"http://localhost/{entity.ShortUrlCode.Value}");
+        shortUrl.Tags.Should().BeEquivalentTo(entity.UrlMetadata.Tags);
         shortUrl.PublishOn.Should().Be(entity.UrlMetadata.PublishOn);
         shortUrl.State.Should().Be((int)entity.UrlMetadata.State);
     }
@@ -35,9 +36,11 @@ internal static class ShortenedUrlResponseAssertions
         for (int i = 0; i < list!.Count(); i++)
         {
             list![i].Id.Should().Be(entities[i].Id.Value.ToString());
+            list[i].Title.Should().Be(entities[i].Title.Value);
             list[i].LongUrl.Should().Be(entities[i].LongUrl.Value);
             list[i].Summary.Should().Be(entities[i].Summary.Value);
             list[i].ShortUrl.Should().Be($"http://localhost/{entities[i].ShortUrlCode.Value}");
+            list[i].Tags.Should().BeEquivalentTo(entities[i].UrlMetadata.Tags);
             list[i].PublishOn.Should().Be(entities[i].UrlMetadata.PublishOn);
             list[i].State.Should().Be((int)entities[i].UrlMetadata.State);
         }
@@ -45,6 +48,7 @@ internal static class ShortenedUrlResponseAssertions
 
     public static async Task ShouldBeEquivalentTo(
         this HttpResponseMessage httpResponse,
+        string title,
         string longUrl,
         string summary,
         int state = 0)
@@ -53,9 +57,11 @@ internal static class ShortenedUrlResponseAssertions
 
         shortUrl.Should().NotBeNull();
         shortUrl!.Id.Should().NotBeNull();
+        shortUrl.Title.Should().Be(title);
         shortUrl.LongUrl.Should().Be(longUrl);
         shortUrl.Summary.Should().Be(summary);
         shortUrl.ShortUrl.Should().NotBeNull();
+        shortUrl.Tags.Should().BeEmpty();
         shortUrl.State.Should().Be(state);
     }
 

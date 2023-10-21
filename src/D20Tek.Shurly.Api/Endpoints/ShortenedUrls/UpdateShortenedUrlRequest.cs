@@ -13,7 +13,9 @@ internal sealed record UpdateShortenedUrlRequest(
     ClaimsPrincipal User) : IRequest<IResult>
 {
     internal sealed record RequestBody(
+        string Title,
         string LongUrl,
-        string Summary,
+        string? Summary,
+        List<string>? Tags = null,
         DateTime? PublishOn = null);
 }

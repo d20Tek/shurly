@@ -7,9 +7,11 @@ namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls;
 
 public sealed record ShortenedUrlResult(
     Guid Id,
+    string Title,
     string LongUrl,
     string ShortUrlCode,
     string Summary,
+    List<string> Tags,
     int State,
     DateTime PublishOn)
 {
@@ -17,9 +19,11 @@ public sealed record ShortenedUrlResult(
     {
         return new ShortenedUrlResult(
             entity.Id.Value,
+            entity.Title.Value,
             entity.LongUrl.Value,
             entity.ShortUrlCode.Value,
             entity.Summary.Value,
+            entity.UrlMetadata.Tags,
             (int)entity.UrlMetadata.State,
             entity.UrlMetadata.PublishOn);
     }

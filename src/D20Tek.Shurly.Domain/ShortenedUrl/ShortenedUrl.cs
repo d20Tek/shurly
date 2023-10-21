@@ -38,6 +38,12 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
     {
     }
 
+    public void ChangeTitle(Title title)
+    {
+        Title = title;
+        UrlMetadata.Modified();
+    }
+
     public void ChangeLongUrl(LongUrl longUrl)
     {
         LongUrl = longUrl;
@@ -59,7 +65,7 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
         Summary summary,
         ShortUrlCode shortUrlCode,
         AccountId creatorId,
-        List<string> tags,
+        List<string>? tags,
         DateTime? publishOn)
     {
         return new ShortenedUrl(

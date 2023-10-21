@@ -16,6 +16,14 @@ internal class CreateShortenedUrlCommandValidator : IValidator<CreateShortenedUr
         var result = new ValidationsResult();
 
         result.AddOnFailure(
+        () => command.Title.NotEmpty(),
+            DomainErrors.EntityPropertyEmpty(nameof(command.Title)));
+
+        result.AddOnFailure(
+            () => command.Title.InMaxLength(Title.MaxLength),
+            DomainErrors.EntityPropertyTooLong(nameof(command.Title)));
+
+        result.AddOnFailure(
         () => command.LongUrl.NotEmpty(),
             DomainErrors.EntityPropertyEmpty(nameof(command.LongUrl)));
 
@@ -23,13 +31,16 @@ internal class CreateShortenedUrlCommandValidator : IValidator<CreateShortenedUr
             () => command.LongUrl.InMaxLength(LongUrl.MaxLength),
             DomainErrors.EntityPropertyTooLong(nameof(command.LongUrl)));
 
-        result.AddOnFailure(
-        () => command.Summary.NotEmpty(),
-            DomainErrors.EntityPropertyEmpty(nameof(command.Summary)));
+        if (command.Summary is not null)
+        {
+            result.AddOnFailure(
+            () => command.Summary.NotEmpty(),
+                DomainErrors.EntityPropertyEmpty(nameof(command.Summary)));
 
-        result.AddOnFailure(
-            () => command.Summary.InMaxLength(Summary.MaxLength),
-            DomainErrors.EntityPropertyTooLong(nameof(command.Summary)));
+            result.AddOnFailure(
+                () => command.Summary.InMaxLength(Summary.MaxLength),
+                DomainErrors.EntityPropertyTooLong(nameof(command.Summary)));
+        }
 
         result.AddOnFailure(
         () => command.CreatorId.NotEmpty(),

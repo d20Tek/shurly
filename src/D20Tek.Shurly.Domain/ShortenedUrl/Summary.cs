@@ -21,5 +21,6 @@ public sealed class Summary : ValueObject
         yield return Value;
     }
 
-    public static Summary Create(string summary) => new Summary(summary);
+    public static Summary Create(string? summary) =>
+        new Summary(summary ?? string.Empty);
 }

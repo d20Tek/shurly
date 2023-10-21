@@ -11,9 +11,11 @@ internal sealed class ShortenedUrlResponseMapper
     {
         return new ShortenedUrlResponse(
             source.Id.ToString(),
+            source.Title,
             source.LongUrl,
             $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/{source.ShortUrlCode}",
             source.Summary,
+            source.Tags,
             source.State,
             source.PublishOn);
     }

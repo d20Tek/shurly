@@ -1,0 +1,62 @@
+﻿@page "/short-url/delete/{Id}"
+@attribute [Authorize]
+@inject ShurlyApiService _service;
+@inject NavigationManager _nav;
+
+<h4 class="fw-bold">Delete Link</h4>
+<div class="row link-container">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <p>
+            Deleting this link will remove it from our redirection server. 
+            Users will get errors if they attempt to click on this short link: <br/>
+            <span class="fw-bold">@_shortUrl</span>
+        </p>
+        <p>
+            This deletion cannot be undone. Are you sure you want to delete it?
+        </p>
+        <div class="float-md-end my-1">
+            <button class="btn btn-outline-secondary" @onclick=OnCancel>Cancel</button>
+            <button class="btn btn-danger" @onclick=OnDelete>Delete Link</button>
+        </div>
+
+        <div>@_message</div>
+    </div>
+</div>
+
+@code {
+    private string _message = "";
+    private string _shortUrl = "";
+
+    [Parameter]
+    public string Id { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _service.GetByIdAsync(Id);
+        result.MatchFirstError(
+            success => _shortUrl = success.ShortUrl,
+            error =>
+            {
+                _message = error.ToString();
+                _shortUrl = "invalid-link";
+            });
+    }
+
+    private void OnCancel()
+    {
+        _nav.NavigateTo("/short-url");
+    }
+
+    private async Task OnDelete()
+    {
+        var result = await _service.DeleteAsync(Id);
+        if (result.IsSuccess)
+        {
+            _nav.NavigateTo("/short-url");
+        }
+        else
+        {
+            _message = result.Errors.First().ToString();
+        }
+    }
+}

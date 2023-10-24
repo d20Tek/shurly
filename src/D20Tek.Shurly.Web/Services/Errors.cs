@@ -13,6 +13,10 @@ internal static class Errors
             "ShortenedUrl.Failure",
             "Unable to perform service operation.");
 
+        public static readonly Error DeleteShortUrlFailure = Error.Failure(
+            "ShortenedUrl.Failure",
+            "Unable to delete the specified short url.");
+
         public static readonly Error CannotParseProblem = Error.Invalid(
             "Service.CannotParseProblem",
             "Unable to parse a problem details from the service response body");

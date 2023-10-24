@@ -10,8 +10,8 @@
   <ItemGroup>
     <PackageReference Include="D20Tek.Authentication.Individual.Client" Version="1.0.4-prerelease" />
     <PackageReference Include="D20Tek.Minimal.Result" Version="0.1.4-prerelease" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.12" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.13" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

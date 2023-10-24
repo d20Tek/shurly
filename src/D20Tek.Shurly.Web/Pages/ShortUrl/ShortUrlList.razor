@@ -2,34 +2,39 @@
 @attribute [Authorize]
 @inject ShurlyApiService _service;
 
-<h4>My Links</h4>
-@if (_urlList.Any())
+<h4 class="fw-bold">My Links</h4>
+<div class="row">
+    <a class="btn btn-outline-primary btn-sm" style="max-width: 180px;"
+       href="/short-url/create">
+       Create New Short Link
+    </a>
+</div>
+<hr />
+
+@if (_urlList is not null)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Long Url</th>
-                <th>Short Url</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var shortUrl in _urlList)
-            {
-                <tr>
-                    <td>@shortUrl.LongUrl</td>
-                    <td>@shortUrl.ShortUrl</td>
-                    <td>@shortUrl.State</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @if (_urlList.Any())
+    {
+        <div class="row">
+            <div class="col col-xl-8 offset-xl-2">
+                @foreach (var shortLink in _urlList)
+                {
+                    <ShortUrlListItem Link=@shortLink />
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">You don't have any saved short links. <a href="/short-url/create">Create one now!</a></div>
+    }
 }
-<button>New Short Link</button>
+
 <div>@message</div>
+<hr />
 
 @code {
-    IEnumerable<ShortenedUrlResponse> _urlList = new List<ShortenedUrlResponse>();
+    IEnumerable<ShortenedUrlResponse>? _urlList;
     string message = "Loading...";
 
     protected override async Task OnInitializedAsync()

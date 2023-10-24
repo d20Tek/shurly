@@ -1,0 +1,53 @@
+﻿@if (Link != null)
+{
+<div class="row link-container">
+    <div class="col-md-8 col-sm-12">
+        <div class="row">
+            <div class="col-12 my-2">
+                <div class="fw-bold fs-5 mb-2">
+                    <a href="/short-url/view/@Link.Id" class="link-url">
+                        @Link.Title
+                    </a>
+                </div>
+                <div>
+                    @if (Link.State == UrlState.Published)
+                    {
+                    <a href=@Link.ShortUrl>@Link.ShortUrl</a>
+                    }
+                    else
+                    {
+                        <span>@Link.ShortUrl</span><span class="small"> (Not published)</span>
+                    }
+                </div>
+                <div class="trim-with-ellipsis">
+                    <a href=@Link.LongUrl class="link-url">@Link.LongUrl</a>
+                </div>
+                <div class="small trim-with-ellipsis">
+                    @Link.Summary with some extra long description text to test trimming.
+                </div>
+            </div>
+            <div class="col-12 fw-bold small my-2">
+                <ClicksLabel ClickCount=@Link.ClickCount />
+                <CreatedOnLabel CreatedOn=@Link.CreatedOn />
+                <TagsLabel Tags=@Link.Tags />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <div class="buttons float-md-end my-1">
+            <CopyLinkButton ShortUrl=@Link />
+            <EditLinkButton Target=@_editUrl />
+            <DeleteLinkButton Target=@_deleteUrl />
+            <PublishStateButton Link=@Link />
+        </div>
+    </div>
+</div>
+}
+
+@code {
+    private string _editUrl => $"/short-url/edit/{Link?.Id}";
+    private string _deleteUrl => $"/short-url/delete/{Link?.Id}";
+
+    [Parameter]
+    public ShortenedUrlResponse? Link { get; set; } = null;
+}

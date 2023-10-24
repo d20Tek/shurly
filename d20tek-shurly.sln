@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Infrastructur
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9652D467-A892-48CF-95B8-74C770BCA3B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20Tek.Shurly.Api.UnitTests", "tests\D20Tek.Shurly.Api.UnitTests\D20Tek.Shurly.Api.UnitTests.csproj", "{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D20Tek.Shurly.Api.UnitTests", "tests\D20Tek.Shurly.Api.UnitTests\D20Tek.Shurly.Api.UnitTests.csproj", "{AC841725-10E6-45B9-8B0A-FD1AAD957DD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

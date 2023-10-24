@@ -1,0 +1,23 @@
+﻿.link-container {
+    border-radius: 8px;
+    border: 1px solid gray;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    padding: 4px;
+    background-color: white;
+}
+
+.trim-with-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a.link-url {
+    color: inherit;
+    text-decoration: none;
+}
+
+    a.link-url:hover {
+        text-decoration: underline;
+    }

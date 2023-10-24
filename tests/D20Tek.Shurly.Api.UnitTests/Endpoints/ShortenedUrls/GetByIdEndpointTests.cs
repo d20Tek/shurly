@@ -108,6 +108,7 @@ public class GetByIdEndpointTests
         var summary = "test-summary";
         var tags = new List<string> { "tag" };
         var state = 1;
+        var createdOn = DateTime.UtcNow.AddHours(-3);
         var publishOn = DateTime.UtcNow;
 
         var response = new ShortenedUrlResponse(
@@ -118,6 +119,7 @@ public class GetByIdEndpointTests
             "",
             new List<string>(),
             0,
+            DateTime.Now,
             DateTime.Now);
 
         // act
@@ -130,6 +132,7 @@ public class GetByIdEndpointTests
             Summary = summary,
             Tags = tags,
             State = state,
+            CreatedOn = createdOn,
             PublishOn = publishOn
         };
 
@@ -142,6 +145,7 @@ public class GetByIdEndpointTests
         response.Summary.Should().Be(summary);
         response.Tags.Should().BeEquivalentTo(tags);
         response.State.Should().Be(state);
+        response.CreatedOn.Should().Be(createdOn);
         response.PublishOn.Should().Be(publishOn);
     }
 }

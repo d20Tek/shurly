@@ -19,9 +19,19 @@ public class ShortenedUrlResultTests
         var summary = "test-summary";
         var tags = new List<string> { "tag1", "tag2", "tag3" };
         var state = 1;
+        var createdOn = DateTime.UtcNow.AddHours(-1);
         var publishOn = DateTime.UtcNow;
 
-        var response = new ShortenedUrlResult(Guid.Empty, "", "", "", "", new List<string>(), 0, DateTime.Now);
+        var response = new ShortenedUrlResult(
+            Guid.Empty,
+            "",
+            "",
+            "",
+            "",
+            new List<string>(),
+            0,
+            DateTime.Now,
+            DateTime.Now);
 
         // act
         response = response with
@@ -33,6 +43,7 @@ public class ShortenedUrlResultTests
             Summary = summary,
             Tags = tags,
             State = state,
+            CreatedOn = createdOn,
             PublishOn = publishOn
         };
 
@@ -45,6 +56,7 @@ public class ShortenedUrlResultTests
         response.Summary.Should().Be(summary);
         response.Tags.Should().BeEquivalentTo(tags);
         response.State.Should().Be(state);
+        response.CreatedOn.Should().Be(createdOn);
         response.PublishOn.Should().Be(publishOn);
     }
 }

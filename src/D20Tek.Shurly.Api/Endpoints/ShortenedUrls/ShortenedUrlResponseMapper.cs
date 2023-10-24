@@ -17,6 +17,7 @@ internal sealed class ShortenedUrlResponseMapper
             source.Summary,
             source.Tags,
             source.State,
+            source.CreatedOn,
             source.PublishOn);
     }
 }

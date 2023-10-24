@@ -11,4 +11,5 @@ internal sealed record ShortenedUrlResponse(
     string Summary,
     List<string> Tags,
     int State,
+    DateTime CreatedOn,
     DateTime PublishOn);

@@ -13,6 +13,7 @@ public sealed record ShortenedUrlResult(
     string Summary,
     List<string> Tags,
     int State,
+    DateTime CreatedOn,
     DateTime PublishOn)
 {
     internal static ShortenedUrlResult FromEntity(ShortenedUrl entity)
@@ -25,6 +26,7 @@ public sealed record ShortenedUrlResult(
             entity.Summary.Value,
             entity.UrlMetadata.Tags,
             (int)entity.UrlMetadata.State,
+            entity.UrlMetadata.CreatedOn,
             entity.UrlMetadata.PublishOn);
     }
 }

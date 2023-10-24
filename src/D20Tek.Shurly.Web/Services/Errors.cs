@@ -11,7 +11,7 @@ internal static class Errors
     {
         public static readonly Error GetShortUrlFailure = Error.Failure(
             "ShortenedUrl.Failure",
-            "Unable to perform service operation.");
+            "Unable to perform service operation to retrieve short urls.");
 
         public static readonly Error DeleteShortUrlFailure = Error.Failure(
             "ShortenedUrl.Failure",

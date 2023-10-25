@@ -1,0 +1,97 @@
+﻿@page "/short-url/create"
+@using D20Tek.Shurly.Web.Helpers;
+@attribute [Authorize]
+@inject ShurlyApiService _service;
+@inject NavigationManager _nav;
+
+<h4 class="fw-bold">Create Link</h4>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <EditForm Model="@_request" OnValidSubmit="OnPostAsync">
+            <DataAnnotationsValidator />
+            <div class="form-floating mb-3">
+                <InputText id="title-input" class="form-control" @bind-Value=_request.Title
+                           autocomplete="link-title" aria-required="true"
+                           placeholder="Title" />
+                <label class="form-label" for="Title">Title</label>
+                <ValidationMessage For=@(() => _request.Title) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText id="long-url-input" class="form-control" type="url" @bind-Value=_request.LongUrl
+                           autocomplete="long-url" aria-required="true"
+                           placeholder="http://example.com" />
+                <label class="form-label" for="longUrl">Destination Url</label>
+                <ValidationMessage For=@(() => _request.LongUrl) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText id="summary-input" class="form-control" @bind-Value=_request.Summary
+                           autocomplete="link-summary" placeholder="Summary" />
+                <label class="form-label" for="summary">Summary (optional)</label>
+                <ValidationMessage For=@(() => _request.Summary) />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText id="tags-input" class="form-control" @bind-Value=_request.TagsRaw
+                           autocomplete="link-tags" placeholder="Tags" />
+                <label class="form-label" for="summary">Tags</label>
+                <ValidationMessage For=@(() => _request.TagsRaw) />
+                <div class="m-1 small">Separate tag entries must be separated by ";".</div>
+            </div>
+
+            <hr />
+            <div class="form-floating mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="future-publish-input"
+                           @bind-value=_request.HasPublishDate>
+                    <label class="form-check-label" for="toggleSwitch">
+                        Publish link in the future?
+                    </label>
+                </div>
+            </div>
+
+            @if (_request.HasPublishDate is true)
+            {
+            <div class="col-md-6 form-floating mb-3">
+                <InputDate id="publish-date-input" Type="InputDateType.DateTimeLocal"
+                           class="form-control" @bind-Value=_request.PublishOn />
+                <label class="form-label" for="summary">Publish on</label>
+                <ValidationMessage For=@(() => _request.PublishOn) />
+            </div>
+            }
+
+            <div class="float-md-end my-1">
+                <button class="btn btn-outline-secondary" @onclick=OnCancel>Cancel</button>
+                <button id="create-submit" type="submit" class="btn btn-lg btn-primary">
+                    Create
+                </button>
+            </div>
+        </EditForm>
+        <div class="my-2">@_message</div>
+    </div>
+</div>
+
+@code {
+    private readonly CreateShortenedUrlRequest _request = new();
+    private string _message = "";
+
+    private void OnCancel()
+    {
+        _nav.NavigateTo("/short-url");
+    }
+
+    private async Task OnPostAsync()
+    {
+        var tagEntries = TagsParser.ParseTagEntries(_request.TagsRaw);
+        _request.Tags.AddRange(tagEntries);
+
+        if (_request.HasPublishDate is false)
+        {
+            _request.PublishOn = null;
+        }
+
+        var response = await _service.CreateAsync(_request);
+        response.MatchFirstError(
+            success => _nav.NavigateTo("/short-url"),
+            error => _message = error.ToString());
+    }
+}

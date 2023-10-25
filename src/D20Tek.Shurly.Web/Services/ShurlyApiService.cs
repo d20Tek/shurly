@@ -49,15 +49,27 @@ internal class ShurlyApiService : ServiceBase
         return response!;
     }
 
+    public async Task<Result<ShortenedUrlResponse>> CreateAsync(CreateShortenedUrlRequest request)
+    {
+        var response = await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}";
+            return await _httpClient.PostAsJsonAsync<CreateShortenedUrlRequest>(
+                serviceUrl,
+                request);
+        });
+
+        return response;
+    }
+
     public async Task<Result> DeleteAsync(string urlId)
     {
-        var serviceUrl = $"{_baseUrl}/{urlId}";
-        var result = await _httpClient.DeleteAsync(serviceUrl);
-        if (result.IsSuccessStatusCode is false)
+        var response = await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
         {
-            return Errors.ShortenedUrlService.DeleteShortUrlFailure;
-        }
+            var serviceUrl = $"{_baseUrl}/{urlId}";
+            return await _httpClient.DeleteAsync(serviceUrl);
+        });
 
-        return Result.Success();
+        return response;
     }
 }

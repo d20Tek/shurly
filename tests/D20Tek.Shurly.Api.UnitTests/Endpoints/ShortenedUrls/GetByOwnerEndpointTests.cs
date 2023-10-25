@@ -34,7 +34,8 @@ public class GetByOwnerEndpointTests
         // assert
         response.Should().NotBeNull();
         response.IsSuccessStatusCode.Should().BeTrue();
-        await response.ShouldBeEquivalentTo(items);
+        await response.ShouldBeEquivalentTo(
+            items.OrderByDescending(x => x.UrlMetadata.CreatedOn).ToList());
     }
 
     [TestMethod]

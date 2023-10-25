@@ -28,7 +28,7 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
         {
             var entities = await _dbContext.ShortenedUrls
             .Where(x => x.UrlMetadata.OwnerId == ownerId)
-            .OrderBy(x => x.UrlMetadata.CreatedOn)
+            .OrderByDescending(x => x.UrlMetadata.CreatedOn)
             .ToListAsync();
 
             return entities;

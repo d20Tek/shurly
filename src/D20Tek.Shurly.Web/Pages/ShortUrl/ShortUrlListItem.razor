@@ -38,7 +38,7 @@
             <CopyLinkButton ShortUrl=@Link />
             <EditLinkButton Target=@_editUrl />
             <DeleteLinkButton Target=@_deleteUrl />
-            <PublishStateButton Link=@Link />
+            <PublishStateButton Link=@Link PublishStateChanged=OnPublishStateChanged />
         </div>
     </div>
 </div>
@@ -50,4 +50,9 @@
 
     [Parameter]
     public ShortenedUrlResponse? Link { get; set; } = null;
+
+    private void OnPublishStateChanged(ShortenedUrlResponse newResponse)
+    {
+        Link = newResponse;
+    }
 }

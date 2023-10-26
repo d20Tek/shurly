@@ -73,4 +73,22 @@ internal class ShurlyApiService : ServiceBase
             return await _httpClient.DeleteAsync(serviceUrl);
         });
     }
+
+    public async Task<Result<ShortenedUrlResponse>> PublishAsync(string urlId)
+    {
+        return await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}/{urlId}/publish";
+            return await _httpClient.PutAsync(serviceUrl, null);
+        });
+    }
+
+    public async Task<Result<ShortenedUrlResponse>> UnpublishAsync(string urlId)
+    {
+        return await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}/{urlId}/unpublish";
+            return await _httpClient.PutAsync(serviceUrl, null);
+        });
+    }
 }

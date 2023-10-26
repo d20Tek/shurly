@@ -1,10 +1,11 @@
-﻿@page "/short-url/create"
+﻿@page "/short-url/edit/{Id}"
 @using D20Tek.Shurly.Web.Helpers;
 @attribute [Authorize]
 @inject ShurlyApiService _service;
 @inject NavigationManager _nav;
+@inject IJSRuntime _jsRuntime;
 
-<h4 class="fw-bold">Create Link</h4>
+<h4 class="fw-bold">Edit Link</h4>
 
 <div class="row">
     <div class="col-md-8 offset-md-2 col-sm-12">
@@ -63,8 +64,9 @@
                 <button id="cancel-button" class="btn btn-outline-secondary" @onclick=OnCancel>
                     Cancel
                 </button>
-                <button id="create-submit" type="submit" class="btn btn-primary">
-                    Create
+                <button id="save-submit" type="submit" disabled=@_submitDisabled
+                        class="btn btn-primary">
+                    Save
                 </button>
             </div>
         </EditForm>
@@ -73,27 +75,65 @@
 </div>
 
 @code {
-    private readonly CreateShortenedUrlRequest _request = new();
+    private UpdateShortenedUrlRequest _request = new();
+    private bool _submitDisabled = false;
     private string _message = "";
+    private bool _canceled = false;
 
-    private void OnCancel()
+    [Parameter]
+    public string Id { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
     {
-        _nav.NavigateTo("/short-url");
+        var result = await _service.GetByIdAsync(Id);
+        result.MatchFirstError(
+            success => _request = MapFromResponse(success),
+            error =>
+            {
+                _message = error.ToString();
+                _submitDisabled = true;
+            });
+    }
+
+    private async Task OnCancel()
+    {
+        await _nav.GoBack(_jsRuntime);
+        _canceled = true;
     }
 
     private async Task OnPostAsync()
     {
+        if (_canceled is true) return;
+
         var tagEntries = TagsParser.ParseTagEntries(_request.TagsRaw);
-        _request.Tags.AddRange(tagEntries);
+        _request.Tags = new List<string>(tagEntries);
 
         if (_request.HasPublishDate is false)
         {
             _request.PublishOn = null;
         }
 
-        var response = await _service.CreateAsync(_request);
-        response.MatchFirstError(
-            success => _nav.NavigateTo("/short-url"),
-            error => _message = error.ToString());
+        var response = await _service.UpdateAsync(Id, _request);
+        await response.MatchFirstErrorAsync(
+            async (success) => await _nav.GoBack(_jsRuntime),
+            error =>
+            {
+                _message = error.ToString();
+                return Task.CompletedTask;
+            });
+    }
+
+    private UpdateShortenedUrlRequest MapFromResponse(ShortenedUrlResponse response)
+    {
+        return new UpdateShortenedUrlRequest
+            {
+                Title = response.Title,
+                LongUrl = response.LongUrl,
+                Summary = response.Summary,
+                Tags = response.Tags,
+                TagsRaw = string.Join("; ", response.Tags),
+                PublishOn = response.PublishOn,
+                HasPublishDate = response.PublishOn > DateTime.UtcNow
+            };
     }
 }

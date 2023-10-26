@@ -66,6 +66,12 @@ public sealed class UrlMetadata : ValueObject
         ModifiedOn = DateTime.UtcNow;
     }
 
+    public void ChangeTags(List<string>? tags)
+    {
+        Tags = tags ?? new();
+        Modified();
+    }
+
     public void UpdatePublishOn(DateTime publishOn)
     {
         if (publishOn <= DateTime.UtcNow)

@@ -90,7 +90,7 @@ public class UpdateShortenedUrlEndpointTests
         var token = factory.GenerateTestAccessToken(userId.ToString());
         var client = factory.CreateAuthenticatedClient(token);
 
-        var request = new UpdateShortenedUrlRequest.RequestBody("update", longUrl, "");
+        var request = new UpdateShortenedUrlRequest.RequestBody("", longUrl, "");
 
         // act
         var response = await client.PutAsJsonAsync<UpdateShortenedUrlRequest.RequestBody>(

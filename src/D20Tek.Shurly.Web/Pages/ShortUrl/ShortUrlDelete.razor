@@ -16,8 +16,12 @@
             This deletion cannot be undone. Are you sure you want to delete it?
         </p>
         <div class="float-md-end my-1">
-            <button class="btn btn-outline-secondary" @onclick=OnCancel>Cancel</button>
-            <button class="btn btn-danger" @onclick=OnDelete>Delete Link</button>
+            <button id="cancel-button" class="btn btn-outline-secondary" @onclick=OnCancel>
+                Cancel
+            </button>
+            <button id="delete-button" class="btn btn-danger" @onclick=OnDelete>
+                Delete Link
+            </button>
         </div>
     </div>
     <div class="col-md-8 offset-md-2 col-sm-12 mt-3">

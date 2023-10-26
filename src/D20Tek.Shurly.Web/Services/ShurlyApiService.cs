@@ -25,51 +25,52 @@ internal class ShurlyApiService : ServiceBase
 
     public async Task<Result<IEnumerable<ShortenedUrlResponse>>> GetByOwnerAsync()
     {
-        var serviceUrl = $"{_baseUrl}{Configuration.Shurly.GetByOwner}";
-        var result = await _httpClient.GetAsync(serviceUrl);
-        if (result.IsSuccessStatusCode is false)
+        return await InvokeServiceOperation<IEnumerable<ShortenedUrlResponse>>(async () =>
         {
-            return Errors.ShortenedUrlService.GetShortUrlFailure;
-        }
-
-        var response = await result.Content.ReadFromJsonAsync<List<ShortenedUrlResponse>>();
-        return response!;
+            var serviceUrl = $"{_baseUrl}";
+            return await _httpClient.GetAsync(serviceUrl);
+        });
     }
 
     public async Task<Result<ShortenedUrlResponse>> GetByIdAsync(string urlId)
     {
-        var serviceUrl = $"{_baseUrl}/{urlId}";
-        var result = await _httpClient.GetAsync(serviceUrl);
-        if (result.IsSuccessStatusCode is false)
+        return await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
         {
-            return Errors.ShortenedUrlService.GetShortUrlFailure;
-        }
-
-        var response = await result.Content.ReadFromJsonAsync<ShortenedUrlResponse>();
-        return response!;
+            var serviceUrl = $"{_baseUrl}/{urlId}";
+            return await _httpClient.GetAsync(serviceUrl);
+        });
     }
 
     public async Task<Result<ShortenedUrlResponse>> CreateAsync(CreateShortenedUrlRequest request)
     {
-        var response = await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
+        return await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
         {
             var serviceUrl = $"{_baseUrl}";
             return await _httpClient.PostAsJsonAsync<CreateShortenedUrlRequest>(
                 serviceUrl,
                 request);
         });
+    }
 
-        return response;
+    public async Task<Result<ShortenedUrlResponse>> UpdateAsync(
+        string urlId,
+        UpdateShortenedUrlRequest request)
+    {
+        return await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
+        {
+            var serviceUrl = $"{_baseUrl}/{urlId}";
+            return await _httpClient.PutAsJsonAsync<UpdateShortenedUrlRequest>(
+                serviceUrl,
+                request);
+        });
     }
 
     public async Task<Result> DeleteAsync(string urlId)
     {
-        var response = await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
+        return await InvokeServiceOperation<ShortenedUrlResponse>(async () =>
         {
             var serviceUrl = $"{_baseUrl}/{urlId}";
             return await _httpClient.DeleteAsync(serviceUrl);
         });
-
-        return response;
     }
 }

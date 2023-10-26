@@ -86,6 +86,7 @@ internal class UpdateShortenedUrlCommandHandler : IUpdateShortenedUrlCommandHand
         existingEntity.ChangeTitle(Title.Create(command.Title));
         existingEntity.ChangeLongUrl(LongUrl.Create(command.LongUrl));
         existingEntity.ChangeSummary(Summary.Create(command.Summary));
+        existingEntity.ChangeTags(command.Tags);
 
         if (command.PublishOn is not null)
         {

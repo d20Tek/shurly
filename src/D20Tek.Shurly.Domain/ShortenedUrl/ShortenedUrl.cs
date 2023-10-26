@@ -56,6 +56,9 @@ public sealed class ShortenedUrl : AggregateRoot<ShortenedUrlId>
         UrlMetadata.Modified();
     }
 
+    public void ChangeTags(List<string>? tags) =>
+        UrlMetadata.ChangeTags(tags);
+
     public void ChangePublishOn(DateTime publishOn) =>
         UrlMetadata.UpdatePublishOn(publishOn);
 

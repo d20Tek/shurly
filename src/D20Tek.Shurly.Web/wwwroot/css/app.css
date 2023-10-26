@@ -38,6 +38,12 @@ a, .btn-link {
     color: red;
 }
 
+.span-trim-with-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

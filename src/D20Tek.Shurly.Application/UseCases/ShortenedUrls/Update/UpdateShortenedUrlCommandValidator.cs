@@ -34,10 +34,6 @@ internal class UpdateShortenedUrlCommandValidator : IValidator<UpdateShortenedUr
         if (command.Summary is not null)
         {
             result.AddOnFailure(
-            () => command.Summary.NotEmpty(),
-                DomainErrors.EntityPropertyEmpty(nameof(command.Summary)));
-
-            result.AddOnFailure(
                 () => command.Summary.InMaxLength(Summary.MaxLength),
                 DomainErrors.EntityPropertyTooLong(nameof(command.Summary)));
         }

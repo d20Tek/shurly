@@ -1,0 +1,15 @@
+﻿.notags-label {
+    position: relative;
+    top: 2px;
+}
+
+.alltags-label {
+    position: relative;
+    top: 2px;
+}
+
+.trim-with-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

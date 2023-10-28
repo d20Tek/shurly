@@ -15,21 +15,32 @@
                     <div class="col-12 my-2">
                         <div class="fw-bold fs-5 mb-2">@_link.Title</div>
                         <div>
+                            <span class="fw-bold">Short Url: </span>
                             @if (_link.State == UrlState.Published)
                             {
                             <a href=@_link.ShortUrl>@_link.ShortUrl</a>
                             }
                             else
                             {
-                                <span>@_link.ShortUrl</span><span class="small"> (Not published)</span>
+                            <span>@_link.ShortUrl</span><span class="small"> (Not published)</span>
                             }
                         </div>
                         <div class="trim-with-ellipsis">
+                            <span class="fw-bold">Destination: </span>
                             <a href=@_link.LongUrl class="link-url">@_link.LongUrl</a>
                         </div>
-                        <div class="small trim-with-ellipsis">
-                            @_link.Summary
+                        @if (_hasFuturePublishOn)
+                        {
+                        <div class="my-1">
+                            <span class="fw-bold">Publishes on: </span>@_localPublishOn
                         </div>
+                        }
+                        @if (_link.Summary != "")
+                        {
+                        <div class="my-1">
+                            <span class="fw-bold">Summary: </span>@_link.Summary
+                        </div>
+                        }
                     </div>
                     <div class="col-12 fw-bold small my-2">
                         <CreatedOnLabel CreatedOn=@_link.CreatedOn UseShortFormat=false />
@@ -71,6 +82,8 @@
 
 @code {
     private ShortenedUrlResponse? _link;
+    private bool _hasFuturePublishOn => _link!.PublishOn > DateTime.UtcNow;
+    private DateTime _localPublishOn => DateTimeHelper.UtcToLocalDateTime(_link!.PublishOn);
     private string _message = "";
 
     private string _editUrl => $"/short-url/edit/{_link?.Id}";

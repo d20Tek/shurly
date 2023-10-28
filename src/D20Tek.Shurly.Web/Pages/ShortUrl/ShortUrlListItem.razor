@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-12 my-2">
                 <div class="fw-bold fs-5 mb-2">
-                    <a href="/short-url/view/@Link.Id" class="link-url">
+                    <a href=@Configuration.ShortUrl.ViewUrl(Link.Id) class="link-url">
                         @Link.Title
                     </a>
                 </div>
@@ -38,8 +38,8 @@
     <div class="col-md-4 col-sm-12">
         <div class="buttons float-md-end my-1">
             <CopyLinkButton ShortUrl=@Link />
-            <EditLinkButton Target=@_editUrl />
-            <DeleteLinkButton Target=@_deleteUrl />
+            <EditLinkButton Target=@Configuration.ShortUrl.EditUrl(Link.Id) />
+            <DeleteLinkButton Target=@Configuration.ShortUrl.DeleteUrl(Link.Id) />
             <PublishStateButton Link=@Link PublishStateChanged=OnPublishStateChanged />
         </div>
     </div>
@@ -47,14 +47,9 @@
 }
 
 @code {
-    private string _editUrl => $"/short-url/edit/{Link?.Id}";
-    private string _deleteUrl => $"/short-url/delete/{Link?.Id}";
-
     [Parameter]
     public ShortenedUrlResponse? Link { get; set; } = null;
 
-    private void OnPublishStateChanged(ShortenedUrlResponse newResponse)
-    {
+    private void OnPublishStateChanged(ShortenedUrlResponse newResponse) =>
         Link = newResponse;
-    }
 }

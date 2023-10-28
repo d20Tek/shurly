@@ -53,7 +53,7 @@
             {
             <div class="col-md-6 form-floating mb-3">
                 <InputDate id="publish-date-input" Type="InputDateType.DateTimeLocal"
-                           class="form-control" @bind-Value=_request.PublishOn />
+                           class="form-control" @bind-Value=_request.LocalPublishOn />
                 <label class="form-label" for="summary">Publish on</label>
                 <ValidationMessage For=@(() => _request.PublishOn) />
             </div>
@@ -83,13 +83,11 @@
 
     private async Task OnPostAsync()
     {
-        var tagEntries = TagsParser.ParseTagEntries(_request.TagsRaw);
-        _request.Tags.AddRange(tagEntries);
+        _request.Tags = TagsParser.ParseTagEntries(_request.TagsRaw);
 
-        if (_request.HasPublishDate is false)
-        {
-            _request.PublishOn = null;
-        }
+        _request.PublishOn = DateTimeHelper.LocalDateTimeToUtc(
+            _request.LocalPublishOn,
+            _request.HasPublishDate is false);
 
         var response = await _service.CreateAsync(_request);
         response.MatchFirstError(

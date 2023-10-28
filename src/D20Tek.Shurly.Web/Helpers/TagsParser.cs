@@ -5,10 +5,12 @@ namespace D20Tek.Shurly.Web.Helpers;
 
 internal class TagsParser
 {
-    public static string[] ParseTagEntries(string tagsRaw)
+    public static List<string> ParseTagEntries(string tagsRaw)
     {
-        return tagsRaw.Split(
+        var tagEntries = tagsRaw.Split(
             ';',
             StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        return new List<string>(tagEntries);
     }
 }

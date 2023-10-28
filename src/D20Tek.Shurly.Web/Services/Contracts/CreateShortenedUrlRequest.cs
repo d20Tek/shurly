@@ -33,4 +33,7 @@ public sealed class CreateShortenedUrlRequest
     public bool HasPublishDate { get; set; } = false;
 
     public DateTime? PublishOn { get; set; }
+
+    [JsonIgnore]
+    public DateTime? LocalPublishOn { get; set; } = DateTime.Now;
 }

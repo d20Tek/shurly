@@ -1,0 +1,94 @@
+﻿@page "/short-url/view/{Id}"
+@attribute [Authorize]
+@inject ShurlyApiService _service;
+
+<h4 class="fw-bold">View Link</h4>
+
+<div class="row">
+    <div class="col-xl-8 offset-xl-2 col-12">
+
+    @if (_link != null)
+    {
+        <div class="row link-container">
+            <div class="col-md-8 col-sm-12">
+                <div class="row">
+                    <div class="col-12 my-2">
+                        <div class="fw-bold fs-5 mb-2">@_link.Title</div>
+                        <div>
+                            @if (_link.State == UrlState.Published)
+                            {
+                            <a href=@_link.ShortUrl>@_link.ShortUrl</a>
+                            }
+                            else
+                            {
+                                <span>@_link.ShortUrl</span><span class="small"> (Not published)</span>
+                            }
+                        </div>
+                        <div class="trim-with-ellipsis">
+                            <a href=@_link.LongUrl class="link-url">@_link.LongUrl</a>
+                        </div>
+                        <div class="small trim-with-ellipsis">
+                            @_link.Summary
+                        </div>
+                    </div>
+                    <div class="col-12 fw-bold small my-2">
+                        <CreatedOnLabel CreatedOn=@_link.CreatedOn UseShortFormat=false />
+                        <TagsLabel Tags=@_link.Tags TrimTags=false />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="buttons float-md-end my-1">
+                    <CopyLinkButton ShortUrl=@_link />
+                    <EditLinkButton Target=@_editUrl />
+                    <DeleteLinkButton Target=@_deleteUrl />
+                    <PublishStateButton Link=@_link PublishStateChanged=OnPublishStateChanged />
+                </div>
+            </div>
+        </div>
+
+        <div class="row link-container">
+            <div class="col-12">
+                <div class="fw-bold fs-5 mb-2">Engagement</div>
+                <div class="row">
+                    <div class="col-4">
+                        Total: <ClicksLabel ClickCount=_link.ClickCount />
+                    </div>
+                    <div class="col-4">
+                        Last 7 days: <small><i>(coming soon)</i></small>
+                    </div>
+                    <div class="col-4">
+                        Weekly Change: <small><i>(coming soon)</i></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-2">@_message</div>
+    }
+    </div>
+</div>
+
+@code {
+    private ShortenedUrlResponse? _link;
+    private string _message = "";
+
+    private string _editUrl => $"/short-url/edit/{_link?.Id}";
+    private string _deleteUrl => $"/short-url/delete/{_link?.Id}";
+
+    [Parameter]
+    public string Id { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _service.GetByIdAsync(Id);
+        result.MatchFirstError(
+            success => _link = success,
+            error => _message = error.ToString());
+    }
+
+    private void OnPublishStateChanged(ShortenedUrlResponse newResponse)
+    {
+        _link = newResponse;
+    }
+}

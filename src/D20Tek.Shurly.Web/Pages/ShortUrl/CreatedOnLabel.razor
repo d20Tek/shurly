@@ -13,14 +13,14 @@
     {
         get
         {
-            var offset = new DateTimeOffset(CreatedOn, DateTimeOffset.UtcNow.Offset);
+            var localDateTime = DateTimeHelper.UtcToLocalDateTime(CreatedOn);
             if (UseShortFormat is true)
             {
-                return offset.ToString("MMM d, yyyy");
+                return localDateTime.ToString("MMM d, yyyy");
             }
             else
             {
-                return offset.ToString("MMMM d, yyyy h:mm tt zzz");
+                return localDateTime.ToString("MMMM d, yyyy h:mm tt");
             }
         }
     }

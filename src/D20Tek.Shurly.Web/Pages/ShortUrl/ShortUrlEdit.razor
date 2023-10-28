@@ -42,9 +42,9 @@
             <hr />
             <div class="form-floating mb-3">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="future-publish-input"
-                           @bind-value=_request.HasPublishDate>
-                    <label class="form-check-label" for="toggleSwitch">
+                    <InputCheckbox class="form-check-input" type="checkbox" id="future-publish-input"
+                           @bind-Value=_request.HasPublishDate />
+                    <label class="form-check-label" for="future-publish-input">
                         Publish link in the future?
                     </label>
                 </div>
@@ -54,7 +54,7 @@
             {
             <div class="col-md-6 form-floating mb-3">
                 <InputDate id="publish-date-input" Type="InputDateType.DateTimeLocal"
-                           class="form-control" @bind-Value=_request.PublishOn />
+                           class="form-control" @bind-Value=_request.LocalPublishOn />
                 <label class="form-label" for="summary">Publish on</label>
                 <ValidationMessage For=@(() => _request.PublishOn) />
             </div>
@@ -105,13 +105,11 @@
     {
         if (_canceled is true) return;
 
-        var tagEntries = TagsParser.ParseTagEntries(_request.TagsRaw);
-        _request.Tags = new List<string>(tagEntries);
+        _request.Tags = TagsParser.ParseTagEntries(_request.TagsRaw);
 
-        if (_request.HasPublishDate is false)
-        {
-            _request.PublishOn = null;
-        }
+        _request.PublishOn = DateTimeHelper.LocalDateTimeToUtc(
+            _request.LocalPublishOn,
+            _request.HasPublishDate is false);
 
         var response = await _service.UpdateAsync(Id, _request);
         await response.MatchFirstErrorAsync(
@@ -133,7 +131,8 @@
                 Tags = response.Tags,
                 TagsRaw = string.Join("; ", response.Tags),
                 PublishOn = response.PublishOn,
-                HasPublishDate = response.PublishOn > DateTime.UtcNow
+                HasPublishDate = response.PublishOn > DateTime.UtcNow,
+                LocalPublishOn = DateTimeHelper.UtcToLocalDateTime(response.PublishOn)
             };
     }
 }

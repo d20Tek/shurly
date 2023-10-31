@@ -15,6 +15,7 @@ internal static class DependencyInjection
         services.ConfigureAppSettings(configuration);
 
         services.AddScoped<ShurlyApiService>();
+        services.AddSingleton<ClipboardService>();
 
         return services;
     }

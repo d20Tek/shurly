@@ -9,21 +9,8 @@
 </div>
 
 @code {
-    private string _displayDate
-    {
-        get
-        {
-            var localDateTime = DateTimeHelper.UtcToLocalDateTime(CreatedOn);
-            if (UseShortFormat is true)
-            {
-                return localDateTime.ToString("MMM d, yyyy");
-            }
-            else
-            {
-                return localDateTime.ToString("MMMM d, yyyy h:mm tt");
-            }
-        }
-    }
+    private string _displayDate =>
+        DateTimeHelper.UtcToLocalDateTimeString(CreatedOn, UseShortFormat);
 
     [Parameter]
     public DateTime CreatedOn { get; set; }

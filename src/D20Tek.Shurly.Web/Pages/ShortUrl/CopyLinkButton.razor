@@ -1,4 +1,4 @@
-﻿@inject IJSRuntime _jsRuntime;
+﻿@inject ClipboardService _clipboardService;
 
 <button class="btn btn-outline-secondary btn-sm small" title="Copy Short Link"
         @onclick=OnCopyShortUrl>
@@ -17,6 +17,6 @@
     {
         if (ShortUrl is null) return;
 
-        await _jsRuntime.InvokeVoidAsync("clipboardCopy.copyText", ShortUrl.ShortUrl);
+        await _clipboardService.CopyText(ShortUrl.ShortUrl);
     }
 }

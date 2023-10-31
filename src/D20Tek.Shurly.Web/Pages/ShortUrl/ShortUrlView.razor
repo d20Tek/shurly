@@ -51,8 +51,8 @@
             <div class="col-md-4 col-sm-12">
                 <div class="buttons float-md-end my-1">
                     <CopyLinkButton ShortUrl=@_link />
-                    <EditLinkButton Target=@_editUrl />
-                    <DeleteLinkButton Target=@_deleteUrl />
+                    <EditLinkButton Target=@Configuration.ShortUrl.EditUrl(_link.Id) />
+                    <DeleteLinkButton Target=@Configuration.ShortUrl.DeleteUrl(_link.Id) />
                     <PublishStateButton Link=@_link PublishStateChanged=OnPublishStateChanged />
                 </div>
             </div>
@@ -79,29 +79,3 @@
     }
     </div>
 </div>
-
-@code {
-    private ShortenedUrlResponse? _link;
-    private bool _hasFuturePublishOn => _link!.PublishOn > DateTime.UtcNow;
-    private DateTime _localPublishOn => DateTimeHelper.UtcToLocalDateTime(_link!.PublishOn);
-    private string _message = "";
-
-    private string _editUrl => $"/short-url/edit/{_link?.Id}";
-    private string _deleteUrl => $"/short-url/delete/{_link?.Id}";
-
-    [Parameter]
-    public string Id { get; set; } = default!;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var result = await _service.GetByIdAsync(Id);
-        result.MatchFirstError(
-            success => _link = success,
-            error => _message = error.ToString());
-    }
-
-    private void OnPublishStateChanged(ShortenedUrlResponse newResponse)
-    {
-        _link = newResponse;
-    }
-}

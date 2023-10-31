@@ -19,6 +19,19 @@ internal class DateTimeHelper
         return UtcToLocalDateTime(utcDateTime.Value);
     }
 
+    public static string UtcToLocalDateTimeString(DateTime utcDateTime, bool useShortFormat)
+    {
+        var localDateTime = DateTimeHelper.UtcToLocalDateTime(utcDateTime);
+        if (useShortFormat is true)
+        {
+            return localDateTime.ToString("MMM d, yyyy");
+        }
+        else
+        {
+            return localDateTime.ToString("MMMM d, yyyy h:mm tt");
+        }
+    }
+
     public static DateTime? LocalDateTimeToUtc(DateTime? localDateTime, bool nullChecker)
     {
         if (nullChecker || localDateTime.HasValue is false)

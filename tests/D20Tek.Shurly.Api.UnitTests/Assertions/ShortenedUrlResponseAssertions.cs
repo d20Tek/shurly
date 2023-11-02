@@ -29,20 +29,27 @@ internal static class ShortenedUrlResponseAssertions
         this HttpResponseMessage httpResponse,
         List<ShortenedUrl> entities)
     {
-        var list = await httpResponse.Content.ReadFromJsonAsync<List<ShortenedUrlResponse>>();
+        var list = await httpResponse.Content.ReadFromJsonAsync<ShortenedUrlListResponse>();
 
         list.Should().NotBeNull();
-        list!.Count().Should().Be(entities.Count());
-        for (int i = 0; i < list!.Count(); i++)
+        list!.Metadata.TotalItems.Should().Be(entities.Count());
+        list.Metadata.Skip.Should().Be(0);
+        list.Metadata.Take.Should().Be(25);
+
+        list.Links.Should().HaveCount(2);
+        list.Links.Should().Contain(x => x.Type == "firstLink");
+        list.Links.Should().Contain(x => x.Type == "lastLink");
+
+        for (int i = 0; i < list.Metadata.TotalItems; i++)
         {
-            list![i].Id.Should().Be(entities[i].Id.Value.ToString());
-            list[i].Title.Should().Be(entities[i].Title.Value);
-            list[i].LongUrl.Should().Be(entities[i].LongUrl.Value);
-            list[i].Summary.Should().Be(entities[i].Summary.Value);
-            list[i].ShortUrl.Should().Be($"http://localhost/{entities[i].ShortUrlCode.Value}");
-            list[i].Tags.Should().BeEquivalentTo(entities[i].UrlMetadata.Tags);
-            list[i].PublishOn.Should().Be(entities[i].UrlMetadata.PublishOn);
-            list[i].State.Should().Be((int)entities[i].UrlMetadata.State);
+            list.Items[i].Id.Should().Be(entities[i].Id.Value.ToString());
+            list.Items[i].Title.Should().Be(entities[i].Title.Value);
+            list.Items[i].LongUrl.Should().Be(entities[i].LongUrl.Value);
+            list.Items[i].Summary.Should().Be(entities[i].Summary.Value);
+            list.Items[i].ShortUrl.Should().Be($"http://localhost/{entities[i].ShortUrlCode.Value}");
+            list.Items[i].Tags.Should().BeEquivalentTo(entities[i].UrlMetadata.Tags);
+            list.Items[i].PublishOn.Should().Be(entities[i].UrlMetadata.PublishOn);
+            list.Items[i].State.Should().Be((int)entities[i].UrlMetadata.State);
         }
     }
 

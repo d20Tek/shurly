@@ -7,7 +7,9 @@ namespace D20Tek.Shurly.Application.Abstractions;
 
 public interface IShortenedUrlRepository
 {
-    public Task<IList<ShortenedUrl>> GetForOwnerAsync(AccountId ownerId);
+    public Task<IList<ShortenedUrl>> GetForOwnerAsync(AccountId ownerId, int skip, int take);
+
+    public Task<int> GetCountForOwnerAsync(AccountId ownerId);
 
     public Task<ShortenedUrl?> GetByIdAsync(ShortenedUrlId id);
 

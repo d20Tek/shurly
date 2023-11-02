@@ -38,7 +38,7 @@ public class QueryTests
         // arrange
         var ownerId = Guid.NewGuid();
 
-        var query = new GetByOwnerQuery(Guid.Empty);
+        var query = new GetByOwnerQuery(Guid.Empty, 0, 10);
 
         // act
         query = query with

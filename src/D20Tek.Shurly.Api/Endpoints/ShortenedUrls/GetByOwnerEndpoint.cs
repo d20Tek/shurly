@@ -9,9 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
-internal class GetByOwnerEndpoint : IApiEndpoint<HttpContextRequest, IGetByOwnerQueryHandler>
+internal class GetByOwnerEndpoint : IApiEndpoint<GetByOwnerRequest, IGetByOwnerQueryHandler>
 {
     private readonly ShortenedUrlResponseMapper _responseMapper = new();
+    private readonly ShortenedUrlListResponseMapper _listMapper;
+
+    public GetByOwnerEndpoint()
+    {
+        _listMapper = new(_responseMapper);
+    }
 
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
@@ -21,18 +27,16 @@ internal class GetByOwnerEndpoint : IApiEndpoint<HttpContextRequest, IGetByOwner
     }
 
     public async Task<IResult> HandleAsync(
-        [AsParameters] HttpContextRequest request,
+        [AsParameters] GetByOwnerRequest request,
         [FromServices] IGetByOwnerQueryHandler handler,
         CancellationToken cancellation)
     {
         var userId = request.User.FindUserId();
-        var query = new GetByOwnerQuery(userId);
+        var query = new GetByOwnerQuery(userId, request.Skip, request.Take);
         var result = await handler.HandleAsync(query, cancellation);
 
         return result.Match<IResult>(
-            success => TypedResults.Ok(
-                success.Select(x => _responseMapper.Map(x, request.Context))
-                       .ToList()),
+            success => TypedResults.Ok(_listMapper.Map(success, request.Context)),
             errors => Results.Extensions.Problem(errors));
     }
 }

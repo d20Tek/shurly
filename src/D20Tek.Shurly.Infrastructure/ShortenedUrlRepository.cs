@@ -22,17 +22,30 @@ internal class ShortenedUrlRepository : IShortenedUrlRepository
         _logger = logger;
     }
 
-    public async Task<IList<ShortenedUrl>> GetForOwnerAsync(AccountId ownerId)
+    public async Task<IList<ShortenedUrl>> GetForOwnerAsync(AccountId ownerId, int skip, int take)
     {
         return await OperationLogManager.OperationAsync<IList<ShortenedUrl>>(async () =>
         {
             var entities = await _dbContext.ShortenedUrls
-            .Where(x => x.UrlMetadata.OwnerId == ownerId)
-            .OrderByDescending(x => x.UrlMetadata.CreatedOn)
-            .ToListAsync();
+                .Where(x => x.UrlMetadata.OwnerId == ownerId)
+                .OrderByDescending(x => x.UrlMetadata.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
 
             return entities;
         }, _logger) ?? Array.Empty<ShortenedUrl>();
+    }
+
+    public async Task<int> GetCountForOwnerAsync(AccountId ownerId)
+    {
+        return await OperationLogManager.OperationAsync<int>(async () =>
+        {
+            return await _dbContext.ShortenedUrls
+                .Where(x => x.UrlMetadata.OwnerId == ownerId)
+                .CountAsync();
+
+        }, _logger);
     }
 
     public async Task<ShortenedUrl?> GetByIdAsync(ShortenedUrlId id)

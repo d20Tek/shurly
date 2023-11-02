@@ -42,7 +42,7 @@ public class GetByOwnerEndpointTests
     public async Task HandleAsync_WithQueryHandlerError_ReturnsProblem()
     {
         // arrange
-        var request = new HttpContextRequest(new DefaultHttpContext(), new ClaimsPrincipal());
+        var request = new GetByOwnerRequest(new DefaultHttpContext(), new ClaimsPrincipal());
         var handler = new Mock<IGetByOwnerQueryHandler>();
         handler.Setup(x => x.HandleAsync(It.IsAny<GetByOwnerQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(Error.Unexpected("test.error", "mocked call..."));

@@ -22,20 +22,22 @@ internal class GetByOwnerQueryHandler : IGetByOwnerQueryHandler
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<ShortenedUrlResult>>> HandleAsync(
+    public async Task<Result<ShortenedUrlList>> HandleAsync(
         GetByOwnerQuery query,
         CancellationToken cancellationToken)
     {
-        return await UseCaseOperation.InvokeAsync<IEnumerable<ShortenedUrlResult>>(
+        return await UseCaseOperation.InvokeAsync<ShortenedUrlList>(
             _logger,
             async () =>
             {
                 var ownerId = AccountId.Create(query.OwnerId);
-                var entities = await _repository.GetForOwnerAsync(ownerId);
 
+                var entities = await _repository.GetForOwnerAsync(ownerId, query.Skip, query.Take);
                 var results = entities.Select(x => ShortenedUrlResult.FromEntity(x))
                                       .ToList();
-                return results;
+
+                var totalCount = await _repository.GetCountForOwnerAsync(ownerId);
+                return new ShortenedUrlList(query.Skip, query.Take, totalCount, results);
             });
     }
 }

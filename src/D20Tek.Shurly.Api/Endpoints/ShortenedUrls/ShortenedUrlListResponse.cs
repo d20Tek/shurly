@@ -1,12 +1,13 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Minimal.Endpoints;
-using System.Security.Claims;
-
 namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
-internal sealed record DeleteShortenedUrlRequest(
-    Guid Id,
-    HttpContext Context,
-    ClaimsPrincipal User) : IRequest<IResult>;
+internal sealed record ShortenedUrlListResponse(
+    ListMetadata Metadata,
+    List<LinkMetadata> Links,
+    List<ShortenedUrlResponse> Items);
+
+internal sealed record ListMetadata(int TotalItems, int ItemsCount, int Skip, int Take);
+
+internal sealed record LinkMetadata(string Type, string Url);

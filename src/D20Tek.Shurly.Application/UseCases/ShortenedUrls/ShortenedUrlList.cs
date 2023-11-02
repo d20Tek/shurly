@@ -1,12 +1,10 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Minimal.Domain.Abstractions;
-using D20Tek.Minimal.Result;
+namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls;
 
-namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByOwner;
-
-public sealed record GetByOwnerQuery(
-    Guid OwnerId,
+public sealed record ShortenedUrlList(
     int Skip,
-    int Take) : IQuery<Result<ShortenedUrlList>>;
+    int Take,
+    int TotalItems,
+    IEnumerable<ShortenedUrlResult> Items);

@@ -1,12 +1,13 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Minimal.Domain.Abstractions;
-using D20Tek.Minimal.Result;
+using D20Tek.Minimal.Endpoints;
+using System.Security.Claims;
 
-namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByOwner;
+namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
-public sealed record GetByOwnerQuery(
-    Guid OwnerId,
-    int Skip,
-    int Take) : IQuery<Result<ShortenedUrlList>>;
+internal sealed record GetByOwnerRequest(
+    HttpContext Context,
+    ClaimsPrincipal User,
+    int Skip = 0,
+    int Take = 25) : IRequest<IResult>;

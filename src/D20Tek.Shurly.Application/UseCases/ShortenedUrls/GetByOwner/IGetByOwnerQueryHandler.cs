@@ -7,6 +7,6 @@ using D20Tek.Minimal.Result;
 namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.GetByOwner;
 
 public interface IGetByOwnerQueryHandler :
-    IQueryHandler<GetByOwnerQuery, Result<IEnumerable<ShortenedUrlResult>>>
+    IQueryHandler<GetByOwnerQuery, Result<ShortenedUrlList>>
 {
 }

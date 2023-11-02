@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace D20Tek.Shurly.Api.Endpoints.ShortenedUrls;
 
-public sealed record GetByIdRequest(
+internal sealed record GetByIdRequest(
     Guid Id,
     HttpContext Context,
     ClaimsPrincipal User) : IRequest<IResult>;

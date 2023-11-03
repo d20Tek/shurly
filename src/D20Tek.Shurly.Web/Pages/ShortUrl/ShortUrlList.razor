@@ -11,13 +11,13 @@
 </div>
 <hr />
 
-@if (_urlList is not null)
+@if (_urlListResponse is not null)
 {
-    @if (_urlList.Any())
+    @if (_urlListResponse.Items.Any())
     {
         <div class="row">
             <div class="col col-xl-8 offset-xl-2">
-                @foreach (var shortLink in _urlList)
+                @foreach (var shortLink in _urlListResponse.Items)
                 {
                     <ShortUrlListItem Link=@shortLink />
                 }

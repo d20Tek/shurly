@@ -23,9 +23,9 @@ internal class ShurlyApiService : ServiceBase
         _baseUrl = endpointOptions.Value.ShorturlEndpoint;
     }
 
-    public async Task<Result<IEnumerable<ShortenedUrlResponse>>> GetByOwnerAsync()
+    public async Task<Result<ShortenedUrlListResponse>> GetByOwnerAsync()
     {
-        return await InvokeServiceOperation<IEnumerable<ShortenedUrlResponse>>(async () =>
+        return await InvokeServiceOperation<ShortenedUrlListResponse>(async () =>
         {
             var serviceUrl = $"{_baseUrl}";
             return await _httpClient.GetAsync(serviceUrl);

@@ -27,20 +27,32 @@ internal static class ShortenedUrlResponseAssertions
 
     public static async Task ShouldBeEquivalentTo(
         this HttpResponseMessage httpResponse,
-        List<ShortenedUrl> entities)
+        List<ShortenedUrl> entities,
+        int skip = 0,
+        int take = 25,
+        int totalCount = 3,
+        List<LinkMetadata>? expectedLinks = null)
     {
         var list = await httpResponse.Content.ReadFromJsonAsync<ShortenedUrlListResponse>();
 
         list.Should().NotBeNull();
-        list!.Metadata.TotalItems.Should().Be(entities.Count());
-        list.Metadata.Skip.Should().Be(0);
-        list.Metadata.Take.Should().Be(25);
+        list!.Metadata.TotalItems.Should().Be(totalCount);
+        list.Metadata.Skip.Should().Be(skip);
+        list.Metadata.Take.Should().Be(take);
 
-        list.Links.Should().HaveCount(2);
-        list.Links.Should().Contain(x => x.Type == "firstLink");
-        list.Links.Should().Contain(x => x.Type == "lastLink");
+        expectedLinks ??= new List<LinkMetadata>
+        {
+            new LinkMetadata("firstLink", "first-page"),
+            new LinkMetadata("lastLink", "last-page")
+        };
 
-        for (int i = 0; i < list.Metadata.TotalItems; i++)
+        list.Links.Should().HaveCount(expectedLinks.Count);
+        foreach (var link in expectedLinks )
+        {
+            list.Links.Should().Contain(x => x.Type == link.Type);
+        }
+
+        for (int i = 0; i < list.Metadata.ItemsCount; i++)
         {
             list.Items[i].Id.Should().Be(entities[i].Id.Value.ToString());
             list.Items[i].Title.Should().Be(entities[i].Title.Value);

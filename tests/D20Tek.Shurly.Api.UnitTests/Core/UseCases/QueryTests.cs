@@ -37,6 +37,8 @@ public class QueryTests
     {
         // arrange
         var ownerId = Guid.NewGuid();
+        var skip = 100;
+        var take = 5;
 
         var query = new GetByOwnerQuery(Guid.Empty, 0, 10);
 
@@ -44,11 +46,15 @@ public class QueryTests
         query = query with
         {
             OwnerId = ownerId,
+            Skip = skip,
+            Take = take
         };
 
         // assert
         query.Should().NotBeNull();
         query.OwnerId.Should().Be(ownerId);
+        query.Skip.Should().Be(skip);
+        query.Take.Should().Be(take);
     }
 
     [TestMethod]

@@ -18,6 +18,7 @@ internal sealed class ShortenedUrlListResponseMapper
     {
         var baseLink = Configuration.ShortUrl.GetByOwner.RoutePattern;
         var links = new List<LinkMetadata>();
+
         if (source.Skip > 0)
         {
             var prevSkip = Math.Max(source.Skip - source.Take, 0);

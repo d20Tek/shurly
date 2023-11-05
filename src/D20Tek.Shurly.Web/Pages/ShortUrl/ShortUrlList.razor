@@ -26,15 +26,17 @@
     }
     else
     {
-        <div class="row">You don't have any saved short links.
-        <a href=@Configuration.ShortUrl.CreateUrl>Create one now!</a></div>
+        <div>
+            You don't have any saved short links.
+            <a href=@Configuration.ShortUrl.CreateUrl>Create one now!</a>
+        </div>
     }
 }
 
 @if (_hasMoreResults)
 {
-<div>
-    <button class="btn btn-outline-secondary" @onclick=OnMoreLinks>
+<div class="mt-2">
+    <button class="btn btn-outline-secondary btn-sm" @onclick=OnMoreLinks>
         More Links...
     </button>
 </div>

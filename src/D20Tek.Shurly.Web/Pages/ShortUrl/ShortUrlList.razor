@@ -3,7 +3,7 @@
 @inject ShurlyApiService _service;
 
 <h4 class="fw-bold">My Links</h4>
-<div class="row">
+<div>
     <a class="btn btn-outline-primary btn-sm" style="max-width: 180px;"
        href=@Configuration.ShortUrl.CreateUrl>
        Create New Short Link
@@ -11,13 +11,13 @@
 </div>
 <hr />
 
-@if (_urlListResponse is not null)
+@if (_urlList is not null)
 {
-    @if (_urlListResponse.Items.Any())
+    @if (_urlList.Any())
     {
         <div class="row">
             <div class="col col-xl-8 offset-xl-2">
-                @foreach (var shortLink in _urlListResponse.Items)
+                @foreach (var shortLink in _urlList)
                 {
                     <ShortUrlListItem Link=@shortLink />
                 }
@@ -29,6 +29,15 @@
         <div class="row">You don't have any saved short links.
         <a href=@Configuration.ShortUrl.CreateUrl>Create one now!</a></div>
     }
+}
+
+@if (_hasMoreResults)
+{
+<div>
+    <button class="btn btn-outline-secondary" @onclick=OnMoreLinks>
+        More Links...
+    </button>
+</div>
 }
 
 <div>@_message</div>

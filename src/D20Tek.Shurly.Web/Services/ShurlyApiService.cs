@@ -23,11 +23,12 @@ internal class ShurlyApiService : ServiceBase
         _baseUrl = endpointOptions.Value.ShorturlEndpoint;
     }
 
-    public async Task<Result<ShortenedUrlListResponse>> GetByOwnerAsync()
+    public async Task<Result<ShortenedUrlListResponse>> GetByOwnerAsync(
+        string? pagedUrl = null)
     {
         return await InvokeServiceOperation<ShortenedUrlListResponse>(async () =>
         {
-            var serviceUrl = $"{_baseUrl}";
+            var serviceUrl = pagedUrl ?? $"{_baseUrl}";
             return await _httpClient.GetAsync(serviceUrl);
         });
     }

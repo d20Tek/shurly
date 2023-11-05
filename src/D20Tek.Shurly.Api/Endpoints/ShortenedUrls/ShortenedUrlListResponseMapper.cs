@@ -16,7 +16,8 @@ internal sealed class ShortenedUrlListResponseMapper
 
     public ShortenedUrlListResponse Map(ShortenedUrlList source, HttpContext httpContext)
     {
-        var baseLink = Configuration.ShortUrl.GetByOwner.RoutePattern;
+        var root = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}";
+        var baseLink = $"{root}{Configuration.ShortUrl.GetByOwner.RoutePattern}";
         var links = new List<LinkMetadata>();
 
         if (source.Skip > 0)
@@ -24,7 +25,7 @@ internal sealed class ShortenedUrlListResponseMapper
             var prevSkip = Math.Max(source.Skip - source.Take, 0);
             links.Add(new LinkMetadata(
                 "prevLink",
-                baseLink + $"?skip={prevSkip}; take={source.Take}"));
+                baseLink + $"?skip={prevSkip}&take={source.Take}"));
         }
 
         var nextSkip = source.Skip + source.Take;
@@ -32,14 +33,14 @@ internal sealed class ShortenedUrlListResponseMapper
         {
             links.Add(new LinkMetadata(
                 "nextLink",
-                baseLink + $"?skip={nextSkip}; take={source.Take}"));
+                baseLink + $"?skip={nextSkip}&take={source.Take}"));
         }
 
         links.Add(new LinkMetadata("firstLink", baseLink));
         var lastSkip = (source.TotalItems / source.Take) * source.Take;
         links.Add(new LinkMetadata(
             "lastLink",
-            baseLink + $"?skip={lastSkip}; take={source.Take}"));
+            baseLink + $"?skip={lastSkip}&take={source.Take}"));
 
         var items = source.Items.Select(x => _instanceMapper.Map(x, httpContext))
                                 .ToList();

@@ -12,7 +12,7 @@
                 <div>
                     @if (Link.State == UrlState.Published)
                     {
-                    <a href=@Link.ShortUrl>@Link.ShortUrl</a>
+                    <a href=@Link.ShortUrl target="_blank">@Link.ShortUrl</a>
                     }
                     else
                     {
@@ -20,7 +20,7 @@
                     }
                 </div>
                 <div class="trim-with-ellipsis">
-                    <a href=@Link.LongUrl class="link-url">@Link.LongUrl</a>
+                    <a href=@Link.LongUrl class="link-url" target="_blank">@Link.LongUrl</a>
                 </div>
                 <div class="small trim-with-ellipsis">
                     @Link.Summary

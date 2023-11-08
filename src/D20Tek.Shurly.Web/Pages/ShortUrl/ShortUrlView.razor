@@ -18,7 +18,7 @@
                             <span class="fw-bold">Short Url: </span>
                             @if (_link.State == UrlState.Published)
                             {
-                            <a href=@_link.ShortUrl>@_link.ShortUrl</a>
+                            <a href=@_link.ShortUrl target="_blank">@_link.ShortUrl</a>
                             }
                             else
                             {
@@ -27,7 +27,7 @@
                         </div>
                         <div class="trim-with-ellipsis">
                             <span class="fw-bold">Destination: </span>
-                            <a href=@_link.LongUrl class="link-url">@_link.LongUrl</a>
+                            <a href=@_link.LongUrl class="link-url" target="_blank">@_link.LongUrl</a>
                         </div>
                         @if (_hasFuturePublishOn)
                         {

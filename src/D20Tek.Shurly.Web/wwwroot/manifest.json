@@ -1,6 +1,6 @@
 {
-  "name": "D20Tek.Shurly.Web",
-  "short_name": "D20Tek.Shurly.Web",
+  "name": "Shurly - Short Urls",
+  "short_name": "Shurly",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

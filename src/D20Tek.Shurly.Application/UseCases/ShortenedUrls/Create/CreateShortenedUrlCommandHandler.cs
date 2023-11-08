@@ -12,6 +12,7 @@ namespace D20Tek.Shurly.Application.UseCases.ShortenedUrls.Create;
 
 internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHandler
 {
+    private const int _urlStorageLimit = 100;
     private readonly IShortenedUrlRepository _repository;
     private readonly IUrlShorteningService _urlService;
     private readonly CreateShortenedUrlCommandValidator _validator;
@@ -38,7 +39,7 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
             async () =>
             {
                 // 1. test guard conditions
-                var guardResult = ValidateGuardConditions(command);
+                var guardResult = await ValidateGuardConditions(command);
                 if (guardResult.IsFailure)
                 {
                     return guardResult.ErrorsList;
@@ -58,7 +59,7 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
             });
     }
 
-    private Result ValidateGuardConditions(CreateShortenedUrlCommand command)
+    private async Task<Result> ValidateGuardConditions(CreateShortenedUrlCommand command)
     {
         // 1. validate command input
         var vResult = _validator.Validate(command);
@@ -71,6 +72,14 @@ internal class CreateShortenedUrlCommandHandler : ICreateShortenedUrlCommandHand
         if (!Uri.TryCreate(command.LongUrl, UriKind.Absolute, out _))
         {
             return DomainErrors.LongUrlInvalidFormat;
+        }
+
+        // 3. ensure user not past the url storage limit.
+        var currentCount = await _repository.GetCountForOwnerAsync(
+            AccountId.Create(command.CreatorId));
+        if (currentCount >= _urlStorageLimit)
+        {
+            return DomainErrors.ShortUrlLimitReached;
         }
 
         return Result.Success();

@@ -19,6 +19,10 @@ public static class DomainErrors
         $"{name}.NotFound",
         $"Cannot find the entity with Id: {id}.");
 
+    public static Error ShortUrlLimitReached = Error.Conflict(
+        "ShortUrl.LimitReached",
+        "A user can only save 100 short urls in this system. Please clean up old links that are no longer required.");
+
     public static Error LongUrlInvalidFormat = Error.Validation(
         "LongUrl.InvalidFormat",
         "The specified LongUrl is not a valid URL format.");
